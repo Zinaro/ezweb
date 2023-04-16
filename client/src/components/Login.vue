@@ -4,11 +4,11 @@
         <form v-if="!user" class="login-form" @submit.prevent="submitForm">
             <h2>Têkeve Rûpelê</h2>
             <label>
-                Username:
+                Navê Bikarhêner:
                 <input type="text" v-model="username" required>
             </label>
             <label>
-                Password:
+                Borînpeyv:
                 <input type="password" v-model="password" required>
             </label>
             <button type="submit">Têkeve</button>
