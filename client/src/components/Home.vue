@@ -1,18 +1,18 @@
 <template>
   <div class="container">
-    <h1 class="title">Hi zinar, {{ msg }}</h1>
+    <h1 class="title">Silav Zinar, {{ msg }}</h1>
     <div>
       <div v-if="user" class="form-section">
         <form v-if="user" @submit.prevent="addItem" class="form">
           <div class="form-group">
-            <label for="nav" class="label">Title:</label>
+            <label for="nav" class="label">Sernav:</label>
             <input type="text" id="nav" v-model="posttitle" class="input" required>
           </div>
           <div class="form-group form-dil">
-            <label for="dil" class="label">Content:</label>
+            <label for="dil" class="label">Naverok:</label>
             <textarea id="dil" v-model="postcontent" class="input" rows="3" required></textarea>
           </div>
-          <button type="submit" class="button is-primary">Add</button>
+          <button type="submit" class="button is-primary">Tevlî bike</button>
         </form>
       </div>
 
@@ -23,8 +23,8 @@
               <input type="text" v-model="editedItem.postTitle" class="input">
               <input type="text" v-model="editedItem.postContent" class="input">
               <div class="list-item-buttons">
-                <button @click="updateItem" class="button is-primary">Saved</button>
-                <button @click="cancelEdit" class="button is-danger">Cancel</button>
+                <button @click="updateItem" class="button is-primary">Tomar bû</button>
+                <button @click="cancelEdit" class="button is-danger">Têk bibe</button>
               </div>
             </div>
             <div v-else>
@@ -35,16 +35,16 @@
                 <div class="item-dil">Created By {{ item.postAutorName }}</div>
                 <div class="item-dil">Likes count {{ Object.keys(item.likes).length }}</div>
                 <button class="like" @click="likePost(item._id, item)"
-                  v-if="!item.likes.some((l) => l.likeId == user._id) && user">Like</button>
-                <button class="likered" @click="likePost(item._id, item)" v-else>Dislike</button>
-                <button @click="viewPost(item)">View Post</button>
+                  v-if="!item.likes.some((l) => l.likeId == user._id) && user">Hez bike</button>
+                <button class="likered" @click="likePost(item._id, item)" v-else>Hez neke</button>
+                <button @click="viewPost(item)">Şandiyê Nîşan bide</button>
                 <Post v-if="selectedPost" :post="selectedPost"/>
               </div>
               <div class="list-item-buttons">
                 <button v-if="user && item.postAutorId === user._id" @click="deleteItem(item._id)"
-                  class="button is-danger">Delete</button>
+                  class="button is-danger">Jê bibe</button>
                 <button v-if="user && item.postAutorId === user._id" @click="editItem(item)"
-                  class="button is-primary">Update</button>
+                  class="button is-primary">Rojane bike</button>
               </div>
             </div>
           </li>
