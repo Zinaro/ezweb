@@ -2,7 +2,7 @@
 <template>
     <div class="login-page">
         <form v-if="!user" class="login-form" @submit.prevent="submitForm">
-            <h2>Tekeve Rupele</h2>
+            <h2>Têkeve Rûpelê</h2>
             <label>
                 Username:
                 <input type="text" v-model="username" required>
@@ -11,10 +11,10 @@
                 Password:
                 <input type="password" v-model="password" required>
             </label>
-            <button type="submit">Tekeve</button>
+            <button type="submit">Têkeve</button>
         </form>
         <div v-if="user">
-            Bi xer hati, {{ user.username }}!
+            Silav, {{ user.username }}!
         </div>
     </div>
 </template>
