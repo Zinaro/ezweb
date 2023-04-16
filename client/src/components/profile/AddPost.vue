@@ -1,19 +1,19 @@
 <template>
     <div class="add-post">
-        <h1>Add Post</h1>
+        <h1>Şandî Tevlî bike</h1>
 
         <form v-if="user" @submit.prevent="addItem" class="form form-section">
             <div class="form-group">
-                <label for="posttitle" class="label">Title:</label>
+                <label for="posttitle" class="label">Sernav:</label>
                 <input type="text" id="posttitle" v-model="posttitle" class="input" required>
             </div>
             <div class="form-group form-postcontent">
-                <label for="postcontent" class="label">Content:</label>
+                <label for="postcontent" class="label">Naverok:</label>
                 <textarea id="postcontent" v-model="postcontent" class="input" rows="3" required></textarea>
             </div>
-            <button type="submit" class="button is-primary">Add</button>
+            <button type="submit" class="button is-primary">Tevlî bike</button>
         </form>
-        <div v-if="showMessage" class="success-message">Post Added</div>
+        <div v-if="showMessage" class="success-message">Şandî Tevlî bû</div>
 
     </div>
 </template>
