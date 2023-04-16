@@ -1,6 +1,6 @@
 <template>
     <div class="add-post">
-        <h1>Şandî tevlî bike</h1>
+        <h1>Şandî Tevlî bike</h1>
 
         <form v-if="user" @submit.prevent="addItem" class="form form-section">
             <div class="form-group">
@@ -13,7 +13,7 @@
             </div>
             <button type="submit" class="button is-primary">Tevlî bike</button>
         </form>
-        <div v-if="showMessage" class="success-message">Şandî tevlî bû</div>
+        <div v-if="showMessage" class="success-message">Şandî Tevlî bû</div>
 
     </div>
 </template>
