@@ -1,16 +1,16 @@
 <template>
     <div class="profile">
         <div class="settings">
-            <button @click="$router.push('/')">Home</button>
-            <button @click="$router.push('/@' + user.username)">My Profile</button>
-            <button @click="$router.push('/about')">About</button>
-            <button @click="showSettings = true; showMyPosts = false; showFollowing = false; showFollowers = false; showFavorites = false; showAddPost = false">Settings</button>
-            <button @click="showAddPost = true; showMyPosts = false; showFollowing = false; showFollowers = false; showFavorites = false; showSettings = false">Add Post</button>
+            <button @click="$router.push('/')">Rûpela Sereke</button>
+            <button @click="$router.push('/@' + user.username)">Profîla min</button>
+            <button @click="$router.push('/about')">Derbar</button>
+            <button @click="showSettings = true; showMyPosts = false; showFollowing = false; showFollowers = false; showFavorites = false; showAddPost = false">Sazkarî</button>
+            <button @click="showAddPost = true; showMyPosts = false; showFollowing = false; showFollowers = false; showFavorites = false; showSettings = false">Şandî Tevlî bike</button>
         </div>
         <div class="content-section">
             <div class="top-section">
                 <div class="profile-row">
-                    <img src="image.jpg" alt="Profil Resmi" class="profile-image">
+                    <img src="image.jpg" alt="Wêneya Profîlê" class="profile-image">
                     <div class="profile-info">
                         <h2>{{ user.name }}</h2>
                         <p>{{ user.mail }}</p>
@@ -18,15 +18,15 @@
                 </div>
                 <div class="button-row">
                     <button class="button-profile" :class="{ active: showMyPosts }"
-                        @click="showMyPosts = true; showFollowing = false; showFollowers = false; showFavorites = false; showAddPost = false; showSettings = false">My
-                        Posts</button>
+                        @click="showMyPosts = true; showFollowing = false; showFollowers = false; showFavorites = false; showAddPost = false; showSettings = false">Şandiyên
+                        min</button>
                     <button class="button-profile" :class="{ active: showFollowing }"
-                        @click="showMyPosts = false; showFollowing = true; showFollowers = false; showFavorites = false; showAddPost = false; showSettings = false">Following</button>
+                        @click="showMyPosts = false; showFollowing = true; showFollowers = false; showFavorites = false; showAddPost = false; showSettings = false">Dişopîne</button>
                     <button class="button-profile" :class="{ active: showFollowers }"
-                        @click="showMyPosts = false; showFollowing = false; showFollowers = true; showFavorites = false; showAddPost = false; showSettings = false">Followers</button>
+                        @click="showMyPosts = false; showFollowing = false; showFollowers = true; showFavorites = false; showAddPost = false; showSettings = false">Şopîner</button>
                     <button class="button-profile" :class="{ active: showFavorites }"
-                        @click="showMyPosts = false; showFollowing = false; showFollowers = false; showFavorites = true; showAddPost = false; showSettings = false">My
-                        Favorite</button>
+                        @click="showMyPosts = false; showFollowing = false; showFollowers = false; showFavorites = true; showAddPost = false; showSettings = false">Hezkirinên
+                        min</button>
                 </div>
             </div>
             <div class="bottom-section">
