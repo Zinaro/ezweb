@@ -1,11 +1,11 @@
 <template>
     <div class="followers">
-        <h1>My Followers Page</h1>
+        <h1>Rûpela Şopînerên min</h1>
         <ul>
             <li v-for="person in followersList" :key="person.name">
-                <p>Name: {{ person.name }}</p>
-                <p>Username: {{ person.username }}</p>
-                <p>Mail: {{ person.mail }}</p>
+                <p>Nav: {{ person.name }}</p>
+                <p>Navê bikarhêner: {{ person.username }}</p>
+                <p>E-name: {{ person.mail }}</p>
                 
             </li>
         </ul>
