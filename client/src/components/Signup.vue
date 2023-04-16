@@ -1,27 +1,27 @@
 <template>
     <div>
-        <h1>Sign Up</h1>
+        <h1>Tomar bibe</h1>
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
         <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
         <div v-if="!user" class="form-container">
             <form @submit.prevent="signup">
                 <div>
-                    <label for="name">Name</label>
+                    <label for="name">Nav</label>
                     <input id="name" type="text" v-model="name" required>
                 </div>
                 <div>
-                    <label for="username">Username</label>
+                    <label for="username">Navê Bikarhêner</label>
                     <input id="username" type="text" v-model="username" required>
                 </div>
                 <div>
-                    <label for="email">Mail</label>
+                    <label for="email">E-name</label>
                     <input id="email" type="text" v-model="mail" required>
                 </div>
                 <div>
-                    <label for="password">Password</label>
+                    <label for="password">Borînpeyv</label>
                     <input id="password" type="password" v-model="password" required>
                 </div>
-                <button type="submit">Sign Up</button>
+                <button type="submit">Tomar bibe</button>
             </form>
         </div>
         <div v-if="user"><h1>Lexeee</h1></div>
