@@ -1,30 +1,30 @@
 <template>
     <div class="settings-page">
-        <h1>Settings</h1>
+        <h1>Sazkarî</h1>
         <div class="settings-form">
             <form @submit.prevent="updateUser">
 
                 <div class="form-group">
-                    <label for="name">Name</label>
+                    <label for="name">Nav</label>
                     <input type="text" id="name" v-model="name" required>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email">E-name</label>
                     <input type="email" id="email" v-model="mail" required>
                 </div>
                 <div class="form-group">
-                    <label for="current-password">Current Password</label>
+                    <label for="current-password">Borînpeyva Heyî</label>
                     <input type="password" id="current-password" v-model="currentPassword" required>
                 </div>
                 <div class="form-group">
-                    <label for="new-password">New Password</label>
+                    <label for="new-password">Borînpeyva Nû</label>
                     <input type="password" id="new-password" v-model="newPassword" required>
                 </div>
                 <div class="form-group">
-                    <label for="new-password-confirm">Confirm New Password</label>
+                    <label for="new-password-confirm">Borînpeyva Nû Bipejirîne</label>
                     <input type="password" id="new-password-confirm" v-model="newPasswordConfirm" required>
                 </div>
-                <button type="submit">Update</button>
+                <button type="submit">Rojane bike</button>
             </form>
         </div>
     </div>
