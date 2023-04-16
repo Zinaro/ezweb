@@ -1,6 +1,6 @@
 <template>
   <div class="myposts">
-    <h1 class="item-nav">My Posts</h1>
+    <h1 class="item-nav">Şandiyên min</h1>
     <card title="Items">
       <ul class="list">
         <li v-for="item in sortedUserItems" :key="item._id" class="list-item">
