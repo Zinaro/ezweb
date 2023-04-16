@@ -5,8 +5,8 @@
             <li v-for="item in items" :key="item._id">
                 <h2>{{ item.postTitle }}</h2>
                 <p>{{ item.postContent }}</p>
-                <p>Author: {{ item.postAutorName }}</p>
-                <p>Date: {{ item.postDate }}</p>
+                <p>Nivîskar: {{ item.postAutorName }}</p>
+                <p>Dem: {{ item.postDate }}</p>
                 <button class="like" @click="likePost(item._id, item)"
                     v-if="!item.likes.some((l) => l.likeId == user._id) && user">Hez bike</button>
                 <button class="likered" @click="likePost(item._id, item)" v-else>Hez neke</button>
