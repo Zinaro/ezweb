@@ -1,6 +1,6 @@
 <template>
     <div class="favorite">
-        <h1>Rûpela hezkirnên min</h1>
+        <h1>Rûpela Hezkirnên min</h1>
         <ul>
             <li v-for="item in items" :key="item._id">
                 <h2>{{ item.postTitle }}</h2>
