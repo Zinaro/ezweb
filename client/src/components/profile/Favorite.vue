@@ -1,6 +1,6 @@
 <template>
     <div class="favorite">
-        <h1>My Favorite Page</h1>
+        <h1>Rûpela min a hezkirî</h1>
         <ul>
             <li v-for="item in items" :key="item._id">
                 <h2>{{ item.postTitle }}</h2>
@@ -8,9 +8,9 @@
                 <p>Author: {{ item.postAutorName }}</p>
                 <p>Date: {{ item.postDate }}</p>
                 <button class="like" @click="likePost(item._id, item)"
-                    v-if="!item.likes.some((l) => l.likeId == user._id) && user">Like</button>
-                <button class="likered" @click="likePost(item._id, item)" v-else>Dislike</button>
-                <button @click="viewPost(item)">View Post</button>
+                    v-if="!item.likes.some((l) => l.likeId == user._id) && user">Hez bike</button>
+                <button class="likered" @click="likePost(item._id, item)" v-else>Hez neke</button>
+                <button @click="viewPost(item)">Şandiyê Nîşan bide</button>
             </li>
         </ul>
     </div>
