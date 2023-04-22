@@ -39,7 +39,6 @@ export default {
                 const response = await fetch(`http://localhost:3000/users/${userId}/posts/favorites`);
                 const posts = await response.json();
                 this.items = posts;
-                console.log(posts);
             } catch (err) {
                 console.error(err);
             }

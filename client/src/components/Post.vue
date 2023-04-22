@@ -1,7 +1,7 @@
 <template>
     <div class="post-view">
         <h1>{{ post.postTitle }}</h1>
-         <p>{{ post.postContent }}</p>
+        <div v-html="post.postContent"></div>
          <p>Likes: {{ post.likes ? Object.keys(post.likes).length : 0 }}</p>
          <p>Created by {{ post.postAutorName }}</p>
     </div>

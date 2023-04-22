@@ -70,8 +70,7 @@ export default {
                     data.password = this.newPassword;
                 }
                 try {
-                    const response = await axios.put(`http://localhost:3000/users/${this.user._id}`, data);
-                    console.log(response.data.message);
+                    await axios.put(`http://localhost:3000/users/${this.user._id}`, data);
                     this.user.name = this.name;
                     this.user.mail = this.mail;
                     this.user.password = this.newPassword || this.user.password;

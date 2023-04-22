@@ -4,31 +4,44 @@
     <card title="Items">
       <ul class="list">
         <li v-for="item in sortedUserItems" :key="item._id" class="list-item">
-
           <div class="item-card">
             <div class="item-nav">{{ item.postTitle }}</div>
             <div v-if="!item.showModal && item.postContent.length > 500">
-      {{ item.postContent.slice(0, 500) }}...
-      <a href="#" class="more-link" @click.prevent="item.showModal = true">more</a>
-    </div>
-    <div v-else>
-      {{ item.postContent }}
-    </div>
-    <div v-if="item.showModal" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="item.showModal = false">&times;</span>
-        <p>{{ item.postContent }}</p>
-      </div>
-    </div>
+              <div v-html="item.postContent.slice(0, 500)"></div>
+              <span>...</span>              <a
+                href="#"
+                class="more-link"
+                @click.prevent="item.showModal = true"
+                >more</a
+              >
+            </div>
+            <div v-else v-html="item.postContent"></div>
+            <div v-if="item.showModal" class="modal">
+              <div class="modal-content">
+                <span class="close" @click="item.showModal = false"
+                  >&times;</span
+                >
+                <div v-html="item.postContent"></div>
+              </div>
+            </div>
             <div class="item-dil">Created By {{ item.postAutorName }}</div>
           </div>
           <div class="list-item-buttons">
-            <button v-if="user && item.postAutorId === user._id" @click="deleteItem(item._id)"
-              class="button is-danger">Delete</button>
-            <button v-if="user && item.postAutorId === user._id" @click="editItem(item)"
-              class="button is-primary">Update</button>
+            <button
+              v-if="user && item.postAutorId === user._id"
+              @click="deleteItem(item._id)"
+              class="button is-danger"
+            >
+              Delete
+            </button>
+            <button
+              v-if="user && item.postAutorId === user._id"
+              @click="editItem(item)"
+              class="button is-primary"
+            >
+              Update
+            </button>
           </div>
-
         </li>
       </ul>
     </card>
@@ -36,8 +49,8 @@
 </template>
 
 <script>
-import VueCookies from "vue-cookies"
-import axios from "axios"
+import VueCookies from "vue-cookies";
+import axios from "axios";
 
 export default {
   name: "MyPostsPage",
@@ -49,22 +62,20 @@ export default {
       postdate: null,
       items: [],
       showModal: false,
-    }
+    };
   },
   async created() {
     this.user = VueCookies.get("user");
     try {
       const response = await axios.get("http://localhost:3000");
-      console.log(response)
       this.items = response.data;
-      console.log(this.items)
     } catch (error) {
       console.error(error);
     }
   },
   computed: {
     sortedUserItems() {
-      return this.items.filter(item => item.postAutorId === this.user._id);
+      return this.items.filter((item) => item.postAutorId === this.user._id);
     },
   },
   methods: {
@@ -82,8 +93,8 @@ export default {
         _id: item._id,
         postTitle: item.postTitle,
         postContent: item.postContent,
-        postDate: new Date().toLocaleString('tr-TR'),
-        postAutorName: this.user.name
+        postDate: new Date().toLocaleString("tr-TR"),
+        postAutorName: this.user.name,
       };
     },
     async updateItem() {
@@ -112,14 +123,14 @@ export default {
     },
     async getItems() {
       try {
-        const response = await axios.get('http://localhost:3000');
+        const response = await axios.get("http://localhost:3000");
         this.items = response.data;
       } catch (error) {
         console.error(error);
-        alert('hi zinar, you have an error');
+        alert("hi zinar, you have an error");
       }
     },
-  }
+  },
 };
 </script>
 <style>

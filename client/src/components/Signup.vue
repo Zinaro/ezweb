@@ -73,7 +73,6 @@ export default {
                 VueCookies.set('user', signUpResponse.data);
                 location.reload()
                 this.$router.push('/');
-                console.log(signUpResponse.data);
             } catch (error) {
                 console.error(error);
             }

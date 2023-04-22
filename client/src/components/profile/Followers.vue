@@ -38,7 +38,6 @@ export default {
                 const users = [];
                 for (let i = 0; i < followersIds.length; i++) {
                     const userResponse = await axios.get(`http://localhost:3000/users/${followersIds[i]}`);
-                    console.log(userResponse)
                     users.push(userResponse.data);
                 }
                 this.followersList = users;

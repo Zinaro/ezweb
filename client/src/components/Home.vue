@@ -23,21 +23,20 @@
               <input type="text" v-model="editedItem.postTitle" class="input">
               <input type="text" v-model="editedItem.postContent" class="input">
               <div class="list-item-buttons">
-                <button @click="updateItem" class="button is-primary">Tomar bû</button>
+                <button @click="updateItem" class="button is-primary">Tomar bike</button>
                 <button @click="cancelEdit" class="button is-danger">Têk bibe</button>
               </div>
             </div>
             <div v-else>
               <div class="item-card">
                 <div class="item-nav">{{ item.postTitle }}</div>
-                <div class="item-dil">{{ item.postContent }}</div>
-                <div class="item-dil">{{ getDifference(item.postDate) }}</div>
+                <div v-html="item.postContent" class="item-dil"></div>                <div class="item-dil">{{ getDifference(item.postDate) }}</div>
                 <div class="item-dil">Created By {{ item.postAutorName }}</div>
                 <div class="item-dil">Likes count {{ Object.keys(item.likes).length }}</div>
                 <button class="like" @click="likePost(item._id, item)"
-                  v-if="!item.likes.some((l) => l.likeId == user._id) && user">Hez bike</button>
-                <button class="likered" @click="likePost(item._id, item)" v-else>Hez neke</button>
-                <button @click="viewPost(item)">Şandiyê Nîşan bide</button>
+                  v-if="user && !item.likes.some((l) => l.likeId == user._id)">Hez bike</button>
+                <button class="likered" @click="likePost(item._id, item)" v-else-if="user">Hez neke</button>
+                <button class="like" @click="viewPost(item)">Şandiyê Nîşan bide</button>
                 <Post v-if="selectedPost" :post="selectedPost"/>
               </div>
               <div class="list-item-buttons">
@@ -115,6 +114,7 @@ export default {
         console.error(error)
       }
     },
+    
     async likePost(postttId) {
       try {
         const userId = this.user._id;
@@ -247,6 +247,7 @@ export default {
   font-size: 14px;
   font-weight: bold;
   margin-right: 10px;
+  margin: 10px;
   outline: none;
   padding: 8px 16px;
   text-decoration: none;
@@ -266,6 +267,7 @@ export default {
   font-size: 14px;
   font-weight: bold;
   margin-right: 10px;
+  margin: 10px;
   outline: none;
   padding: 8px 16px;
   text-decoration: none;
