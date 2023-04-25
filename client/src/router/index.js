@@ -23,7 +23,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "login" */ '../views/LoginView.vue')
   },
   {
-    path: "/:userId",
+    path: "/profile/:userId",
     name: "profile",
     component: () => import(/* webpackChunkName: "profile" */ '../views/profile/ProfileView.vue')
   },
@@ -66,6 +66,12 @@ const routes = [
     path: "/post/:postId",
     name: "post",
     component: () => import(/* webpackChunkName: "post" */ '../views/PostView.vue'),
+    props: true
+  },
+  {
+    path: "/:username",
+    name: "username",
+    component: () => import(/* webpackChunkName: "username" */ '../components/UserProfile.vue'),
     props: true
   },
 ]

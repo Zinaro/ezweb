@@ -1,5 +1,8 @@
 const express = require("express");
 const cors = require("cors");
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 const db = require("./db");
 const User = require("./userModel.js");
 const Post = require("./post.js");
@@ -9,6 +12,8 @@ console.log(db);
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", async (req, res) => {
   try {
@@ -114,13 +119,13 @@ app.post("/users", async (req, res) => {
 app.put("/users/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    console.log(user);
     if (!user) {
       return res.status(404).send("User not found");
     }
     user.name = req.body.name || user.name;
     user.mail = req.body.mail || user.mail;
     user.password = req.body.password || user.password;
+    user.profileImage = req.body.profileImage;
     await user.save();
     res.send(user);
   } catch (error) {
@@ -357,6 +362,53 @@ app.get("/users/:userId/posts/favorites", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+
+
+
+
+
+
+
+
+app.post('/upload/:id', (req, res) => {
+  const username = req.params.id;
+  const uploadDir = path.join(__dirname, `../client/src/assets/images/${username}`);
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+  }
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname);
+      const name = username;
+      const filename = name + '-' + Date.now() + ext;
+      if (fs.existsSync(path.join(uploadDir, filename))) {
+        let i = 1;
+        while (fs.existsSync(path.join(uploadDir, `${name}-${i}${ext}`))) {
+          i++;
+        }
+        cb(null, `${name}-${i}${ext}`);
+      } else {
+        cb(null, filename);
+      }
+    }
+  });
+  const upload = multer({ storage: storage }).single('image');
+  upload(req, res, (err) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ message: 'An error occurred while uploading the image.' });
+    }
+    const imageUrl = req.file.filename;
+    res.json({ imageUrl: imageUrl });
+  });
+});
+
+
+
 
 app.listen(3000, () => {
   console.log("Server starting: http://localhost:3000");

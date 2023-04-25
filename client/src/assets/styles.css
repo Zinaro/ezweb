@@ -109,6 +109,16 @@
   margin-bottom: 50px;
 }
 
+.profile-sec {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.item-dilnav {
+  margin-left: 20px;
+  align-items: center;
+  margin-bottom: 10px;
+}
 .item-card {
   display: flex;
   flex-direction: column;
@@ -118,12 +128,14 @@
   font-size: 18px;
   font-weight: bold;
   word-break: break-all;
+  margin-top: 5px;
 }
 
 .item-dil {
   font-size: 14px;
-  color: #666;
   word-break: break-all;
+  margin-top: 5px;
+  color: #999;
 }
 
 .list-item-buttons {

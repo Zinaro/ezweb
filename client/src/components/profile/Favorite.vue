@@ -4,7 +4,7 @@
         <ul>
             <li v-for="item in items" :key="item._id">
                 <h2>{{ item.postTitle }}</h2>
-                <p>{{ item.postContent }}</p>
+                <div v-html="item.postContent"></div>
                 <p>Nivîskar: {{ item.postAutorName }}</p>
                 <p>Dem: {{ item.postDate }}</p>
                 <button class="like" @click="likePost(item._id, item)"

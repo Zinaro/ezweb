@@ -28,8 +28,8 @@
 <script>
 import VueCookies from "vue-cookies";
 import axios from "axios";
-import Quill from "quill";
 import "quill/dist/quill.snow.css";
+import Quill from 'quill'
 
 export default {
   name: "AddPostPage",

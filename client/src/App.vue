@@ -14,7 +14,7 @@
         <a class="navbar-item button" @click="$router.push('/about')">About</a>
         <a v-if="user" class="navbar-item button" @click="$router.push('/users')">Users</a>
         <div v-if="user" class="navbar-item button">
-          Bi xer hati,<a v-if="user" class="navbar-item button" @click="$router.push('/@'+ user.username)"> {{ user.name }}
+          Bi xer hati,<a v-if="user" class="navbar-item button" @click="$router.push('/profile/'+ user.username)"> {{ user.name }}
         </a>
         </div>
       </div>

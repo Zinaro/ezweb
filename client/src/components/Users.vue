@@ -7,14 +7,29 @@
           <li v-for="item in items" :key="item._id" class="list-item">
             <div class="item-card">
               <div class="item-nav">{{ item._id }}</div>
-              <div class="item-nav">{{ item.name }}</div>
-              <div class="item-dil">{{ item.username }}</div>
+              <div class="profile-sec">
+                <div class="profile-image">
+                  <img
+                    v-bind:src="
+                      item.profileImage
+                        ? require(`@/assets/images/${item.username}/${item.profileImage}`)
+                        : require(`@/assets/images/default.jpg`)
+                    "
+                    alt="Profile Image"
+                  />
+                </div>
+                <div class="item-dilnav">
+                  <a href="#" @click.prevent="goToProfile(item.username)" class="item-nav">{{ item.name }}</a>
+                  <div class="item-nav">{{ item.name }}</div>
+                  <div class="item-dil">{{ item.username }}</div>
+                </div>
+              </div>
               <div class="item-dil">
                 FOLLOWING = {{ Object.keys(item.following).length }}
                 {{ followingNames(item._id) }}
               </div>
               <div class="item-dil">
-                FOLLOWER = {{ Object.keys(item.followers).length }}
+                FOLLOWERS = {{ Object.keys(item.followers).length }}
                 {{ followersNames(item._id) }}
               </div>
               <button
@@ -80,6 +95,9 @@ export default {
     }
   },
   methods: {
+    goToProfile(username) {
+    this.$router.push({ name: 'username', params: { username } });
+  },
     async refreshData() {
       try {
         const response = await axios.get("http://localhost:3000/users", {
@@ -203,4 +221,16 @@ export default {
 
 <style>
 @import url("../assets/styles.css");
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 </style>
