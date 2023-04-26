@@ -3,5 +3,9 @@ import App from './App.vue'
 import router from './router'
 import VueCookies from 'vue-cookies'
 
-createApp(App).use(router).use(VueCookies).mount('#app')
+const app = createApp(App)
 
+app.use(router)
+app.use(VueCookies)
+
+app.mount('#app')

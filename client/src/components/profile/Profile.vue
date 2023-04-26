@@ -1,125 +1,47 @@
 <template>
-  <div class="profile">
+  <div v-if="user" class="profile">
     <div class="settings">
       <button @click="$router.push('/')">Rûpela Sereke</button>
-      <button @click="$router.push('/@' + user.username)">Profîla min</button>
-      <button @click="$router.push('/about')">Derbar</button>
-      <button
-        @click="
-          showSettings = true;
-          showMyPosts = false;
-          showFollowing = false;
-          showFollowers = false;
-          showFavorites = false;
-          showAddPost = false;
-        "
-      >
-        Sazkarî
-      </button>
-      <button
-        @click="
-          showAddPost = true;
-          showMyPosts = false;
-          showFollowing = false;
-          showFollowers = false;
-          showFavorites = false;
-          showSettings = false;
-        "
-      >
-        Şandî Tevlî bike
-      </button>
+      <button @click="$router.push('/' + user.username)">Profîla min</button>
+      <button v-if="user && user.permission === 'root' || user.permission === 'admin'" :class="{ active: activeTab === 'add-category' }"
+      @click="activeTab = 'add-category'">Kategorî Tevlî bike</button>
+      <button v-if="user && user.permission === 'root' || user.permission === 'admin'" :class="{ active: activeTab === 'user-control' }"
+      @click="activeTab = 'user-control'">User Control</button>
+      <button :class="{ active: activeTab === 'settings' }"
+      @click="activeTab = 'settings'">Sazkarî</button>
+      <button v-if="user && user.permission === 'root' || user.permission === 'admin' || user.permission === 'editor' || user.permission === 'niviskar'" 
+      :class="{ active: activeTab === 'add-post' }"
+        @click="activeTab = 'add-post'">Şandî Tevlî bike</button>
     </div>
     <div class="content-section">
       <div class="top-section">
         <div class="profile-row">
             <div class="profile-image">
-                <img
-            v-if="user.profileImage"
-            :src="
-              require(`@/assets/images/${user.username}/${user.profileImage}`)
-            "
-            alt="Wêneya Profîlê"
-            class="profile-image"
-          />
-          <img
-            v-else
-            src="../../assets/images/default.jpg"
-            alt="Wêneya Profîlê"
-            class="profile-image"
-          />
-            </div>
-          
+                <img v-if="user.profileImage" :src="
+              require(`@/assets/images/${user._id}/${user.profileImage}`) " alt="Wêneya Profîlê" class="profile-image" />
+          <img v-else src="../../assets/images/default.jpg" alt="Wêneya Profîlê" class="profile-image"/></div>
           <div class="profile-info">
             <h2>{{ user.name }}</h2>
             <p>{{ user.mail }}</p>
           </div>
         </div>
         <div class="button-row">
-          <button
-            class="button-profile"
-            :class="{ active: showMyPosts }"
-            @click="
-              showMyPosts = true;
-              showFollowing = false;
-              showFollowers = false;
-              showFavorites = false;
-              showAddPost = false;
-              showSettings = false;
-            "
-          >
-            Şandiyên min
+            <button v-if="user.permission === 'root' || user.permission === 'admin' || user.permission === 'editor' || user.permission === 'niviskar'" class="button-profile" :class="{ active: activeTab === 'my-posts' }"
+            @click="activeTab = 'my-posts'">Şandiyên min
           </button>
-          <button
-            class="button-profile"
-            :class="{ active: showFollowing }"
-            @click="
-              showMyPosts = false;
-              showFollowing = true;
-              showFollowers = false;
-              showFavorites = false;
-              showAddPost = false;
-              showSettings = false;
-            "
-          >
-            Dişopîne
+          <button class="button-profile" :class="{ active: activeTab === 'following' }"
+            @click="activeTab = 'following'">Dişopîne
           </button>
-          <button
-            class="button-profile"
-            :class="{ active: showFollowers }"
-            @click="
-              showMyPosts = false;
-              showFollowing = false;
-              showFollowers = true;
-              showFavorites = false;
-              showAddPost = false;
-              showSettings = false;
-            "
-          >
-            Şopîner
+          <button v-if="user.permission === 'root' || user.permission === 'admin' || user.permission === 'editor' || user.permission === 'niviskar'" class="button-profile" :class="{ active: activeTab === 'followers' }"
+            @click="activeTab = 'followers'">Şopîner
           </button>
-          <button
-            class="button-profile"
-            :class="{ active: showFavorites }"
-            @click="
-              showMyPosts = false;
-              showFollowing = false;
-              showFollowers = false;
-              showFavorites = true;
-              showAddPost = false;
-              showSettings = false;
-            "
-          >
-            Hezkirinên min
+          <button class="button-profile" :class="{ active: activeTab === 'favorites' }"
+            @click="activeTab = 'favorites'">Hezkirinên min
           </button>
         </div>
       </div>
       <div class="bottom-section">
-        <MyPosts v-if="showMyPosts"></MyPosts>
-        <Following v-if="showFollowing"></Following>
-        <Followers v-if="showFollowers"></Followers>
-        <Favorite v-if="showFavorites"></Favorite>
-        <AddPost v-if="showAddPost"></AddPost>
-        <Settings v-if="showSettings"></Settings>
+        <component :is="activeTabComponent"></component>
       </div>
     </div>
   </div>
@@ -133,20 +55,42 @@ import Followers from "../profile/Followers.vue";
 import Favorite from "../profile/Favorite.vue";
 import AddPost from "../profile/AddPost.vue";
 import Settings from "../profile/Settings.vue";
+import AddCategory from "../profile/AddCategory.vue";
+import UserControl from "../profile/UserControl.vue"
 import axios from "axios";
+
 
 export default {
   name: "ProfilePage",
   data() {
     return {
       user: null,
-      showMyPosts: true,
-      showFollowing: false,
-      showFollowers: false,
-      showFavorites: false,
-      showAddPost: false,
-      showSettings: false,
+      activeTab: "my-posts",
     };
+  },
+  computed: {
+    activeTabComponent() {
+      switch (this.activeTab) {
+        case "my-posts":
+          return "MyPosts";
+        case "following":
+          return "Following";
+        case "followers":
+          return "Followers";
+        case "favorites":
+          return "Favorite";
+        case "add-post":
+          return "AddPost";
+        case "add-category":
+          return "AddCategory";
+        case "user-control":
+          return "UserControl";
+        case "settings":
+          return "Settings";
+        default:
+          return "MyPosts";
+      }
+    },
   },
   created() {
     this.user = VueCookies.get("user");
@@ -162,6 +106,8 @@ export default {
     Followers,
     Favorite,
     AddPost,
+    AddCategory,
+    UserControl,
     Settings,
   },
 };

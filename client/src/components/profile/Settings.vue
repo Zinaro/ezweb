@@ -81,7 +81,7 @@ export default {
       formData.append("image", this.profileImage);
       try {
         const response = await axios.post(
-          `http://localhost:3000/upload/${this.user.username}`,
+          `http://localhost:3000/upload/${this.user._id}`,
           formData,
           {
             headers: {

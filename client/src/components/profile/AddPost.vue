@@ -13,6 +13,16 @@
           required
         />
       </div>
+      <div class="form-group">
+        <label for="postcategory" class="label">Kategori:</label>
+        <select id="postcategory" v-model="postcategory" class="input" required>
+          <option value="">Kategori Hilbijere</option>
+          <option
+            v-for="category in categories" :key="category._id" :value="category._id">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
       <div class="form-group form-postcontent">
         <label for="postcontent" class="label">Naverok:</label>
         <div ref="editor" :style="{ 'min-height': '150px' }"></div>
@@ -29,7 +39,7 @@
 import VueCookies from "vue-cookies";
 import axios from "axios";
 import "quill/dist/quill.snow.css";
-import Quill from 'quill'
+import Quill from "quill";
 
 export default {
   name: "AddPostPage",
@@ -37,9 +47,11 @@ export default {
     return {
       user: null,
       posttitle: "",
+      postcategory: "",
       postcontent: "",
       postdate: null,
       showMessage: false,
+      categories: [],
     };
   },
   created() {
@@ -61,31 +73,41 @@ export default {
       [{ align: [] }],
       ["clean"],
     ];
-
     const editor = new Quill(this.$refs.editor, {
       modules: {
         toolbar: toolbarOptions,
-      },
-      theme: "snow",
-    });
-
+      }, theme: "snow",});
     editor.on("text-change", () => {
       this.postcontent = editor.root.innerHTML;
     });
+
+    this.fetchCategories();
   },
   methods: {
+    async fetchCategories() {
+      try {
+        const response = await axios.get('http://localhost:3000/category');
+        this.categories = response.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async addItem() {
       const item = {
         postTitle: this.posttitle,
+        postCategory: this.postcategory,
         postContent: this.postcontent,
         postDate: new Date().toLocaleString("tr-TR"),
         postAutorId: this.user._id,
         postAutorName: this.user.name,
       };
       try {
-        await axios.post("http://localhost:3000", item);
-        const response = await axios.get("http://localhost:3000");
-        this.items = response.data;
+        const response = await axios.post("http://localhost:3000", item);
+        const postId = response.data._id;
+        const categoryResponse = await axios.put(`http://localhost:3000/category/${this.postcategory}/addpost`, { postId });
+        console.log(categoryResponse.data);
+        const itemsResponse = await axios.get("http://localhost:3000");
+        this.items = itemsResponse.data;
         this.clearInputs();
         this.showMessage = true;
         setTimeout(() => {

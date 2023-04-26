@@ -6,6 +6,8 @@ const path = require("path");
 const db = require("./db");
 const User = require("./userModel.js");
 const Post = require("./post.js");
+const Category = require("./category.js")
+
 
 db.connect();
 console.log(db);
@@ -134,15 +136,46 @@ app.put("/users/:id", async (req, res) => {
   }
 });
 
-app.delete("/users/:id", async (req, res) => {
+app.put("/users/:id/root", async (req, res) => {
   try {
-    const user = await User.findOneAndDelete(req.params.id);
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    user.name = req.body.name || user.name;
+    user.username = req.body.username || user.username;
+    user.mail = req.body.mail || user.mail;
+    user.permission = req.body.permission || user.permission;
+    user.password = req.body.password || user.password;
+    if (req.body.username && req.body.username !== user.username) {
+      const existingUser = await User.findOne({ username: req.body.username });
+      if (existingUser) {
+        return res.status(400).send("Username already exists");
+      }
+    }
+    if (req.body.mail && req.body.mail !== user.mail) {
+      const existingUser = await User.findOne({ mail: req.body.mail });
+      if (existingUser) {
+        return res.status(400).send("E-mail already exists");
+      }
+    }
+    await user.save();
+    res.send(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+});
+
+app.delete("/users/:id/root", async (req, res) => {
+  try {
+    const user = await User.findOneAndDelete({ _id: req.params.id });
     if (!user) {
       res.status(404).send("hi zinar, user not found");
     }
     res.status(200).send();
   } catch (error) {
-    console.error(error);
+    console.log(error);
     res.status(500).send("hi zinar, you have an error");
   }
 });
@@ -372,8 +405,8 @@ app.get("/users/:userId/posts/favorites", async (req, res) => {
 
 
 app.post('/upload/:id', (req, res) => {
-  const username = req.params.id;
-  const uploadDir = path.join(__dirname, `../client/src/assets/images/${username}`);
+  const userId = req.params.id;
+  const uploadDir = path.join(__dirname, `../client/src/assets/images/${userId}`);
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
   }
@@ -383,8 +416,8 @@ app.post('/upload/:id', (req, res) => {
     },
     filename: (req, file, cb) => {
       const ext = path.extname(file.originalname);
-      const name = username;
-      const filename = name + '-' + Date.now() + ext;
+      const name = userId;
+      const filename = name + ext;
       if (fs.existsSync(path.join(uploadDir, filename))) {
         let i = 1;
         while (fs.existsSync(path.join(uploadDir, `${name}-${i}${ext}`))) {
@@ -406,6 +439,82 @@ app.post('/upload/:id', (req, res) => {
     res.json({ imageUrl: imageUrl });
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+// CATEGORY
+app.get("/category", async (req, res) => {
+  try {
+    const categories = await Category.find().populate("posts");
+    res.json(categories);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "hi zinar, you have an error" });
+  }
+});
+
+app.post("/category", async (req, res) => {
+  try {
+    const category = req.body;
+    const newCategory = await Category.create(category);
+    await newCategory.save().then(newCategory);
+    res.status(201).json(newCategory);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "hi zinar, you have an error" });
+  }
+});
+app.put("/category/:id/addpost", async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+    const postId = req.body.postId;
+    const category = await Category.findById(categoryId);
+    category.posts.push(postId);
+    await category.save();
+    res.status(200).send("Post added to category successfully");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error adding post to category");
+  }
+});
+
+app.put("/category/:id/", async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+    const updatedCategory = await Category.findByIdAndUpdate(
+      categoryId,
+      { name: req.body.name },
+      { new: true }
+    ).populate("posts");
+    res.status(200).json(updatedCategory);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.delete("/category/:id/", async (req, res) => {
+  try {
+    const category = await Category.findByIdAndDelete(req.params.id);
+    if (!category) {
+      return res.status(404).send("Category not found");
+    }
+    res.status(200).send("Category deleted successfully");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error deleting category");
+  }
+});
+
+
 
 
 

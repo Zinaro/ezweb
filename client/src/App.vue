@@ -1,28 +1,45 @@
 <template>
   <nav class="navbar">
-    <div class="navbar-brand">
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" @click="toggleNavbar">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-      
-    </div>
     <div class="navbar-menu" :class="{ 'is-active': navbarOpen }">
       <div class="navbar-start">
         <a class="navbar-item button" @click="$router.push('/')">Home</a>
         <a class="navbar-item button" @click="$router.push('/about')">About</a>
-        <a v-if="user" class="navbar-item button" @click="$router.push('/users')">Users</a>
+        <a class="navbar-item button" @click="$router.push('/users')">Users</a>
+        <div class="navbar-item dropdown is-hoverable">
+          <button class="" @click="toggleDropdown">
+            Categories
+            <span class="icon">
+              <i class="fas fa-angle-down"></i>
+            </span>
+          </button>
+          <div class="navbar-dropdown" v-show="showDropdown">
+            <a v-for="category in categories" :key="category._id"
+              class="navbar-item" @click="$router.push('/category/' + category.name)">
+              {{ category.name }}
+            </a>
+          </div>
+        </div>
         <div v-if="user" class="navbar-item button">
-          Bi xer hati,<a v-if="user" class="navbar-item button" @click="$router.push('/profile/'+ user.username)"> {{ user.name }}
-        </a>
+          Bi xer hati,<a
+            v-if="user"
+            class="navbar-item button"
+            @click="$router.push('/profile/' + user.username)"
+          >
+            {{ user.name }}
+          </a>
         </div>
       </div>
       <div class="navbar-end">
         <div class="navbar-item button">
-            <a v-if="!user" class="button button" @click="$router.push('/signup')">Sign up</a>
-            <a v-if="!user" class="button button" @click="$router.push('/login')">Login</a>
-            <button v-if="user" class="button button" @click.prevent="logout">Log out</button>
+          <a v-if="!user" class="button button" @click="$router.push('/signup')"
+            >Sign up</a
+          >
+          <a v-if="!user" class="button button" @click="$router.push('/login')"
+            >Login</a
+          >
+          <button v-if="user" class="button button" @click.prevent="logout">
+            Log out
+          </button>
         </div>
       </div>
     </div>
@@ -32,32 +49,48 @@
 </template>
 
 <script>
-import VueCookies from 'vue-cookies'
+import VueCookies from "vue-cookies";
+import axios from "axios";
 
 export default {
-  name: 'App',
+  name: "App",
   data() {
     return {
       navbarOpen: false,
-      user: VueCookies.get("user")
-    }
+      user: VueCookies.get("user"),
+      categories: [],
+      showDropdown: false,
+    };
+  },
+  mounted() {
+    this.fetchCategories();
   },
   methods: {
+    toggleDropdown() {
+      this.showDropdown = !this.showDropdown;
+    },
+    async fetchCategories() {
+      try {
+        const response = await axios.get("http://localhost:3000/category");
+        this.categories = response.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     toggleNavbar() {
       this.navbarOpen = !this.navbarOpen;
     },
     logout() {
-      VueCookies.remove('user')
-      this.user = null
-      window.location.reload()
-    }
-  }
-}
-
+      VueCookies.remove("user");
+      this.user = null;
+      window.location.reload();
+    },
+  },
+};
 </script>
 
 <style>
-@import url('https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css');
+@import url("https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css");
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -67,6 +100,24 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+
+.navbar-dropdown {
+  position: absolute;
+  top: 100%;
+  z-index: 20;
+  display: none;
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+}
+
 
 .navbar {
   position: fixed;
@@ -104,7 +155,6 @@ export default {
   transform: rotate(-45deg);
 }
 
-
 .navbar-menu.is-active {
   display: block;
 }
@@ -120,9 +170,8 @@ export default {
 }
 
 .navbar-item:hover {
-  background-color:  #3e8e41;
+  background-color: #3e8e41;
 }
-
 
 .button,
 .my-button {
@@ -132,7 +181,7 @@ export default {
   padding: 10px;
   border: none;
   border-radius: 5px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   font-size: 16px;
   cursor: pointer;

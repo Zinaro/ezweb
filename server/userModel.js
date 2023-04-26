@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
   },
   permission: {
     type: String,
-    enum: ["root", "editor", "niviskar", "user"],
+    enum: ["root", "admin", "editor", "niviskar", "user"],
     default: "user",
   },
   following: [

@@ -12,7 +12,7 @@
                   <img
                     v-bind:src="
                       item.profileImage
-                        ? require(`@/assets/images/${item.username}/${item.profileImage}`)
+                        ? require(`@/assets/images/${item._id}/${item.profileImage}`)
                         : require(`@/assets/images/default.jpg`)
                     "
                     alt="Profile Image"

@@ -63,6 +63,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "addpost" */ '../views/profile/AddPostView.vue')
   },
   {
+    path: "/:userId/addcategory",
+    name: "addcategory",
+    component: () => import(/* webpackChunkName: "addcategory" */ '../views/profile/AddCategoryView.vue')
+  },
+  {
+    path: "/:userId/usercontrol",
+    name: "usercontrol",
+    component: () => import(/* webpackChunkName: "usercontrol" */ '../views/profile/UserControlView.vue')
+  },
+  {
     path: "/post/:postId",
     name: "post",
     component: () => import(/* webpackChunkName: "post" */ '../views/PostView.vue'),
