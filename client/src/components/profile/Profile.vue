@@ -7,6 +7,8 @@
       @click="activeTab = 'add-category'">Kategorî Tevlî bike</button>
       <button v-if="user && user.permission === 'root' || user.permission === 'admin'" :class="{ active: activeTab === 'user-control' }"
       @click="activeTab = 'user-control'">User Control</button>
+      <button v-if="user && user.permission === 'root' || user.permission === 'admin' || user.permission === 'editor'" :class="{ active: activeTab === 'post-control' }"
+      @click="activeTab = 'post-control'">Post Control</button>
       <button :class="{ active: activeTab === 'settings' }"
       @click="activeTab = 'settings'">Sazkarî</button>
       <button v-if="user && user.permission === 'root' || user.permission === 'admin' || user.permission === 'editor' || user.permission === 'niviskar'" 
@@ -57,6 +59,7 @@ import AddPost from "../profile/AddPost.vue";
 import Settings from "../profile/Settings.vue";
 import AddCategory from "../profile/AddCategory.vue";
 import UserControl from "../profile/UserControl.vue"
+import PostControl from "../profile/PostControl.vue"
 import axios from "axios";
 
 
@@ -85,6 +88,8 @@ export default {
           return "AddCategory";
         case "user-control":
           return "UserControl";
+        case "post-control":
+          return "PostControl";
         case "settings":
           return "Settings";
         default:
@@ -108,6 +113,7 @@ export default {
     AddPost,
     AddCategory,
     UserControl,
+    PostControl,
     Settings,
   },
 };
@@ -135,7 +141,7 @@ button,
   border: none;
   border-radius: 5px;
   background-color: #4caf50;
-  color: white !important;
+  color: white;
   font-size: 16px;
   cursor: pointer;
   white-space: nowrap;

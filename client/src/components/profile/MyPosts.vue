@@ -3,7 +3,7 @@
     <h1 class="item-nav">Şandiyên min</h1>
     <card title="Items">
       <ul class="list">
-        <li v-for="item in sortedUserItems" :key="item._id" class="list-item">
+        <li v-for="item in sortedItems" :key="item._id" class="list-item">
           <div class="item-card">
             <div class="item-nav">{{ item.postTitle }}</div>
             <div v-if="!item.showModal && item.postContent.length > 500">
@@ -74,15 +74,15 @@ export default {
     }
   },
   computed: {
-    sortedUserItems() {
-      return this.items.filter((item) => item.postAutorId === this.user._id);
+    sortedItems() {
+      return this.items.slice().reverse();
     },
   },
   methods: {
     async deleteItem(itemId) {
       try {
         await axios.delete(`http://localhost:3000/${itemId}`);
-        this.items = this.items.filter((item) => item._id !== itemId); // Silinen öğeyi listeden kaldırın
+        this.items = this.items.filter((item) => item._id !== itemId);
       } catch (error) {
         console.error(error);
         alert("hi zinar, you have an error");

@@ -2,7 +2,7 @@
   <div class="add-post">
     <h1>Şandî Tevlî bike</h1>
 
-    <div v-if="user" class="form form-section">
+    <div v-if="user" class="form form-section-add">
       <div class="form-group">
         <label for="posttitle" class="label">Sernav:</label>
         <input
@@ -25,7 +25,7 @@
       </div>
       <div class="form-group form-postcontent">
         <label for="postcontent" class="label">Naverok:</label>
-        <div ref="editor" :style="{ 'min-height': '150px' }"></div>
+        <Ckeditor ref="editor" v-model="postcontent" :config="config"></Ckeditor>
       </div>
       <button type="submit" class="button is-primary" @click.prevent="addItem">
         Tevlî bike
@@ -38,9 +38,7 @@
 <script>
 import VueCookies from "vue-cookies";
 import axios from "axios";
-import "quill/dist/quill.snow.css";
-import Quill from "quill";
-
+import Ckeditor from '@/components/profile/post/Ckeditor.vue';
 export default {
   name: "AddPostPage",
   data() {
@@ -52,35 +50,24 @@ export default {
       postdate: null,
       showMessage: false,
       categories: [],
+      config: {
+  styles: [
+    {
+      name: "Custom Color",
+      element: "span",
+      styles: {
+        color: "#FF0000", // Bu alanda istediğiniz rengi belirleyebilirsiniz.
+      },
+    },
+  ],
+}
     };
+  },
+  components: {
+    Ckeditor
   },
   created() {
     this.user = VueCookies.get("user");
-  },
-  mounted() {
-    const toolbarOptions = [
-      ["bold", "italic", "underline", "strike"],
-      ["blockquote", "code-block"],
-      [{ header: 1 }, { header: 2 }],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ script: "sub" }, { script: "super" }],
-      [{ indent: "-1" }, { indent: "+1" }],
-      [{ direction: "rtl" }],
-      [{ size: ["small", false, "large", "huge"] }],
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      [{ color: [] }, { background: [] }],
-      [{ font: [] }],
-      [{ align: [] }],
-      ["clean"],
-    ];
-    const editor = new Quill(this.$refs.editor, {
-      modules: {
-        toolbar: toolbarOptions,
-      }, theme: "snow",});
-    editor.on("text-change", () => {
-      this.postcontent = editor.root.innerHTML;
-    });
-
     this.fetchCategories();
   },
   methods: {
@@ -96,17 +83,17 @@ export default {
       const item = {
         postTitle: this.posttitle,
         postCategory: this.postcategory,
-        postContent: this.postcontent,
+        postContent: this.$refs.editor.editorData,
         postDate: new Date().toLocaleString("tr-TR"),
         postAutorId: this.user._id,
         postAutorName: this.user.name,
       };
       try {
-        const response = await axios.post("http://localhost:3000", item);
+        const response = await axios.post("http://localhost:3000/posts", item);
         const postId = response.data._id;
         const categoryResponse = await axios.put(`http://localhost:3000/category/${this.postcategory}/addpost`, { postId });
         console.log(categoryResponse.data);
-        const itemsResponse = await axios.get("http://localhost:3000");
+        const itemsResponse = await axios.get("http://localhost:3000/posts");
         this.items = itemsResponse.data;
         this.clearInputs();
         this.showMessage = true;
@@ -121,13 +108,6 @@ export default {
     clearInputs() {
       this.posttitle = "";
       this.postcontent = "";
-      const editor = new Quill(this.$refs.editor, {
-        modules: {
-          toolbar: true,
-        },
-        theme: "snow",
-      });
-      editor.setText("");
     },
   },
 };
@@ -140,14 +120,14 @@ export default {
   margin-top: 10px;
   text-align: center;
 }
-
 .add-post {
   max-width: 800px;
   margin: 0 auto;
   padding-bottom: 100px;
 }
-.form-section {
+.form-section-add {
   max-width: 600px;
   margin: 0 auto;
+  background-color: #fff;
 }
 </style>

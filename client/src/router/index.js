@@ -63,6 +63,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "addpost" */ '../views/profile/AddPostView.vue')
   },
   {
+    path: "/:userId/editpost",
+    name: "editpost",
+    component: () => import(/* webpackChunkName: "editpost" */ '../components/profile/EditPost.vue')
+  },
+  {
     path: "/:userId/addcategory",
     name: "addcategory",
     component: () => import(/* webpackChunkName: "addcategory" */ '../views/profile/AddCategoryView.vue')
@@ -71,6 +76,11 @@ const routes = [
     path: "/:userId/usercontrol",
     name: "usercontrol",
     component: () => import(/* webpackChunkName: "usercontrol" */ '../views/profile/UserControlView.vue')
+  },
+  {
+    path: "/:userId/postcontrol",
+    name: "postcontrol",
+    component: () => import(/* webpackChunkName: "postcontrol" */ '../views/profile/PostControlView.vue')
   },
   {
     path: "/post/:postId",

@@ -70,7 +70,6 @@ export default {
     this.user = VueCookies.get("user");
     this.name = this.user.name;
     this.mail = this.user.mail;
-    console.log(this.user.mail);
   },
   methods: {
     onFileChange(e) {

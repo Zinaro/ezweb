@@ -327,6 +327,38 @@ app.get("/posts", async (req, res) => {
     res.status(500).json({ message: "hi zinar, server error" });
   }
 });
+app.get("/posts/unapproved", async (req, res) => {
+  try {
+    const posts = await Post.find({ postApproved: false });
+    res.status(200).json(posts);
+  } catch (error) {
+    console.log(error);
+    console.log(``)
+    res.status(500).json({ message: "hi zinar, server error" });
+  }
+});
+app.get("/posts/approved", async (req, res) => {
+  try {
+    const posts = await Post.find({ postApproved: true });
+    res.status(200).json(posts);
+  } catch (error) {
+    console.log(error);
+    console.log(``)
+    res.status(500).json({ message: "hi zinar, server error" });
+  }
+});
+app.delete("/posts/:id", async (req, res) => {
+  try {
+    const post = await Post.findByIdAndDelete(req.params.id);
+    if (!post) {
+      res.status(404).send("hi zinar, document not found");
+    }
+    res.status(200).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("hi zinar, you have an error");
+  }
+});
 app.get("/post/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -336,6 +368,27 @@ app.get("/post/:id", async (req, res) => {
     res.status(500).json({ message: "hi zinar, server error" });
   }
 });
+app.post("/posts", async (req, res) => {
+  try {
+    const post = req.body;
+    const newPost = await Post.create(post);
+    await newPost.save().then(newPost);
+    res.status(201).json(newPost);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "hi zinar, you have an error" });
+  }
+});
+app.put("/posts/:id", async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(req.params.id, req.body);
+    res.json(post);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 app.put("/posts/:id/like", async (req, res) => {
   try {

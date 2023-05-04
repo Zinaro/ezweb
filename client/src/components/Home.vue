@@ -2,19 +2,6 @@
   <div class="container">
     <h1 class="title">Silav Zinar, {{ msg }}</h1>
     <div>
-      <div v-if="user" class="form-section">
-        <form v-if="user" @submit.prevent="addItem" class="form">
-          <div class="form-group">
-            <label for="nav" class="label">Sernav:</label>
-            <input type="text" id="nav" v-model="posttitle" class="input" required>
-          </div>
-          <div class="form-group form-dil">
-            <label for="dil" class="label">Naverok:</label>
-            <textarea id="dil" v-model="postcontent" class="input" rows="3" required></textarea>
-          </div>
-          <button type="submit" class="button is-primary">Tevlî bike</button>
-        </form>
-      </div>
 
       <card title="Items">
         <ul class="list">
