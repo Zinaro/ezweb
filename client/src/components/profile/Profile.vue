@@ -3,42 +3,116 @@
     <div class="settings">
       <button @click="$router.push('/')">Rûpela Sereke</button>
       <button @click="$router.push('/' + user.username)">Profîla min</button>
-      <button v-if="user && user.permission === 'root' || user.permission === 'admin'" :class="{ active: activeTab === 'add-category' }"
-      @click="activeTab = 'add-category'">Kategorî Tevlî bike</button>
-      <button v-if="user && user.permission === 'root' || user.permission === 'admin'" :class="{ active: activeTab === 'user-control' }"
-      @click="activeTab = 'user-control'">User Control</button>
-      <button v-if="user && user.permission === 'root' || user.permission === 'admin' || user.permission === 'editor'" :class="{ active: activeTab === 'post-control' }"
-      @click="activeTab = 'post-control'">Post Control</button>
-      <button :class="{ active: activeTab === 'settings' }"
-      @click="activeTab = 'settings'">Sazkarî</button>
-      <button v-if="user && user.permission === 'root' || user.permission === 'admin' || user.permission === 'editor' || user.permission === 'niviskar'" 
-      :class="{ active: activeTab === 'add-post' }"
-        @click="activeTab = 'add-post'">Şandî Tevlî bike</button>
+      <button
+        v-if="
+          (user && user.permission === 'root') || user.permission === 'admin'
+        "
+        :class="{ active: activeTab === 'add-category' }"
+        @click="activeTab = 'add-category'"
+      >
+        Kategorî Tevlî bike
+      </button>
+      <button
+        v-if="
+          (user && user.permission === 'root') || user.permission === 'admin'
+        "
+        :class="{ active: activeTab === 'user-control' }"
+        @click="activeTab = 'user-control'"
+      >
+        User Control
+      </button>
+      <button
+        v-if="
+          (user && user.permission === 'root') ||
+          user.permission === 'admin' ||
+          user.permission === 'editor'
+        "
+        :class="{ active: activeTab === 'post-control' }"
+        @click="activeTab = 'post-control'"
+      >
+        Post Control
+      </button>
+      <button
+        :class="{ active: activeTab === 'settings' }"
+        @click="activeTab = 'settings'"
+      >
+        Sazkarî
+      </button>
+      <button
+        v-if="
+          (user && user.permission === 'root') ||
+          user.permission === 'admin' ||
+          user.permission === 'editor' ||
+          user.permission === 'niviskar'
+        "
+        :class="{ active: activeTab === 'add-post' }"
+        @click="activeTab = 'add-post'"
+      >
+        Şandî Tevlî bike
+      </button>
     </div>
     <div class="content-section">
       <div class="top-section">
         <div class="profile-row">
-            <div class="profile-image">
-                <img v-if="user.profileImage" :src="
-              require(`@/assets/images/${user._id}/${user.profileImage}`) " alt="Wêneya Profîlê" class="profile-image" />
-          <img v-else src="../../assets/images/default.jpg" alt="Wêneya Profîlê" class="profile-image"/></div>
+          <div class="profile-image">
+            <img
+              v-if="user.profileImage"
+              :src="require(`@/assets/images/${user._id}/${user.profileImage}`)"
+              alt="Wêneya Profîlê"
+              class="profile-image"
+            />
+            <img
+              v-else
+              src="../../assets/images/default.jpg"
+              alt="Wêneya Profîlê"
+              class="profile-image"
+            />
+          </div>
           <div class="profile-info">
             <h2>{{ user.name }}</h2>
             <p>{{ user.mail }}</p>
           </div>
         </div>
         <div class="button-row">
-            <button v-if="user.permission === 'root' || user.permission === 'admin' || user.permission === 'editor' || user.permission === 'niviskar'" class="button-profile" :class="{ active: activeTab === 'my-posts' }"
-            @click="activeTab = 'my-posts'">Şandiyên min
+          <button
+            v-if="
+              user.permission === 'root' ||
+              user.permission === 'admin' ||
+              user.permission === 'editor' ||
+              user.permission === 'niviskar'
+            "
+            class="button-profile"
+            :class="{ active: activeTab === 'my-posts' }"
+            @click="activeTab = 'my-posts'"
+          >
+            Şandiyên min
           </button>
-          <button class="button-profile" :class="{ active: activeTab === 'following' }"
-            @click="activeTab = 'following'">Dişopîne
+          <button
+            class="button-profile"
+            :class="{ active: activeTab === 'following' }"
+            @click="activeTab = 'following'"
+          >
+            Dişopîne
           </button>
-          <button v-if="user.permission === 'root' || user.permission === 'admin' || user.permission === 'editor' || user.permission === 'niviskar'" class="button-profile" :class="{ active: activeTab === 'followers' }"
-            @click="activeTab = 'followers'">Şopîner
+          <button
+            v-if="
+              user.permission === 'root' ||
+              user.permission === 'admin' ||
+              user.permission === 'editor' ||
+              user.permission === 'niviskar'
+            "
+            class="button-profile"
+            :class="{ active: activeTab === 'followers' }"
+            @click="activeTab = 'followers'"
+          >
+            Şopîner
           </button>
-          <button class="button-profile" :class="{ active: activeTab === 'favorites' }"
-            @click="activeTab = 'favorites'">Hezkirinên min
+          <button
+            class="button-profile"
+            :class="{ active: activeTab === 'favorites' }"
+            @click="activeTab = 'favorites'"
+          >
+            Hezkirinên min
           </button>
         </div>
       </div>
@@ -58,10 +132,9 @@ import Favorite from "../profile/Favorite.vue";
 import AddPost from "../profile/AddPost.vue";
 import Settings from "../profile/Settings.vue";
 import AddCategory from "../profile/AddCategory.vue";
-import UserControl from "../profile/UserControl.vue"
-import PostControl from "../profile/PostControl.vue"
+import UserControl from "../profile/UserControl.vue";
+import PostControl from "../profile/PostControl.vue";
 import axios from "axios";
-
 
 export default {
   name: "ProfilePage",
@@ -93,7 +166,7 @@ export default {
         case "settings":
           return "Settings";
         default:
-          return "MyPosts";
+          return this.user.permission == 'user' ? "Favorite" : "MyPosts";
       }
     },
   },
@@ -101,9 +174,11 @@ export default {
     this.user = VueCookies.get("user");
   },
   mounted() {
-    axios.get(`http://localhost:3000/users/${this.user._id}`).then(response => {
-      this.user.profileImage = response.data.profileImage;
-    });
+    axios
+      .get(`http://localhost:3000/users/${this.user._id}`)
+      .then((response) => {
+        this.user.profileImage = response.data.profileImage;
+      });
   },
   components: {
     MyPosts,

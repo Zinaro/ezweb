@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="title">Veriler {{ msg }}</h1>
+    <h1 class="title">{{ msg }}</h1>
     <div>
       <card title="Items">
         <ul class="list">

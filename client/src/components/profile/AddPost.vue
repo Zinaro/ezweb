@@ -2,7 +2,7 @@
   <div class="add-post">
     <h1>Şandî Tevlî bike</h1>
 
-    <div v-if="user" class="form form-section-add">
+    <div v-if="user" class="form-section-adddd">
       <div class="form-group">
         <label for="posttitle" class="label">Sernav:</label>
         <input
@@ -25,7 +25,7 @@
       </div>
       <div class="form-group form-postcontent">
         <label for="postcontent" class="label">Naverok:</label>
-        <Ckeditor ref="editor" v-model="postcontent" :config="config"></Ckeditor>
+        <Tiny ref="editor" v-model="postcontent"></Tiny>
       </div>
       <button type="submit" class="button is-primary" @click.prevent="addItem">
         Tevlî bike
@@ -35,10 +35,11 @@
   </div>
 </template>
 
+
 <script>
 import VueCookies from "vue-cookies";
 import axios from "axios";
-import Ckeditor from '@/components/profile/post/Ckeditor.vue';
+import Tiny from '@/components/profile/post/Tiny.vue';
 export default {
   name: "AddPostPage",
   data() {
@@ -50,21 +51,10 @@ export default {
       postdate: null,
       showMessage: false,
       categories: [],
-      config: {
-  styles: [
-    {
-      name: "Custom Color",
-      element: "span",
-      styles: {
-        color: "#FF0000", // Bu alanda istediğiniz rengi belirleyebilirsiniz.
-      },
-    },
-  ],
-}
     };
   },
   components: {
-    Ckeditor
+    Tiny
   },
   created() {
     this.user = VueCookies.get("user");
@@ -121,13 +111,11 @@ export default {
   text-align: center;
 }
 .add-post {
-  max-width: 800px;
   margin: 0 auto;
   padding-bottom: 100px;
 }
-.form-section-add {
-  max-width: 600px;
-  margin: 0 auto;
-  background-color: #fff;
+.form-section-adddd {
+  background-color: white;
+
 }
 </style>

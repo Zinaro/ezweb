@@ -66,12 +66,12 @@
       </div>
       <div class="form-group form-postcontent">
         <label class="label">Naverok:</label>
-        <Ckeditor
+        <Tiny
           ref="editor"
           v-model="postCopy.postCategory"
           :value="postCopy.postContent"
           :config="config"
-        ></Ckeditor>
+        ></Tiny>
       </div>
       
     </div>
@@ -82,7 +82,7 @@
 <script>
 import VueCookies from "vue-cookies";
 import axios from "axios";
-import Ckeditor from "@/components/profile/post/Ckeditor.vue";
+import Tiny from "@/components/profile/post/Tiny.vue";
 
 export default {
   name: "EditPostPage",
@@ -107,7 +107,7 @@ export default {
     };
   },
   components: {
-    Ckeditor,
+    Tiny,
   },
   props: {
     post: {

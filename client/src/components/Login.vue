@@ -40,8 +40,7 @@ export default {
                 if (user) {
                     VueCookies.set('user', user);
                     this.user = user;
-                    location.reload()
-                    this.$router.push('/'+user._id);
+                    window.location.href = `/profile/${user.name}`;
                 } else {
                     alert('Incorrect email or password');
                 }

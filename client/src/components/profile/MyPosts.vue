@@ -4,7 +4,8 @@
     <card title="Items">
       <ul class="list">
         <li v-for="item in sortedItems" :key="item._id" class="list-item">
-          <div class="item-card">
+          <div class="kart">
+            <div class="item-card">
             <div class="item-nav">{{ item.postTitle }}</div>
             <div v-if="!item.showModal && item.postContent.length > 500">
               <div v-html="item.postContent.slice(0, 500)"></div>
@@ -25,6 +26,7 @@
               </div>
             </div>
             <div class="item-dil">Created By {{ item.postAutorName }}</div>
+          </div>
           </div>
           <div class="list-item-buttons">
             <button
@@ -75,7 +77,8 @@ export default {
   },
   computed: {
     sortedItems() {
-      return this.items.slice().reverse();
+      const filteredItems = this.items.filter((item) => item.postAutorId === this.user._id);
+      return filteredItems.slice().reverse();
     },
   },
   methods: {

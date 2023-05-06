@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar">
+    <nav class="navbar">
     <div class="navbar-menu" :class="{ 'is-active': navbarOpen }">
       <div class="navbar-start">
         <a class="navbar-item button" @click="$router.push('/')">Home</a>
@@ -44,7 +44,6 @@
       </div>
     </div>
   </nav>
-
   <router-view />
 </template>
 
@@ -83,7 +82,7 @@ export default {
     logout() {
       VueCookies.remove("user");
       this.user = null;
-      window.location.reload();
+      window.location.href = '/';
     },
   },
 };
@@ -98,9 +97,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 52px;
+  background-color: rgba(0, 238, 255, 0.1);
 }
-
 
 .navbar-dropdown {
   position: absolute;
@@ -112,7 +111,6 @@ export default {
   font-size: 1rem;
   text-align: left;
   list-style: none;
-  background-color: #fff;
   background-clip: padding-box;
   border-radius: 0.25rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
