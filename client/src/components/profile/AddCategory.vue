@@ -104,11 +104,6 @@ export default {
   text-align: center;
 }
 
-.add-post {
-  max-width: 800px;
-  margin: 0 auto;
-  padding-bottom: 100px;
-}
 .form-section {
   max-width: 600px;
   margin: 0 auto;

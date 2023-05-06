@@ -83,7 +83,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "postcontrol" */ '../views/profile/PostControlView.vue')
   },
   {
-    path: "/post/:postId",
+    path: "/post/:postname-:id",
     name: "post",
     component: () => import(/* webpackChunkName: "post" */ '../views/PostView.vue'),
     props: true

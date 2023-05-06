@@ -34,16 +34,13 @@ export default {
         plugins:
           "print preview powerpaste casechange importcss tinydrive searchreplace autolink autosave save directionality advcode visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help",
         toolbar1:
-          "formatselect fontselect fontsizeselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent |  forecolor backcolor | removeformat",
-        toolbar2: "table | hr |  link unlink | image media | code",
-        toolbar3:
-          "undo redo | cut copy paste pastetext | searchreplace | selectall | spellchecker",
-        toolbar4:
-          "visualchars visualblocks nonbreaking pagebreak | charmap emoticons | print fullscreen | preview",
+          "formatselect fontselect fontsizeselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent |  forecolor backcolor | removeformat | table | hr |  link unlink | image media | code",
+        toolbar2:
+          "undo redo | cut copy paste pastetext | searchreplace | selectall | spellchecker | visualchars visualblocks nonbreaking pagebreak | charmap emoticons | print fullscreen | preview",
         font_formats:
           "Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva;",
         toolbar:
-          "undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code",
+          "undo redo | cut copy paste pastetext | searchreplace | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent |  forecolor backcolor | removeformat | table | hr |  link unlink | image media | code",
         toolbar_mode: "floating",
         min_height: 300,
       },
