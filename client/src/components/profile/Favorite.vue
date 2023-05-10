@@ -43,9 +43,22 @@ export default {
                 console.error(err);
             }
         },
-        viewPost(post) {
-            this.$router.push({ name: "post", params: { postId: post._id }, props: { post } });
-        },
+        viewPost(item) {
+      const kurdishChars = "ğüşöçİıĞÜŞÖÇêîûÊÎÛ";
+      const englishChars = "gusocIiGUSOCeiuEIU";
+      let postName = item.postTitle.toLowerCase();
+      for (let i = 0; i < kurdishChars.length; i++) {
+        postName = postName.replace(
+          new RegExp(kurdishChars.charAt(i), "g"),
+          englishChars.charAt(i)
+        );
+      }
+      postName = postName.replace(/[^a-zA-Z0-9]/g, "-");
+      this.$router.push({
+        name: "post",
+        params: { postname: postName, id: item._id },
+      });
+    },
         async likePost(postttId) {
       try {
         const userId = this.user._id;

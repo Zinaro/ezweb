@@ -18,11 +18,6 @@ const postSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  postAutorName: {
-    type: String,
-    ref: "User",
-    required: true,
-  },
   postCategory: {
     type: String,
     required: true,
@@ -44,6 +39,11 @@ const postSchema = new mongoose.Schema({
   },
   postImage: {
     type: String,
+  },
+  postUrl: {
+    type: String,
+    required: true,
+    unique: true,
   },
 });
 

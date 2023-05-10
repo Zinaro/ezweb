@@ -1,33 +1,55 @@
 <template>
   <div class="list" @mousemove="moveShadow">
     <div v-for="item in sortedUserItems" :key="item._id" class="list-item">
-      <card title="Item">
+      <card title="Post">
         <div class="kart">
           <div class="item-card">
-            <div class="item-nav">{{ item.postTitle }}</div>
-            <div class="item-dil"  v-html="truncateText(item.postContent, 210)"></div>
-            <div class="item-dil">
-              {{ getDifference(item.postDate) }} Created By
-              {{ item.postAutorName }} Likes count
-              {{ Object.keys(item.likes).length }}
+            <div class="post-image-smole">
+              <img
+                v-if="item.postImage"
+                @click="viewPost(item)"
+                style="cursor: pointer"
+                :src="require(`@/assets/images/postimages/${item.postImage}`)"
+                alt="Wêneya Postê"
+                class="post-image-smole"
+              />
             </div>
-            <button
-              class="like"
-              @click="likePost(item._id, item)"
-              v-if="user && !item.likes.some((l) => l.likeId == user._id)"
+            <div
+              class="item-post-title"
+              @click="viewPost(item)"
+              style="cursor: pointer"
             >
-              Hez bike
-            </button>
-            <button
-              class="likered"
-              @click="likePost(item._id, item)"
-              v-else-if="user"
-            >
-              Hez neke
-            </button>
-            <button class="like" @click="viewPost(item)">
-              Şandiyê Nîşan bide
-            </button>
+              {{ item.postTitle }}
+            </div>
+            <div
+              class="item-post-content"
+              v-html="truncateText(item.postContent, 410)"
+            ></div>
+            <div class="item-post-content">
+              <div class="post-content-autor-bottom">
+                <div class="post-autor">
+                  <img
+                    v-if="item.profileImage"
+                    :src="
+                      require(`@/assets/images/${item.postAutorId}/${item.profileImage}`)
+                    "
+                    alt="Wêneya Profîlê"
+                    class="post-image"
+                  />
+                  <img
+                    v-else
+                    src="../assets/images/default.jpg"
+                    alt="Wêneya Profîlê"
+                    class="profile-image"
+                  />
+                  <div class="post-autor-name">
+                    {{ item.postAutorName }}
+                  </div>
+                </div>
+                {{ Object.keys(item.likes).length }} liked.
+              </div>
+            </div>
+
             <Post v-if="selectedPost" :post="selectedPost" />
           </div>
         </div>
@@ -39,7 +61,6 @@
 <script>
 import axios from "axios";
 import VueCookies from "vue-cookies";
-import { parse } from "date-fns";
 import Post from "@/components/Post.vue";
 
 export default {
@@ -124,10 +145,29 @@ export default {
         params: { postname: postName, id: item._id },
       });
     },
+    async getAutor(userid) {
+      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+      const prof = resuser.data.profileImage;
+      return prof;
+    },
+    async getAutorName(userid) {
+      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+      const prof = resuser.data.name;
+      return prof;
+    },
     async refreshData() {
       try {
-        const response = await axios.get("http://localhost:3000/posts/approved");
-        this.items = response.data;
+        const response = await axios.get(
+          "http://localhost:3000/posts/approved"
+        );
+        const posts = response.data;
+        for (const post of posts) {
+          const prof = await this.getAutor(post.postAutorId);
+          post.profileImage = prof;
+          const name = await this.getAutorName(post.postAutorId);
+          post.postAutorName = name;
+        }
+        this.items = posts;
       } catch (error) {
         console.error(error);
       }
@@ -162,30 +202,7 @@ export default {
         console.log(error);
       }
     },
-    getDifference(postDate) {
-      const currentDate = new Date();
-      const postDateObj = parse(postDate, "dd.MM.yyyy HH:mm:ss", new Date());
-      const diffInMs = currentDate - postDateObj;
-      const diffInSec = Math.floor(diffInMs / 1000);
-      const diffInMin = Math.floor(diffInSec / 60);
-      const diffInHr = Math.floor(diffInMin / 60);
-      const diffInDay = Math.floor(diffInHr / 24);
-      const diffInWeek = Math.floor(diffInDay / 7);
 
-      if (diffInWeek > 0) {
-        return `${diffInWeek} week ago`;
-      } else if (diffInDay > 0) {
-        return `${diffInDay} day ago`;
-      } else if (diffInHr > 0) {
-        return `${diffInHr} hour ago`;
-      } else if (diffInMin > 0) {
-        return `${diffInMin} munite ago`;
-      } else if (diffInSec > 0) {
-        return `${diffInSec} seconds ago`;
-      } else {
-        return "now";
-      }
-    },
     async getItems() {
       try {
         const response = await axios.get("http://localhost:3000");
@@ -225,16 +242,25 @@ export default {
       });
     },
     truncateText(text, maxLength) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
+      if (text.length > maxLength) {
+        return text.substring(0, maxLength) + "...";
+      }
+      return text;
+    },
   },
 };
 </script>
 
 <style>
+.post-image-smole {
+  object-fit: cover;
+  object-position: top;
+  width: 100%;
+  border-top-left-radius: 55px;
+  border-top-right-radius: 55px;
+  height: 210px;
+}
+
 .list {
   display: flex;
   flex-wrap: wrap;
@@ -247,17 +273,18 @@ export default {
   margin: 10px;
 }
 .item-card {
-  padding: 20px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   border: 0.2px solid cyan;
   border-radius: 55px;
   position: relative;
   background-color: rgba(1, 68, 37, 0.1);
   z-index: 999;
+  height: 420px;
+  max-height: 420px;
+  min-height: 420px;
 }
 .kart {
-  padding-right: 5px;
-  padding-top: 5px;
+  padding-bottom: 5px;
   background-color: rgba(0, 0, 0);
   border-radius: 55px;
   position: relative;
@@ -284,9 +311,42 @@ export default {
   font-weight: bold;
   margin-bottom: 10px;
 }
-
-.item-dil {
-  margin-bottom: 5px;
+.item-post-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 3px;
+  margin-left: 3px;
+  margin-right: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.item-post-content {
+  padding-left: 8px;
+  padding-right: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+.post-content-autor-bottom {
+  position: absolute;
+  padding-left: 30px;
+  padding-right: 30px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(1, 68, 37, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  font-size: 14px;
+  border-bottom-left-radius: 55px;
+  border-bottom-right-radius: 55px;
 }
 
 .like,

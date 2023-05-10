@@ -148,7 +148,6 @@ export default {
         postContent: this.$refs.editor.editorData,
         postDate: this.postCopy.postDate,
         postAutorId: this.postCopy.postAutorId,
-        postAutorName: this.postCopy.postAutorName,
       };
       if (this.postCopy.postApproved) {
         item.postApproved = true;

@@ -11,6 +11,7 @@
             id="posttitle"
             v-model="posttitle"
             class="input"
+            :maxlength="100"
             required
           />
         </div>
@@ -142,8 +143,11 @@ export default {
         postContent: this.$refs.editor.editorData,
         postDate: new Date().toLocaleString("tr-TR"),
         postAutorId: this.user._id,
-        postAutorName: this.user.name,
+        postAutorImage: this.user.profileImage ? this.user.profileImage : null,
         postImage: this.postimage,
+        postUrl: this.posttitle.toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/(^-|-$)+/g, '')
       };
       try {
         const response = await axios.post("http://localhost:3000/posts", item);
@@ -224,8 +228,4 @@ export default {
   margin: 15px;
 }
 
-img {
-  max-width: 200px;
-  max-height: 200px;
-}
 </style>

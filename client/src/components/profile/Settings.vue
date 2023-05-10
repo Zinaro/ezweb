@@ -7,7 +7,7 @@
         <input type="file" id="profile-image" @change="onFileChange" />
         <button @click.prevent="uploadImage">Wêneyê Profîlê Bişîne</button>
       </div>
-      <form @submit.prevent="updateUser">
+      <form>
         <div class="form-group">
           <label for="name">Nav</label>
           <input type="text" id="name" v-model="name" required />
@@ -43,7 +43,7 @@
             required
           />
         </div>
-        <button type="submit">Rojane bike</button>
+        <button @click.prevent="updateUser">Rojane bike</button>
       </form>
     </div>
   </div>
@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     onFileChange(e) {
-      this.profileImage = e.target.files[0];
+        this.profileImage = e.target.files[0];
     },
     async uploadImage() {
       const formData = new FormData();
@@ -88,10 +88,8 @@ export default {
             },
           }
         );
-        console.log(response.data.imageUrl);
         this.profileImage = null;
         alert("Profile image uploaded successfully");
-        console.log(response.data.imageUrl)
         await axios.put(`http://localhost:3000/users/${this.user._id}`, {
           profileImage: response.data.imageUrl,
         });
@@ -106,12 +104,10 @@ export default {
         alert("New passwords do not match");
         return;
       }
-
       const data = {
         name: this.name,
         mail: this.mail,
       };
-
       if (this.currentPassword == this.user.password) {
         if (this.newPassword) {
           data.password = this.newPassword;
@@ -121,7 +117,6 @@ export default {
           this.user.name = this.name;
           this.user.mail = this.mail;
           this.user.password = this.newPassword || this.user.password;
-          this.user.imageUrl = this.profileImage;
           VueCookies.set("user", this.user);
           alert("User information updated successfully");
         } catch (error) {

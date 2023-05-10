@@ -6,7 +6,7 @@
         <li v-for="item in sortedItems" :key="item._id" class="list-item">
           <div class="kart">
             <div class="item-card">
-            <div class="item-nav">{{ item.postTitle }}</div>
+            <div class="item-post-title">{{ item.postTitle }}</div>
             <div v-if="!item.showModal && item.postContent.length > 500">
               <div v-html="item.postContent.slice(0, 500)"></div>
               <span>...</span>              <a

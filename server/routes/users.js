@@ -61,7 +61,9 @@ router.get("/users", async (req, res) => {
       user.name = req.body.name || user.name;
       user.mail = req.body.mail || user.mail;
       user.password = req.body.password || user.password;
-      user.profileImage = req.body.profileImage;
+      if ('profileImage' in req.body) {
+        user.profileImage = req.body.profileImage;
+      }
       await user.save();
       res.send(user);
     } catch (error) {
