@@ -137,6 +137,16 @@ export default {
 };
 </script>
 <style>
+.myposts {
+  margin: 0 auto;
+  padding: 20px;
+  height: 100vh;
+}
+.myposts h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
 .modal {
   display: none;
   position: fixed;
@@ -182,37 +192,4 @@ export default {
   cursor: pointer;
 }
 
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
 </style>

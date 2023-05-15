@@ -19,7 +19,6 @@ router.get("/users", async (req, res) => {
       if (!user) {
         return res.status(404).send("hi zinar, user not found");
       }
-      console.log(user);
       res.send(user);
     } catch (error) {
       console.error(error);
@@ -44,7 +43,6 @@ router.get("/users", async (req, res) => {
     try {
       const user = req.body;
       const newUser = await User.create(user);
-      console.log(newUser);
       res.status(201).json(newUser);
     } catch (error) {
       console.error(error);
@@ -54,17 +52,10 @@ router.get("/users", async (req, res) => {
   
   router.put("/users/:id", async (req, res) => {
     try {
-      const user = await User.findById(req.params.id);
+      const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
       if (!user) {
         return res.status(404).send("User not found");
       }
-      user.name = req.body.name || user.name;
-      user.mail = req.body.mail || user.mail;
-      user.password = req.body.password || user.password;
-      if ('profileImage' in req.body) {
-        user.profileImage = req.body.profileImage;
-      }
-      await user.save();
       res.send(user);
     } catch (error) {
       console.error(error);
@@ -121,7 +112,6 @@ router.get("/users", async (req, res) => {
     try {
       const { id } = req.params;
       const { followerId, userId } = req.body;
-      console.log(followerId, userId);
       const user = await User.findById(id);
       if (!user) {
         return res.status(404).json({ message: "hi zinar, user not found" });
@@ -144,7 +134,6 @@ router.get("/users", async (req, res) => {
     try {
       const { id } = req.params;
       const { followerId, userId } = req.body;
-      console.log(followerId, userId);
       const user = await User.findById(id);
       if (!user) {
         return res.status(404).json({ message: "hi zinar, user not found" });

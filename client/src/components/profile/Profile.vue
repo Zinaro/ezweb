@@ -5,7 +5,7 @@
       <button @click="$router.push('/' + user.username)">Profîla min</button>
       <button
         v-if="
-          (user && user.permission === 'root') || user.permission === 'admin'
+          (user && user.permission === 'root')
         "
         :class="{ active: activeTab === 'add-category' }"
         @click="activeTab = 'add-category'"

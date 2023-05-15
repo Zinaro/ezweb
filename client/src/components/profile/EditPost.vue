@@ -1,6 +1,28 @@
 <template>
   <div class="edit-post">
     <div v-if="user" class="form form-section-add">
+      <div class="thumbnail-picker-edit">
+        <img
+                v-if="postCopy.postImage"
+                @click="viewPost(item)"
+                style="cursor: pointer"
+                :src="require(`@/assets/images/postimages/${postCopy.postImage}`)"
+                alt="Wêneya Postê"
+                class="post-image-edit"
+              />
+          <div class="select-image-edit">
+            <input
+              type="file"
+              ref="image"
+              accept="image/*"
+              @change="onFileChange"
+              @click="$refs.image.click()"
+            />
+          </div>
+          
+            <img v-show="thumbImage" class="post-image-edit" :src="thumbImage" alt="Thumbnail" />
+          
+        </div>
       <div class="form-group">
         <div class="switch-container">
           <div
@@ -93,6 +115,9 @@ export default {
       categories: [],
       showMessage: false,
       editorContent: "",
+      postimage: "",
+      previewUrl: null,
+      thumbImage: null,
       config: {
         styles: [
           {
@@ -131,6 +156,35 @@ export default {
         console.log(error);
       }
     },
+    onFileChange(e) {
+      this.previewUrl = e.target.files[0];
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.thumbImage = reader.result;
+      };
+      reader.readAsDataURL(file);
+      
+    },
+    async uploadImage() {
+      const formData = new FormData();
+      formData.append("image", this.previewUrl);
+      try {
+        const response = await axios.post(
+          `http://localhost:3000/image/upload`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        this.previewUrl = null;
+        this.postimage = response.data.imageUrl;
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async deletePost(postID) {
       try {
         await axios.delete(`http://localhost:3000/posts/${postID}`);
@@ -142,12 +196,18 @@ export default {
       }
     },
     async updatePost() {
+      if (this.previewUrl) {
+          await this.uploadImage();
+        } else {
+          this.postimage = this.postCopy.postImage;
+        }
       const item = {
         postTitle: this.postCopy.postTitle,
         postCategory: this.postCopy.postCategory,
         postContent: this.$refs.editor.editorData,
         postDate: this.postCopy.postDate,
         postAutorId: this.postCopy.postAutorId,
+        postImage: this.postimage,
       };
       if (this.postCopy.postApproved) {
         item.postApproved = true;
@@ -192,6 +252,24 @@ export default {
 .form-section-add {
   margin: 0 auto;
   background-color: #fff;
+}
+
+.thumbnail-picker-edit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.post-image-edit {
+  max-width: 200px;
+  height: 75px;
+  margin-right: 20px;
+}
+
+.select-image-edit {
+  margin-right: 20px;
 }
 
 .switch-container {

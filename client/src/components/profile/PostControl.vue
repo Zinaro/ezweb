@@ -123,7 +123,8 @@ export default {
   justify-content: space-between;
 }
 .bottom-active {
-  margin-top: 120px;
+  margin-top: 100px;
+  height: 100vh;
 }
 .form-section {
   position: fixed;

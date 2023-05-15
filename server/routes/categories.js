@@ -1,5 +1,6 @@
 const express = require('express');
 const Category = require("../category.js")
+const Post = require("../post.js")
 const router = express.Router();
 
 
@@ -67,6 +68,30 @@ router.delete("/category/:id/", async (req, res) => {
   }
 });
 
+
+
+router.get("/category/:id", async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+    let category = null;
+    let posts = [];
+
+    if (categoryId) {
+      category = await Category.findById(categoryId);
+      console.log(category);
+      if (!category) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+      posts = await Post.find({ postCategory: categoryId });
+    } else {
+      posts = await Post.find();
+    }
+    res.json({ category, posts });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
 
 
 

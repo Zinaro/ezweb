@@ -67,7 +67,6 @@ router.get("/posts", async (req, res) => {
       res.json(posts);
     } catch (error) {
       console.log(error);
-      console.log(``)
       res.status(500).json({ message: "hi zinar, server error" });
     }
   });
@@ -77,7 +76,6 @@ router.get("/posts", async (req, res) => {
       res.status(200).json(posts);
     } catch (error) {
       console.log(error);
-      console.log(``)
       res.status(500).json({ message: "hi zinar, server error" });
     }
   });
@@ -87,7 +85,6 @@ router.get("/posts", async (req, res) => {
       res.status(200).json(posts);
     } catch (error) {
       console.log(error);
-      console.log(``)
       res.status(500).json({ message: "hi zinar, server error" });
     }
   });

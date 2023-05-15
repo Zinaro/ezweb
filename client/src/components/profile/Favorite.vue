@@ -86,4 +86,15 @@ export default {
     }
 };
 </script>
-<style></style>
+<style>
+.favorite {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  height: 100vh;
+}
+.favorite h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+</style>

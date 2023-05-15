@@ -89,6 +89,12 @@ const routes = [
     props: true
   },
   {
+    path: "/category/:categoryname-:id",
+    name: "category",
+    component: () => import(/* webpackChunkName: "category" */ '../views/CategoryView.vue'),
+    props: true
+  },
+  {
     path: "/:username",
     name: "username",
     component: () => import(/* webpackChunkName: "username" */ '../components/UserProfile.vue'),

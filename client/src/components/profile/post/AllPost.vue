@@ -28,7 +28,7 @@
       <h1>ALLPOST</h1>
       <ul>
         <li v-for="post in sortedItems" :key="post._id">
-          <h2 v-show="!post.showModal">{{ post.postTitle }}</h2>
+          <h1 v-show="!post.showModal" style="font-weight: bold; font-size: 18px;">{{ post.postTitle }}</h1>
           <div v-if="!post.showMore && post.postContent.length > 500">
               <div v-html="post.postContent.slice(0, 500)"></div>
               <span>...</span>              <a
@@ -54,6 +54,7 @@
           </button>
         </li>
       </ul>
+      <button class="show-more-posts" @click="showMorePosts">Show More Posts</button>
     </div>
   </div>
 </template>
@@ -77,8 +78,7 @@ export default {
       showMore: false,
       selectedPost: null,
       editingPost: false,
-      showLoadMoreButton: false,
-      loadMoreCount: 100,
+      loadMoreCount: 5,
     };
   },
 
@@ -96,7 +96,8 @@ export default {
   },
   computed: {
     sortedItems() {
-      return this.posts.slice().reverse();
+      const sortedPosts = this.posts.slice().reverse();
+      return sortedPosts.slice(0, this.loadMoreCount);
     },
   },
   methods: {
@@ -110,16 +111,9 @@ export default {
         console.log(error);
       }
     },
-    async loadMoreUsers() {
-      const startIndex = this.displayedUsers.length;
-      const endIndex = startIndex + this.loadMoreCount;
-      this.displayedUsers = this.displayedUsers.concat(
-        this.users.slice(startIndex, endIndex)
-      );
-      if (endIndex >= this.users.length) {
-        this.showLoadMoreButton = false;
-      }
-    },
+    showMorePosts() {
+    this.loadMoreCount += 5;
+  },
     dialogChange() {
       this.dialog = !this.dialog;
       this.cancelEdit();
@@ -142,6 +136,21 @@ export default {
   position: sticky;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.show-more-posts {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .col {

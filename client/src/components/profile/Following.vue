@@ -83,6 +83,7 @@ export default {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  height: 100vh;
 }
 
 .following h1 {

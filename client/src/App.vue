@@ -14,7 +14,7 @@
           </button>
           <div class="navbar-dropdown" v-show="showDropdown">
             <a v-for="category in categories" :key="category._id"
-              class="navbar-item" @click="$router.push('/category/' + category.name)">
+              class="navbar-item" @click="goToCategory(category)">
               {{ category.name }}
             </a>
           </div>
@@ -84,6 +84,10 @@ export default {
       this.user = null;
       window.location.href = '/';
     },
+    goToCategory(category) {
+    this.$router.push(`/category/${category.name}-${category._id}`);
+    window.location.href = `/category/${category.name}-${category._id}`;
+  },
   },
 };
 </script>

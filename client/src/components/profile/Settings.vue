@@ -1,50 +1,52 @@
 <template>
   <div class="settings-page">
-    <h1>Sazkarî</h1>
-    <div class="settings-form">
-      <div class="form-group">
-        <label for="profile-image">Wêneyê Profîlê</label>
-        <input type="file" id="profile-image" @change="onFileChange" />
-        <button @click.prevent="uploadImage">Wêneyê Profîlê Bişîne</button>
+    <div class="setting-sazkari">
+      <h1>Sazkarî</h1>
+    </div>
+    <div class="setting-photo">
+      <label for="profile-image">Wêneyê Profîlê:</label>
+      <input type="file" id="profile-image" @change="onFileChange" />
+      <button @click.prevent="uploadImage">Wêneyê Profîlê Bişîne</button>
+    </div>
+    <div class="setting-name">
+      <label for="name">Nav:</label>
+      <input type="text" id="name" v-model="name" required />
+      <button @click="updateUser">Rojane bike</button>
+    </div>
+    <div class="setting-mail">
+      <label for="email">E-name:</label>
+      <input type="email" id="email" v-model="mail" required />
+      <button @click="updateUser">Rojane bike</button>
+    </div>
+    <div class="setting-password">
+      <div class="setting-input">
+        <label for="current-password">Borînpeyva Heyî:</label>
+        <input
+          type="password"
+          id="current-password"
+          v-model="currentPassword"
+          required
+        />
       </div>
-      <form>
-        <div class="form-group">
-          <label for="name">Nav</label>
-          <input type="text" id="name" v-model="name" required />
-        </div>
-        <div class="form-group">
-          <label for="email">E-name</label>
-          <input type="email" id="email" v-model="mail" required />
-        </div>
-        <div class="form-group">
-          <label for="current-password">Borînpeyva Heyî</label>
-          <input
-            type="password"
-            id="current-password"
-            v-model="currentPassword"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="new-password">Borînpeyva Nû</label>
-          <input
-            type="password"
-            id="new-password"
-            v-model="newPassword"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="new-password-confirm">Borînpeyva Nû Bipejirîne</label>
-          <input
-            type="password"
-            id="new-password-confirm"
-            v-model="newPasswordConfirm"
-            required
-          />
-        </div>
-        <button @click.prevent="updateUser">Rojane bike</button>
-      </form>
+      <div class="setting-input">
+        <label for="new-password">Borînpeyva Nû:</label>
+        <input
+          type="password"
+          id="new-password"
+          v-model="newPassword"
+          required
+        />
+      </div>
+      <div class="setting-input">
+        <label for="new-password-confirm">Borînpeyva Nû Bipejirîne:</label>
+        <input
+          type="password"
+          id="new-password-confirm"
+          v-model="newPasswordConfirm"
+          required
+        />
+      </div>
+      <button @click.prevent="updateUser">Rojane bike</button>
     </div>
   </div>
 </template>
@@ -73,7 +75,7 @@ export default {
   },
   methods: {
     onFileChange(e) {
-        this.profileImage = e.target.files[0];
+      this.profileImage = e.target.files[0];
     },
     async uploadImage() {
       const formData = new FormData();
@@ -100,36 +102,48 @@ export default {
     },
 
     async updateUser() {
-      if (this.newPassword !== this.newPasswordConfirm) {
-        alert("New passwords do not match");
-        return;
-      }
-      const data = {
-        name: this.name,
-        mail: this.mail,
-      };
-      if (this.currentPassword == this.user.password) {
-        if (this.newPassword) {
-          data.password = this.newPassword;
-        }
-        try {
-          await axios.put(`http://localhost:3000/users/${this.user._id}`, data);
-          this.user.name = this.name;
-          this.user.mail = this.mail;
-          this.user.password = this.newPassword || this.user.password;
-          VueCookies.set("user", this.user);
-          alert("User information updated successfully");
-        } catch (error) {
-          console.error(error);
-        }
-      } else {
-        alert("Current password is incorrect");
-      }
-    },
+  if (this.newPassword !== this.newPasswordConfirm) {
+    alert("New passwords do not match");
+    return;
+  }
+  const data = {};
+  if (this.name !== this.user.name) {
+    data.name = this.name;
+  }
+  if (this.mail !== this.user.mail) {
+    data.mail = this.mail;
+  }
+  if (this.newPassword && this.currentPassword == this.user.password) {
+    data.password = this.newPassword;
+  } else if (this.newPassword && this.currentPassword !== this.user.password) {
+    alert("Current password is incorrect");
+    return;
+  }
+  try {
+    await axios.put(`http://localhost:3000/users/${this.user._id}`, data);
+    if (data.name) {
+      this.user.name = data.name;
+    }
+    if (data.mail) {
+      this.user.mail = data.mail;
+    }
+    if (data.password) {
+      this.user.password = data.password;
+    }
+    VueCookies.set("user", this.user);
+    alert("User information updated successfully");
+    location.reload();
+  } catch (error) {
+    console.error(error);
+  }
+},
   },
 };
 </script>
 <style>
+.settings-page {
+  flex-direction: column;
+}
 .settings-form {
   display: flex;
   justify-content: center;
@@ -140,32 +154,145 @@ export default {
 .form-group {
   margin-bottom: 20px;
 }
+.setting-sazkari {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-size: 36px !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 30px;
 
-label {
+
+  color: #333;
+  border: 1.5px solid #002fff91;
+  background-color: #00ffff20;
+  border-radius: 5px;
+  box-shadow: 0 0 15px 0 #00000077;
+  margin: 20px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding: 20px;
+}
+.setting-photo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  border: 1.5px solid #002fff91;
+  background-color: #00ffff20;
+  border-radius: 5px;
+  box-shadow: 0 0 15px 0 #00000077;
+  margin: 20px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.setting-photo :first-child {
+  text-align: right;
+}
+.setting-photo > * {
+  flex: 1;
+  max-width: 25%;
+  padding: 7px;
+}
+
+
+.setting-name {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+
+
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  border: 1.5px solid #002fff91;
+  background-color: #00ffff20;
+  border-radius: 5px;
+  box-shadow: 0 0 15px 0 #00000077;
+  margin: 20px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.setting-name :first-child {
+  text-align: right;
+}
+.setting-name > * {
+  flex: 1;
+  max-width: 25%;
+  padding: 7px;
+}
+
+.setting-mail {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  border: 1.5px solid #002fff91;
+  background-color: #00ffff20;
+  border-radius: 5px;
+  box-shadow: 0 0 15px 0 #00000077;
+  margin: 20px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.setting-mail :first-child {
+  text-align: right;
+}
+.setting-mail > * {
+  flex: 1;
+  max-width: 25%;
+  padding: 7px;
+}
+.setting-password {
+  flex-direction: column;
+
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  border: 1.5px solid #002fff91;
+  background-color: #00ffff20;
+  border-radius: 5px;
+  box-shadow: 0 0 15px 0 #00000077;
+  margin: 20px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding: 10px;
+}
+.setting-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 3px;
+}
+
+.setting-input label {
   display: block;
   margin-bottom: 5px;
+  text-align: right;
+  flex: 1;
+  padding-right: 15px;
+  max-width: 25%;
+}
+.setting-input input {
+  display: block;
+  text-align: left;
+  margin-right: 55px;
+  max-width: 300px;
+  flex: 1;
+  
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
 
-button[type="submit"] {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
-button[type="submit"]:hover {
-  background-color: #0069d9;
-}
 </style>
