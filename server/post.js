@@ -1,5 +1,21 @@
 const mongoose = require("mongoose");
 
+const commentSchema = new mongoose.Schema({
+  commentContent: {
+    type: String,
+    required: true,
+  },
+  commentDate: {
+    type: String,
+    default: new Date().toLocaleString("tr-TR"),
+  },
+  commentAuthorId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+});
+
 const postSchema = new mongoose.Schema({
   postTitle: {
     type: String,
@@ -33,6 +49,7 @@ const postSchema = new mongoose.Schema({
       },
     },
   ],
+  postComments: [commentSchema],
   postApproved: {
     type: Boolean,
     default: false,

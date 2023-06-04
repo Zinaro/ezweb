@@ -15,7 +15,7 @@
       <div class="post-autor">
         <img
           v-if="autor.profileImage"
-          :src="require(`@/assets/images/${autor._id}/${autor.profileImage}`)"
+          :src="require(`@/assets/images/${autor.profileImage}`)"
           alt="Wêneya Postê"
           class="post-image"
         />
@@ -72,20 +72,89 @@
       </div>
       <div class="post-autor-date">{{ getDifference(post.postDate) }}</div>
       <div
-      class="post-category"
-      @click="goToCategory(post.postCategory)"
-      style="cursor: pointer; text-decoration: underline"
-    >
-      {{ category }}
+        class="post-category"
+        @click="goToCategory(post.postCategory)"
+        style="cursor: pointer; text-decoration: underline"
+      >
+        {{ category }}
+      </div>
     </div>
+    <div class="post-comments">
+      <h3>Commnets</h3>
+      <div class="comment-list">
+        <div
+          v-for="(comment, index) in displayedComments"
+          :key="index"
+          class="comment-item"
+        >
+          <div class="comment-item-top">
+            <div class="post-autor">
+              <img
+                v-if="commentAuthorProfileImages[comment.commentAuthorId]"
+                :src="
+                  require(`@/assets/images/${commentAuthorProfileImages[comment.commentAuthorId]}`)
+                "
+                alt="Wêneya Postê"
+                class="post-image"
+              />
+              <img
+                v-else
+                src="@/assets/images/default.jpg"
+                alt="Wêneya Profîlê"
+                class="profile-image"
+              />
+              <div class="post-autor-name">
+                <a
+                  href="#"
+                  @click.prevent="getUserNameAndGoToProfile(comment.commentAuthorId)"
+                  class="item-nav"
+                  >{{ commentAuthorNames[comment.commentAuthorId] }}</a
+                >
+              </div>
+            </div>
+            <div class="post-autor-date">
+              {{ getDifference(comment.commentDate) }}
+            </div>
+            <button
+              v-if="canDeleteComment(comment)"
+              type="button" class="btn btn-outline-danger"
+              @click="deleteComment(comment._id)"
+            >
+              Delete
+            </button>
+          </div>
+          <div class="comment-item-bottom">
+            <div class="comment-content">
+              {{ comment.commentContent }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="showNextButton" class="next-button">
+        <button type="button" class="btn btn-outline-info" @click="showMoreComments">Next</button>
+      </div>
+      <div class="add-comment">
+        <p>Your Commit:</p>
+        <div class="comment-input">
+          <textarea
+            name="commentContent"
+            :disabled="!user"
+            v-model="comment"
+            :placeholder="placeholderText"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+        <button v-if="user" class="btn btn-outline-success" type="button" @click="submitComment">Send</button>
+      </div>
     </div>
-    
   </div>
 </template>
 <script>
 import VueCookies from "vue-cookies";
 import axios from "axios";
 import { parse } from "date-fns";
+import { reactive } from 'vue';
 
 export default {
   name: "PostPage",
@@ -96,13 +165,35 @@ export default {
       autor: {},
       userLiked: false,
       category: null,
+      placeholderText: "",
+      comment: "",
+      commentsPerPage: 10,
+      displayedComments: [],
+      allComments: [],
+      currentIndex: 0,
+      commentAuthorNames: reactive({}),
+      commentAuthorProfileImages: reactive({})
     };
   },
 
-  created() {
+  async created() {
     this.user = VueCookies.get("user");
     const postId = this.$route.params.id.slice(-24);
-    this.getPost(postId);
+    await this.getPost(postId);
+    if (!this.user) {
+      this.placeholderText = "Login to comment..";
+    }
+    this.allComments = this.post.postComments;
+    this.updateDisplayedComments();
+    for (const comment of this.displayedComments) {
+      this.getCommentAuthorName(comment);
+      this.getCommentAuthorProfileImage(comment);
+    }
+  },
+  computed: {
+    showNextButton() {
+      return this.currentIndex + this.commentsPerPage < this.allComments.length;
+    },
   },
   methods: {
     async getPost(postId) {
@@ -129,11 +220,66 @@ export default {
         console.log(error);
       }
     },
+    async submitComment() {
+      try {
+        await axios.post(`http://localhost:3000/comment/${this.post._id}`, {
+          commentContent: this.comment,
+          commentAuthorId: this.user._id,
+        });
+        this.comment = "";
+        location.reload();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async deleteComment(commentId) {
+      const postId = this.post._id;
+      try {
+        await axios.delete(
+          `http://localhost:3000/comment/${postId}/${commentId}`
+        );
+        location.reload();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    canDeleteComment(comment) {
+      return (
+        (this.user &&
+          comment.commentAuthorId === this.user._id) ||
+        ["root", "admin"].includes(this.user.permission)
+      );
+    },
+    async getUserNameAndGoToProfile(commentAuthorId) {
+      const username = await this.getUserName(commentAuthorId);
+      this.goToProfile(username);
+    },
     goToProfile(username) {
       this.$router.push({ name: "username", params: { username } });
     },
     goToCategory(category) {
       this.$router.push(`/category/${this.category}-${category}`);
+    },
+    async getUserCome(comID) {
+      const resuser = await axios.get(`http://localhost:3000/users/${comID}`);
+      return resuser.data;
+    },
+    async getCommentAuthorName(comment) {
+      if (!this.commentAuthorNames[comment.commentAuthorId]) {
+        const user = await this.getUserCome(comment.commentAuthorId);
+        this.commentAuthorNames[comment.commentAuthorId] = user.name;
+      }
+    },
+    async getCommentAuthorProfileImage(comment) {
+      if (!this.commentAuthorProfileImages[comment.commentAuthorId]) {
+        const user = await this.getUserCome(comment.commentAuthorId);
+        this.commentAuthorProfileImages[comment.commentAuthorId] = user.profileImage || "";
+      }
+    },
+    async getUserName(comID) {
+      const resuser = await this.getUserCome(comID);
+      console.log(resuser.username);
+      return resuser.username;
     },
     async likePost(postttId) {
       if (this.user) {
@@ -186,6 +332,16 @@ export default {
       } else {
         return "now";
       }
+    },
+    showMoreComments() {
+      this.currentIndex += this.commentsPerPage;
+      this.updateDisplayedComments();
+    },
+    updateDisplayedComments() {
+      this.displayedComments = this.allComments.slice(
+        this.currentIndex,
+        this.currentIndex + this.commentsPerPage
+      );
     },
   },
 };
@@ -267,5 +423,66 @@ export default {
 .post-category {
   margin-left: 10px;
   font-size: 14px;
+}
+
+.post-comments {
+  margin-left: 10px;
+  font-size: 14px;
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.post-comments h3 {
+  margin-top: 0;
+}
+.add-comment {
+  margin-left: 10px;
+  font-size: 14px;
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.comment-input {
+  margin: 10px;
+}
+.comment-input textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  box-sizing: border-box;
+  margin: 0;
+}
+.comment-list {
+  margin-top: 20px;
+}
+
+.comment-item {
+  background-color: rgba(173, 235, 245, 0.466);
+  align-items: center;
+  justify-content: space-between;
+  margin: 5px;
+}
+.comment-item-top {
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.comment-content {
+  font-size: 14px;
+  margin: 10px;
+  text-align: left;
+}
+
+.comment-author {
+  font-size: 12px;
+  color: gray;
 }
 </style>

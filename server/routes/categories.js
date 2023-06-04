@@ -82,9 +82,9 @@ router.get("/category/:id", async (req, res) => {
       if (!category) {
         return res.status(404).json({ message: "Category not found" });
       }
-      posts = await Post.find({ postCategory: categoryId });
+      posts = await Post.find({ postCategory: categoryId, postApproved: true });
     } else {
-      posts = await Post.find();
+      posts = await Post.find({ postApproved: true });
     }
     res.json({ category, posts });
   } catch (err) {

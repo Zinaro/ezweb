@@ -52,12 +52,12 @@
       </button>
     </div>
     <div class="content-section">
-      <div class="top-section">
+      <div class="top-section pt-2">
         <div class="profile-row">
           <div class="profile-image">
             <img
               v-if="user.profileImage"
-              :src="require(`@/assets/images/${user._id}/${user.profileImage}`)"
+              :src="require(`@/assets/images/${user.profileImage}`)"
               alt="Wêneya Profîlê"
               class="profile-image"
             />
@@ -199,7 +199,7 @@ export default {
   height: 100%;
   width: 25%;
   max-width: 25%;
-  background-color: aqua;
+  background-color: #ccc;
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
@@ -263,7 +263,7 @@ button:hover,
   max-height: 400px;
   width: 100%;
   max-width: 100%;
-  background-color: aquamarine;
+  background-color: #cff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -332,6 +332,6 @@ button:hover,
   max-width: 100%;
   top: 400px;
   overflow-y: scroll;
-  background-color: darkseagreen;
+  background-color: #eff;
 }
 </style>

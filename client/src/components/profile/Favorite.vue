@@ -1,89 +1,107 @@
 <template>
-    <div class="favorite">
-        <h1>Rûpela Hezkirnên min</h1>
-        <ul>
-            <li v-for="item in items" :key="item._id">
-                <h2>{{ item.postTitle }}</h2>
-                <div v-html="item.postContent"></div>
-                <p>Nivîskar: {{ item.postAutorName }}</p>
-                <p>Dem: {{ item.postDate }}</p>
-                <button class="like" @click="likePost(item._id, item)"
-                    v-if="!item.likes.some((l) => l.likeId == user._id) && user">Hez bike</button>
-                <button class="likered" @click="likePost(item._id, item)" v-else>Hez neke</button>
-                <button @click="viewPost(item)">Şandiyê Nîşan bide</button>
-            </li>
-        </ul>
+  <div class="favorite">
+    <h1>Rûpela Hezkirnên min</h1>
+    <div class="favorite-list">
+      <div
+        v-for="item in sortedUserItems"
+        :key="item._id"
+        class="favorite-list-item"
+      >
+        <PostCard :item="item"></PostCard>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-import VueCookies from "vue-cookies"
-import axios from "axios"
+import VueCookies from "vue-cookies";
+import axios from "axios";
+import PostCard from "@/components/post/PostCard.vue";
 
 export default {
-    name: "FavoritePage",
-    data() {
-        return {
-            user: null,
-            items: {}
-        }
+  name: "FavoritePage",
+  data() {
+    return {
+      user: null,
+      posts: [],
+      numOfLoadedItems: 9,
+    };
+  },
+  components: {
+    PostCard,
+  },
+  computed: {
+    sortedItems() {
+      return this.posts
+        .slice(Math.max(this.posts.length - this.numOfLoadedItems, 0))
+        .reverse();
     },
-    async created() {
-        this.user = VueCookies.get("user");
-        await this.getItems();
-    },
-    methods: {
-        async getItems() {
-            const userId = this.user._id;
-            try {
-                const response = await fetch(`http://localhost:3000/users/${userId}/posts/favorites`);
-                const posts = await response.json();
-                this.items = posts;
-            } catch (err) {
-                console.error(err);
-            }
-        },
-        viewPost(item) {
-      const kurdishChars = "ğüşöçİıĞÜŞÖÇêîûÊÎÛ";
-      const englishChars = "gusocIiGUSOCeiuEIU";
-      let postName = item.postTitle.toLowerCase();
-      for (let i = 0; i < kurdishChars.length; i++) {
-        postName = postName.replace(
-          new RegExp(kurdishChars.charAt(i), "g"),
-          englishChars.charAt(i)
-        );
+    sortedUserItems() {
+      if (this.user) {
+        return this.sortedItems
+          .filter((item) => item.postAutorId === this.user._id)
+          .concat(
+            this.sortedItems.filter(
+              (item) => item.postAutorId !== this.user._id
+            )
+          );
+      } else {
+        return this.sortedItems;
       }
-      postName = postName.replace(/[^a-zA-Z0-9]/g, "-");
-      this.$router.push({
-        name: "post",
-        params: { postname: postName, id: item._id },
-      });
     },
-        async likePost(postttId) {
+    isItemsFullyLoaded() {
+      return this.sortedItems.length === this.posts.length;
+    },
+  },
+  async created() {
+    this.user = VueCookies.get("user");
+    await this.getItems();
+  },
+  mounted() {
+    window.addEventListener("scroll", this.scrollListener);
+  },
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.scrollListener);
+  },
+  methods: {
+    async getItems() {
+      const userId = this.user._id;
       try {
-        const userId = this.user._id;
-        const data = { userId, postttId };
-        const post = this.items.find((item) => item._id == postttId);
-        if (post.likes.some((l) => l.likeId == userId)) {
-          await axios.delete(`http://localhost:3000/posts/${postttId}/like`, { data });
-          post.likes = post.likes.filter((like) => like.likeId !== userId);
-          this.getItems();
-        } else {
-          const response = await axios.put(`http://localhost:3000/posts/${postttId}/like`, data);
-          const updatedPost = response.data;
-          this.getItems();
-          const index = this.items.findIndex((item) => item._id === updatedPost._id);
-          if (index !== -1) {
-            this.items.splice(index, 1, updatedPost);
-          }
-
+        const response = await axios.get(
+          `http://localhost:3000/users/${userId}/posts/favorites`
+        );
+        const datame = response.data;
+        for (const post of datame) {
+          const prof = await this.getAutor(post.postAutorId._id);
+          post.profileImage = prof;
+          const name = await this.getAutorName(post.postAutorId._id);
+          post.postAutorName = name;
+          post.postAutorId = post.postAutorId._id;
         }
-        console.log(`Like process successful`)
-      } catch (error) {
-        console.log(error);
+        this.posts = datame;
+      } catch (err) {
+        console.error(err);
       }
     },
-    }
+    async getAutor(userid) {
+      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+      const prof = resuser.data.profileImage;
+      return prof;
+    },
+    async getAutorName(userid) {
+      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+      const prof = resuser.data.name;
+      return prof;
+    },
+    scrollListener() {
+      const scrollY = window.scrollY;
+      const innerHeight = window.innerHeight;
+      const offset = document.documentElement.offsetHeight;
+      if (scrollY + innerHeight >= offset) {
+        this.numOfLoadedItems += 3;
+      }
+    },
+  },
 };
 </script>
 <style>
@@ -93,8 +111,16 @@ export default {
   padding: 20px;
   height: 100vh;
 }
+.favorite-list {
+  display: flex;
+  flex-wrap: wrap;
+}
 .favorite h1 {
   font-size: 24px;
   margin-bottom: 20px;
+}
+.favorite-list-item {
+  width: calc(50% - 20px);
+  margin: 10px;
 }
 </style>

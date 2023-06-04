@@ -1,46 +1,64 @@
 <template>
-    <nav class="navbar">
-    <div class="navbar-menu" :class="{ 'is-active': navbarOpen }">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div
+      class="navbar-menu navbar-expand-lg navbar-light bg-light"
+      :class="{ 'is-active': navbarOpen }"
+    >
       <div class="navbar-start">
-        <a class="navbar-item button" @click="$router.push('/')">Home</a>
-        <a class="navbar-item button" @click="$router.push('/about')">About</a>
-        <a class="navbar-item button" @click="$router.push('/users')">Users</a>
-        <div class="navbar-item dropdown is-hoverable">
-          <button class="" @click="toggleDropdown">
-            Categories
-            <span class="icon">
-              <i class="fas fa-angle-down"></i>
-            </span>
-          </button>
-          <div class="navbar-dropdown" v-show="showDropdown">
-            <a v-for="category in categories" :key="category._id"
-              class="navbar-item" @click="goToCategory(category)">
-              {{ category.name }}
-            </a>
-          </div>
-        </div>
-        <div v-if="user" class="navbar-item button">
-          Bi xer hati,<a
+        <div class="navbar-item">
+  <button class="btn btn-primary" @click="$router.push('/')">Home</button>
+</div>
+<div class="navbar-item">
+  <button class="btn btn-primary" @click="$router.push('/about')">About</button>
+</div>
+<div class="navbar-item">
+  <button class="btn btn-primary" @click="$router.push('/users')">Users</button>
+</div>
+
+<div class="navbar-item">
+    <div class="dropdown is-hoverable">
+      <button class="btn btn-primary" @click="toggleDropdown">
+        Categories
+        <span class="icon">
+          <i class="fas fa-angle-down"></i>
+        </span>
+      </button>
+      <div class="dropdown-menu" v-show="showDropdown">
+        <a
+          v-for="category in categories"
+          :key="category._id"
+          class="dropdown-item"
+          @click="goToCategory(category)"
+        >
+          {{ category.name }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+        
+        <div v-if="user" class="navbar-item">
+          Bi xer hati, <a
             v-if="user"
-            class="navbar-item button"
+            class="btn btn-primary position-relative ml-2"
             @click="$router.push('/profile/' + user.username)"
-          >
-            {{ user.name }}
+            >{{ user.name }}
+            <span
+              class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle"
+            >
+              <span class="visually-hidden">New alerts</span>
+            </span>
           </a>
         </div>
       </div>
       <div class="navbar-end">
-        <div class="navbar-item button">
-          <a v-if="!user" class="button button" @click="$router.push('/signup')"
-            >Sign up</a
-          >
-          <a v-if="!user" class="button button" @click="$router.push('/login')"
-            >Login</a
-          >
-          <button v-if="user" class="button button" @click.prevent="logout">
-            Log out
-          </button>
-        </div>
+        <div class="navbar-item">
+    <div class="buttons">
+      <a v-if="!user" class="btn btn-primary ml-2" @click="$router.push('/signup')">Sign up</a>
+      <a v-if="!user" class="btn btn-primary ml-2" @click="$router.push('/login')">Login</a>
+      <button v-if="user" class="btn btn-danger" @click.prevent="logout">Log out</button>
+    </div>
+  </div>
       </div>
     </div>
   </nav>
@@ -82,19 +100,19 @@ export default {
     logout() {
       VueCookies.remove("user");
       this.user = null;
-      window.location.href = '/';
+      window.location.href = "/";
     },
     goToCategory(category) {
-    this.$router.push(`/category/${category.name}-${category._id}`);
-    window.location.href = `/category/${category.name}-${category._id}`;
-  },
+      this.$router.push(`/category/${category.name}-${category._id}`);
+      window.location.href = `/category/${category.name}-${category._id}`;
+    },
   },
 };
 </script>
 
 <style>
 @import url("https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css");
-
+@import url("https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css");
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -119,7 +137,6 @@ export default {
   border-radius: 0.25rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
 }
-
 
 .navbar {
   position: fixed;
@@ -166,13 +183,8 @@ export default {
 }
 
 .navbar-item {
-  padding: 0.5rem 1rem;
   color: #333;
   text-decoration: none;
-}
-
-.navbar-item:hover {
-  background-color: #3e8e41;
 }
 
 .button,
@@ -197,7 +209,5 @@ export default {
   color: darkblue;
 }
 
-.buttons .button {
-  margin-left: 0.5rem;
-}
+
 </style>

@@ -91,9 +91,6 @@ export default {
       const prof = resuser.data.name;
       return prof;
     },
-    loadMoreItems() {
-      this.numOfLoadedItems += this.itemsPerPage;
-    },
     scrollListener() {
       const scrollY = window.scrollY;
       const innerHeight = window.innerHeight;

@@ -32,7 +32,6 @@
       </div>
       <div class="table-body">
         <div v-for="u in displayedUsers" :key="u._id" class="table-row">
-        
           <div v-if="u._id !== editUserId" class="table-cell">{{ u.name }}</div>
           <div v-if="u._id !== editUserId" class="table-cell">
             {{ u.username }}
@@ -57,53 +56,9 @@
             "
             class="table-cell"
           >
-            Name:<input type="text" v-model="editUser.name" />
-          </div>
-          <div
-            v-if="
-              u._id === editUserId &&
-              (u.permission !== 'admin' ||
-                user.permission === 'root' ||
-                user._id === u._id)
-            "
-            class="table-cell"
-          >
-            Username:<input type="text" v-model="editUser.username" />
-          </div>
-          <div
-            v-if="
-              u._id === editUserId &&
-              (u.permission !== 'admin' ||
-                user.permission === 'root' ||
-                user._id === u._id)
-            "
-            class="table-cell"
-          >
-            Email:<input type="text" v-model="editUser.mail" />
-          </div>
-          <div
-            v-if="
-              u._id === editUserId &&
-              (u.permission !== 'admin' ||
-                user.permission === 'root' ||
-                user._id === u._id)
-            "
-            class="table-cell"
-          >
-            <label for="permission">Permission:</label>
-            <div class="select">
-              <select id="permission" v-model="editUser.permission">
-                <option value="user">User</option>
-                <option value="niviskar">Niviskar</option>
-                <option value="editor">Editor</option>
-                <option
-                  v-if="user.permission === 'root' || u._id === user._id"
-                  value="admin"
-                >
-                  Admin
-                </option>
-              </select>
-              <div class="select__arrow"></div>
+            <div class="input-group">
+              <span class="input-group-text">Name:</span>
+              <input type="text" class="form-control" v-model="editUser.name" />
             </div>
           </div>
           <div
@@ -115,7 +70,62 @@
             "
             class="table-cell"
           >
-            Password:<input type="text" v-model="editUser.password" />
+            <div class="input-group">
+              <span class="input-group-text">Username:</span>
+              <input
+                type="text"
+                class="form-control"
+                v-model="editUser.username"
+              />
+            </div>
+          </div>
+          <div
+            v-if="
+              u._id === editUserId &&
+              (u.permission !== 'admin' ||
+                user.permission === 'root' ||
+                user._id === u._id)
+            "
+            class="table-cell"
+          >
+            <div class="input-group">
+              <span class="input-group-text">Email:</span>
+              <input type="text" class="form-control" v-model="editUser.mail" />
+            </div>
+          </div>
+          <div
+  v-if="
+    u._id === editUserId &&
+    (u.permission !== 'admin' ||
+      user.permission === 'root' ||
+      user._id === u._id)
+  "
+  class="table-cell"
+>
+  <div class="mb-3">
+    <label for="permission" class="form-label">Permission:</label>
+    <select id="permission" class="form-select" v-model="editUser.permission">
+      <option value="user">User</option>
+      <option value="niviskar">Niviskar</option>
+      <option value="editor">Editor</option>
+      <option v-if="user.permission === 'root' || u._id === user._id" value="admin">Admin</option>
+    </select>
+  </div>
+</div>
+
+          <div
+            v-if="
+              u._id === editUserId &&
+              (u.permission !== 'admin' ||
+                user.permission === 'root' ||
+                user._id === u._id)
+            "
+            class="table-cell"
+          >
+          <div class="input-group">
+    <span class="input-group-text">Password:</span>
+    <input type="password" class="form-control" v-model="editUser.password" />
+  </div>
           </div>
           <div class="table-cell">
             <div class="button-group">
@@ -152,8 +162,8 @@
         </div>
       </div>
       <div v-if="showLoadMoreButton">
-      <button @click="loadMoreUsers()">More</button>
-    </div>
+        <button @click="loadMoreUsers()">More</button>
+      </div>
     </div>
   </div>
 </template>
@@ -211,11 +221,10 @@ export default {
                 return a.permission.localeCompare(b.permission);
               }
             });
-            this.displayedUsers = this.users.slice(0, 100);
+          this.displayedUsers = this.users.slice(0, 100);
           if (this.users.length > 100) {
             this.showLoadMoreButton = true;
           }
-            
         })
         .catch((error) => {
           console.log(error);
@@ -224,7 +233,9 @@ export default {
     async loadMoreUsers() {
       const startIndex = this.displayedUsers.length;
       const endIndex = startIndex + this.loadMoreCount;
-      this.displayedUsers = this.displayedUsers.concat(this.users.slice(startIndex, endIndex));
+      this.displayedUsers = this.displayedUsers.concat(
+        this.users.slice(startIndex, endIndex)
+      );
       if (endIndex >= this.users.length) {
         this.showLoadMoreButton = false;
       }

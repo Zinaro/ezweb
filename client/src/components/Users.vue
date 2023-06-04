@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container pt-3">
     <h1 class="title">{{ msg }}</h1>
     <div>
       <card title="Items">
@@ -12,7 +12,7 @@
                   <img
                     v-bind:src="
                       item.profileImage
-                        ? require(`@/assets/images/${item._id}/${item.profileImage}`)
+                        ? require(`@/assets/images/${item.profileImage}`)
                         : require(`@/assets/images/default.jpg`)
                     "
                     alt="Profile Image"

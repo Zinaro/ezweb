@@ -93,7 +93,7 @@ export default {
         this.profileImage = null;
         alert("Profile image uploaded successfully");
         await axios.put(`http://localhost:3000/users/${this.user._id}`, {
-          profileImage: response.data.imageUrl,
+          profileImage: `${this.user._id}/${response.data.imageUrl}`,
         });
         location.reload();
       } catch (error) {

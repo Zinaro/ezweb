@@ -8,7 +8,7 @@
             <img
               v-if="person.profileImage"
               :src="
-                require(`@/assets/images/${person._id}/${person.profileImage}`)
+                require(`@/assets/images/${person.profileImage}`)
               "
               alt="Wêneya Profîlê"
               class="profile-image"

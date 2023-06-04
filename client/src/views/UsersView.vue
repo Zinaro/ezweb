@@ -1,6 +1,5 @@
 <template>
   <div class="users">
-    <h1>Users list</h1>
     <Users></Users>
   </div>
 </template>

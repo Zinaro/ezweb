@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="title">Silav Zinar, {{ msg }}</h1>
+    <h1 class="title pt-3">Silav Zinar, {{ msg }}</h1>
     <Posts></Posts>
   </div>
 </template>

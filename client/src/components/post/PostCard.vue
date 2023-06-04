@@ -30,7 +30,7 @@
                 <img
                   v-if="item.profileImage"
                   :src="
-                    require(`@/assets/images/${item.postAutorId}/${item.profileImage}`)
+                    require(`@/assets/images/${item.profileImage}`)
                   "
                   alt="Wêneya Profîlê"
                   class="post-image"
@@ -112,7 +112,7 @@ export default {
   border: 0.2px solid cyan;
   border-radius: 55px;
   position: relative;
-  background-color: rgba(1, 68, 37, 0.1);
+  background-color: rgba(255, 255, 255, 0.70);
   z-index: 999;
   height: 420px;
   max-height: 420px;
@@ -120,14 +120,14 @@ export default {
 }
 .kart {
   padding-bottom: 5px;
-  background-color: rgba(0, 0, 0);
+  background-color: #fff;
   border-radius: 55px;
   position: relative;
   transform: scale(0.95);
-  background-image: linear-gradient(to bottom right, black, cyan, cyan, black);
+  background-image: linear-gradient(to bottom right, white, white,white, rgba(0, 247, 255, 0.4), white, white, white);
   background-size: 200% 200%;
   background-position: center;
-  animation: gradient 10s ease infinite;
+  animation: gradient 25s ease infinite;
 }
 @keyframes gradient {
   0% {
@@ -174,7 +174,7 @@ export default {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(1, 68, 37, 0.2);
+  background-color: rgba(0, 255, 255, 0.050);
   display: flex;
   justify-content: space-between;
   align-items: center;
