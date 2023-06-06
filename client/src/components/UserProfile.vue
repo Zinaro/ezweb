@@ -2,7 +2,7 @@
   <div class="profile">
     <div v-if="userNotFound" class="user-not-found">User not found</div>
     <div v-else class="profile-header">
-      <div class="profile-image">
+      <div class="profile-image float-start">
         <img
           v-bind:src="
             user.profileImage
@@ -12,27 +12,35 @@
           alt="Profile Image"
         />
       </div>
-      <div class="profile-info">
+      <div class="profile-info float-end">
         <div class="profile-name">{{ user.name }}</div>
         <div class="profile-username">{{ user.username }}</div>
         <div class="profile-followers">
           <span class="profile-followers-count">{{ followersCount }}</span>
-          followers
+          Followers
         </div>
         <div class="profile-following">
           <span class="profile-following-count">{{ followingCount }}</span>
-          following
+          Following
         </div>
       </div>
+
     </div>
-    <div class="profile-content"></div>
+    <div class="profile-content">
+      <h1 v-if="!userNotFound">Şandiyên {{ user.name }}</h1>
+      <UserPosts :userID=user._id></UserPosts>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import UserPosts from "@/components/UserPosts.vue"
 export default {
   name: "UserProfile",
+  components: {
+    UserPosts
+  },
   data() {
     return {
       user: {},
@@ -55,6 +63,7 @@ export default {
         this.followersCount = user.followers.length;
         this.followingCount = user.following.length;
         this.userNotFound = false;
+        document.title = this.user.name
       } else {
         this.userNotFound = true;
       }
@@ -77,13 +86,17 @@ export default {
   margin-top: 50px;
 }
 .profile {
-  max-width: 800px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   margin: 0 auto;
   padding: 20px;
 }
 
 .profile-header {
+  max-width: 800px;
   display: flex;
+  flex-direction: row;
   align-items: center;
   margin-bottom: 20px;
 }
@@ -93,7 +106,7 @@ export default {
   height: 100px;
   border-radius: 50%;
   overflow: hidden;
-  margin-right: 20px;
+  margin-right: 100px;
 }
 
 .profile-image img {

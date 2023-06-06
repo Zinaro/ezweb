@@ -52,6 +52,7 @@ export default {
   },
   created() {
     this.user = VueCookies.get("user");
+    document.title = 'Dişopîne';
   },
   mounted() {
     this.getFollowingList();

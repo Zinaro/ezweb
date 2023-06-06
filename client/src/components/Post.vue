@@ -216,6 +216,7 @@ export default {
         );
         this.category = rescategory.data.category.name;
         this.autor = resuser.data;
+        document.title = this.post.postTitle;
       } catch (error) {
         console.log(error);
       }

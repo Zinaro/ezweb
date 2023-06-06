@@ -48,6 +48,7 @@ export default {
     },
     created() {
         this.user = VueCookies.get("user");
+        document.title = 'Şopîner';
     },
     mounted() {
         this.getFollowersList();

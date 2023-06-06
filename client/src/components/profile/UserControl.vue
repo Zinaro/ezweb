@@ -188,6 +188,7 @@ export default {
   },
   created() {
     this.user = VueCookies.get("user");
+    document.title = 'User Control';
     this.getUsers();
   },
   watch: {

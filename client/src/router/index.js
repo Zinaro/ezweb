@@ -5,32 +5,53 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: {
+      title: 'Welcome to the dashboard'
+    }
   },
   {
     path: '/about',
     name: 'about',
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    
   },
   {
     path: '/users',
     name: 'users',
-    component: () => import(/* webpackChunkName: "users" */ '../views/UsersView.vue')
+    component: () => import(/* webpackChunkName: "users" */ '../views/UsersView.vue'),
+    meta: {
+      title: 'Users'
+    }
+  },
+  {
+    path: '/categories',
+    name: 'categories',
+    component: () => import(/* webpackChunkName: "categories" */ '../views/CategoriesView.vue'),
+    meta: {
+      title: 'Categories'
+    }
   },
   {
     path: '/login',
     name: 'login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/LoginView.vue')
+    component: () => import(/* webpackChunkName: "login" */ '../views/LoginView.vue'),
+    meta: {
+      title: 'Login'
+    }
   },
   {
     path: "/profile/:userId",
     name: "profile",
-    component: () => import(/* webpackChunkName: "profile" */ '../views/profile/ProfileView.vue')
+    component: () => import(/* webpackChunkName: "profile" */ '../views/profile/ProfileView.vue'),
   },
   {
     path: "/signup",
     name: "signup",
-    component: () => import(/* webpackChunkName: "signup" */ '../views/SignupView.vue')
+    component: () => import(/* webpackChunkName: "signup" */ '../views/SignupView.vue'),
+    meta: {
+      title: 'Sign Up'
+    }
   },
   {
     path: "/:userId/myposts",
@@ -105,6 +126,9 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+router.beforeEach((to) => {
+  document.title = to.meta?.title ?? 'Default Title'
 })
 
 export default router

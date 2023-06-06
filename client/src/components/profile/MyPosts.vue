@@ -28,6 +28,7 @@ export default {
   },
   async created() {
     this.user = VueCookies.get("user");
+    document.title = 'Şandiyên min';
     await this.getItems();
   },
   computed: {
@@ -118,5 +119,17 @@ export default {
 .myposts-list-item {
   width: calc(50% - 20px);
   margin: 10px;
+}
+@media (max-width: 767.98px) {
+ .myposts-list-item {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+@media (max-width: 991.98px) {
+ .myposts-list-item {
+    width: 100%;
+    margin: 10px 0;
+  }
 }
 </style>

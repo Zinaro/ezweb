@@ -1,56 +1,36 @@
 <template>
   <div v-if="user" class="profile">
     <div class="settings">
-      <button @click="$router.push('/')">Rûpela Sereke</button>
-      <button @click="$router.push('/' + user.username)">Profîla min</button>
-      <button
-        v-if="
-          (user && user.permission === 'root')
-        "
-        :class="{ active: activeTab === 'add-category' }"
-        @click="activeTab = 'add-category'"
-      >
-        Kategorî Tevlî bike
-      </button>
-      <button
-        v-if="
-          (user && user.permission === 'root') || user.permission === 'admin'
-        "
-        :class="{ active: activeTab === 'user-control' }"
-        @click="activeTab = 'user-control'"
-      >
-        User Control
-      </button>
-      <button
-        v-if="
-          (user && user.permission === 'root') ||
-          user.permission === 'admin' ||
-          user.permission === 'editor'
-        "
-        :class="{ active: activeTab === 'post-control' }"
-        @click="activeTab = 'post-control'"
-      >
-        Post Control
-      </button>
-      <button
-        :class="{ active: activeTab === 'settings' }"
-        @click="activeTab = 'settings'"
-      >
-        Sazkarî
-      </button>
-      <button
-        v-if="
-          (user && user.permission === 'root') ||
-          user.permission === 'admin' ||
-          user.permission === 'editor' ||
-          user.permission === 'niviskar'
-        "
-        :class="{ active: activeTab === 'add-post' }"
-        @click="activeTab = 'add-post'"
-      >
-        Şandî Tevlî bike
-      </button>
-    </div>
+  <div @click="$router.push('/')">
+    <i class="fas fa-home"></i>
+    Rûpela Sereke
+  </div>
+  <div @click="$router.push('/' + user.username)">
+    <i class="fas fa-user"></i>
+    Profîla min
+  </div>
+  <div v-if="user && user.permission === 'root'" :class="{ active: activeTab === 'add-category' }" @click="activeTab = 'add-category'">
+    <i class="fas fa-plus"></i>
+    Kategorî Tevlî bike
+  </div>
+  <div v-if="(user && user.permission === 'root') || user.permission === 'admin'" :class="{ active: activeTab === 'user-control' }" @click="activeTab = 'user-control'">
+    <i class="fas fa-users"></i>
+    User Control
+  </div>
+  <div v-if="(user && user.permission === 'root') || user.permission === 'admin' || user.permission === 'editor'" :class="{ active: activeTab === 'post-control' }" @click="activeTab = 'post-control'">
+    <i class="fas fa-edit"></i>
+    Post Control
+  </div>
+  <div :class="{ active: activeTab === 'settings' }" @click="activeTab = 'settings'">
+    <i class="fas fa-cog"></i>
+    Sazkarî
+  </div>
+  <div v-if="(user && user.permission === 'root') || user.permission === 'admin' || user.permission === 'editor' || user.permission === 'niviskar'" :class="{ active: activeTab === 'add-post' }" @click="activeTab = 'add-post'">
+    <i class="fas fa-plus"></i>
+    Şandî Tevlî bike
+  </div>
+</div>
+
     <div class="content-section">
       <div class="top-section pt-2">
         <div class="profile-row">
@@ -73,47 +53,49 @@
             <p>{{ user.mail }}</p>
           </div>
         </div>
-        <div class="button-row">
-          <button
-            v-if="
-              user.permission === 'root' ||
-              user.permission === 'admin' ||
-              user.permission === 'editor' ||
-              user.permission === 'niviskar'
-            "
-            class="button-profile"
-            :class="{ active: activeTab === 'my-posts' }"
-            @click="activeTab = 'my-posts'"
-          >
-            Şandiyên min
-          </button>
-          <button
-            class="button-profile"
-            :class="{ active: activeTab === 'following' }"
-            @click="activeTab = 'following'"
-          >
-            Dişopîne
-          </button>
-          <button
-            v-if="
-              user.permission === 'root' ||
-              user.permission === 'admin' ||
-              user.permission === 'editor' ||
-              user.permission === 'niviskar'
-            "
-            class="button-profile"
-            :class="{ active: activeTab === 'followers' }"
-            @click="activeTab = 'followers'"
-          >
-            Şopîner
-          </button>
-          <button
-            class="button-profile"
-            :class="{ active: activeTab === 'favorites' }"
-            @click="activeTab = 'favorites'"
-          >
-            Hezkirinên min
-          </button>
+        <div class="tabs is-toggle is-medium">
+          <ul>
+            <li
+              v-if="
+                user.permission === 'root' ||
+                user.permission === 'admin' ||
+                user.permission === 'editor' ||
+                user.permission === 'niviskar'
+              "
+              :class="{ 'is-active': activeTab === 'my-posts' }"
+            >
+              <a @click="activeTab = 'my-posts'">
+                <span :class="{ active: activeTab === 'my-posts' }"
+                  >Şandiyên min</span
+                >
+              </a>
+            </li>
+            <li :class="{ 'is-active': activeTab === 'following' }">
+              <a @click="activeTab = 'following'">
+                <span :class="{ active: activeTab === 'following' }"
+                  >Dişopîne</span
+                >
+              </a>
+            </li>
+            <li
+              v-if="
+                user.permission === 'root' ||
+                user.permission === 'admin' ||
+                user.permission === 'editor' ||
+                user.permission === 'niviskar'
+              "
+              :class="{ 'is-active': activeTab === 'followers' }"
+            >
+              <a @click="activeTab = 'followers'">
+                <span>Şopîner</span>
+              </a>
+            </li>
+            <li :class="{ 'is-active': activeTab === 'favorites' }">
+              <a @click="activeTab = 'favorites'">
+                <span>Hezkirinên min</span>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
       <div class="bottom-section">
@@ -166,12 +148,13 @@ export default {
         case "settings":
           return "Settings";
         default:
-          return this.user.permission == 'user' ? "Favorite" : "MyPosts";
+          return this.user.permission == "user" ? "Favorite" : "MyPosts";
       }
     },
   },
   created() {
     this.user = VueCookies.get("user");
+    document.title = this.user.name;
   },
   mounted() {
     axios
@@ -194,18 +177,40 @@ export default {
 };
 </script>
 <style>
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 .settings {
   position: fixed;
   height: 100%;
   width: 25%;
   max-width: 25%;
-  background-color: #ccc;
+  background-color: #15202b;
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   justify-content: flex-start;
   padding: 20px;
+}
+
+.settings > div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px;
+  margin-left: 10px;
+  border-radius: 20px;
+  color: white;
+}
+
+.settings > div i {
+  margin-right: 15px; 
+  font-size: 18px;
+  width: 20px; 
+  text-align: center; 
+}
+
+.settings > div:hover {
+  background-color: #37444d;
 }
 
 button,
@@ -334,4 +339,42 @@ button:hover,
   overflow-y: scroll;
   background-color: #eff;
 }
+
+@media screen and (max-width: 768px) {
+  .tabs ul {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tabs ul li {
+    width: 100%;
+  }
+  .settings {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 10%;
+    width: 100%;
+    max-width: 100%;
+    background-color: #000;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    z-index: 9999;
+}
+
+
+.content-section {
+  margin-left: 0%;
+  margin-bottom: 10%;
+  background-color: darkgray;
+  display: flex;
+  flex-direction: column;
+}
+}
+
 </style>

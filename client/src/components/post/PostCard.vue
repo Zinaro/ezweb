@@ -1,60 +1,54 @@
 <template>
-  
-    <card title="Post">
-      <div class="kart">
-        <div class="item-card">
-          <div class="post-image-smole">
-            <img
-              v-if="item.postImage"
-              @click="viewPost(item)"
-              style="cursor: pointer"
-              :src="require(`@/assets/images/postimages/${item.postImage}`)"
-              alt="Wêneya Postê"
-              class="post-image-smole"
-            />
-          </div>
-          <div
-            class="item-post-title"
+
+  <card title="Post">
+      <div class="item-card mt-3 ml-2 mr-2 ">
+        <div class="post-image-smole">
+          <img
+            v-if="item.postImage"
             @click="viewPost(item)"
             style="cursor: pointer"
-          >
-            {{ item.postTitle }}
-          </div>
-          <div
-            class="item-post-content"
-            v-html="truncateText(item.postContent, 410)"
-          ></div>
-          <div class="item-post-content">
-            <div class="post-content-autor-bottom">
-              <div class="post-autor">
-                <img
-                  v-if="item.profileImage"
-                  :src="
-                    require(`@/assets/images/${item.profileImage}`)
-                  "
-                  alt="Wêneya Profîlê"
-                  class="post-image"
-                />
-                <img
-                  v-else
-                  src="@/assets/images/default.jpg"
-                  alt="Wêneya Profîlê"
-                  class="profile-image"
-                />
-                <div class="post-autor-name">
-                  {{ item.postAutorName }}
-                </div>
-              </div>
-              {{ Object.keys(item.likes).length }} liked.
-            </div>
-          </div>
-
-          <Post v-if="selectedPost" :post="selectedPost" />
+            :src="require(`@/assets/images/postimages/${item.postImage}`)"
+            alt="Wêneya Postê"
+            class="post-image-smole"
+          />
         </div>
+        <div
+          class="item-post-title"
+          @click="viewPost(item)"
+          style="cursor: pointer"
+        >
+          {{ item.postTitle }}
+        </div>
+        <div 
+          class="item-post-content"
+          v-html="truncateText(item.postContent, 410)"
+        ></div>
+        <div class="item-post-content">
+          <div class="post-content-autor-bottom">
+            <div class="post-autor">
+              <img
+                v-if="item.profileImage"
+                :src="require(`@/assets/images/${item.profileImage}`)"
+                alt="Wêneya Profîlê"
+                class="post-image"
+              />
+              <img
+                v-else
+                src="@/assets/images/default.jpg"
+                alt="Wêneya Profîlê"
+                class="profile-image"
+              />
+              <div class="post-autor-name">
+                {{ item.postAutorName.length > 15 ? item.postAutorName.substring(0, 15) + '..' : item.postAutorName }}
+              </div>
+            </div>
+            {{ Object.keys(item.likes).length }} liked.
+          </div>
+        </div>
+
+        <Post v-if="selectedPost" :post="selectedPost" />
       </div>
-    </card>
-
-
+  </card>
 </template>
 
 <script>
@@ -99,48 +93,25 @@ export default {
 </script>
 
 <style>
+@import url('@/assets/styles.scss');
 .post-image-smole {
   object-fit: cover;
   object-position: top;
   width: 100%;
-  border-top-left-radius: 55px;
-  border-top-right-radius: 55px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
   height: 210px;
 }
 .item-card {
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.7);
+  background-color: white;
   border: 0.2px solid cyan;
-  border-radius: 55px;
+  border-radius: 15px;
   position: relative;
-  background-color: rgba(255, 255, 255, 0.70);
-  z-index: 999;
   height: 420px;
   max-height: 420px;
   min-height: 420px;
 }
-.kart {
-  padding-bottom: 5px;
-  background-color: #fff;
-  border-radius: 55px;
-  position: relative;
-  transform: scale(0.95);
-  background-image: linear-gradient(to bottom right, white, white,white, rgba(0, 247, 255, 0.4), white, white, white);
-  background-size: 200% 200%;
-  background-position: center;
-  animation: gradient 25s ease infinite;
-}
-@keyframes gradient {
-  0% {
-    background-position: 0% 0%;
-  }
-  50% {
-    background-position: 100% 100%;
-  }
-  100% {
-    background-position: 0% 0%;
-  }
-}
-
 .item-nav {
   font-size: 18px;
   font-weight: bold;
@@ -169,37 +140,20 @@ export default {
 }
 .post-content-autor-bottom {
   position: absolute;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(0, 255, 255, 0.050);
+  background-color: rgba(0, 255, 255, 0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
   font-size: 14px;
-  border-bottom-left-radius: 55px;
-  border-bottom-right-radius: 55px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
-.like,
-.likered {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px;
-  margin-top: 10px;
-  cursor: pointer;
-}
 
-.likered {
-  background-color: #f44336;
-}
-
-.like:hover,
-.likered:hover {
-  opacity: 0.8;
-}
 </style>

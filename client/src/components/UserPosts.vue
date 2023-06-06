@@ -12,7 +12,13 @@ import VueCookies from "vue-cookies";
 import PostCard from "@/components/post/PostCard.vue"
 
 export default {
-  name: "PostsPage",
+  name: "UserPostsPage",
+  props: {
+    userID: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     PostCard,
   },
@@ -94,11 +100,14 @@ export default {
           const name = await this.getAutorName(post.postAutorId);
           post.postAutorName = name;
         }
-        this.items = posts;
+        this.items = posts.filter(post => post.postAutorId === this.userID);
       } catch (error) {
         console.error(error);
       }
     },
+
+
+
 
   },
 };
@@ -116,18 +125,4 @@ export default {
   width: calc(33.33% - 20px);
   margin: 10px;
 }
-@media (max-width: 767.98px) {
- .list-item {
-    width: 100%;
-    margin: 10px 0;
-  }
-}
-@media (max-width: 991.98px) {
- .list-item {
-    width: 100%;
-    margin: 10px 0;
-  }
-}
-
-
 </style>

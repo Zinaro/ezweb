@@ -55,6 +55,7 @@ export default {
   },
   async created() {
     this.user = VueCookies.get("user");
+    document.title = 'Hezkirinên min';
     await this.getItems();
   },
   mounted() {
@@ -122,5 +123,17 @@ export default {
 .favorite-list-item {
   width: calc(50% - 20px);
   margin: 10px;
+}
+@media (max-width: 767.98px) {
+ .favorite-list-item {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+@media (max-width: 991.98px) {
+ .favorite-list-item {
+    width: 100%;
+    margin: 10px 0;
+  }
 }
 </style>

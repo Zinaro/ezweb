@@ -2,7 +2,7 @@
   <div class="category container">
     <h1>{{ categoryName }}</h1>
     <div class="category-view">
-      <div v-for="item in sortedUserItems" :key="item._id" class="category-list-item">
+      <div v-for="item in sortedUserItems" :key="item._id" class="list-item">
         <PostCard :item="item"></PostCard>
       </div>
     </div>
@@ -15,6 +15,11 @@ import PostCard from "@/components/post/PostCard.vue";
 
 export default {
   name: "CategoryPage",
+  props: {
+    catID: {
+      type: String
+    }
+  },
   components: {
     PostCard,
   },
@@ -64,7 +69,12 @@ export default {
   methods: {
     async refreshData() {
       try {
-        const categoryId = this.$route.params.id.slice(-24);
+        let categoryId;
+        if (this.catID == null) {
+          categoryId = this.$route.params.id.slice(-24);
+        } else {
+          categoryId = this.catID;
+        }
         const response = await axios.get(
           `http://localhost:3000/category/${categoryId}`
         );
@@ -77,6 +87,7 @@ export default {
         }
         this.posts = datame;
         this.categoryName = response.data.category.name;
+        document.title = this.categoryName;
       } catch (err) {
         console.error(err);
       }
@@ -114,9 +125,5 @@ export default {
   justify-content: flex-start;
   margin: 0 auto;
   margin-top: 10px;
-}
-.category-list-item {
-  width: calc(33.33% - 20px);
-  margin: 10px;
 }
 </style>
