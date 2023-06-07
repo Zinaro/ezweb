@@ -289,9 +289,7 @@ export default {
   padding: 8px 38px 8px 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: #fff;
   font-size: 16px;
-  color: #333;
   appearance: none;
   -webkit-appearance: none;
 }
@@ -311,7 +309,6 @@ export default {
 }
 
 v-card {
-  background-color: #fff !important;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.24), 0 0 2px rgba(0, 0, 0, 0.12);
   width: 400px;
@@ -362,6 +359,8 @@ v-card-text {
 .user-control {
   flex-direction: row;
   justify-content: space-between;
+  color: var(--colortext) !important;
+  background-color: var(--colorbg) !important;
 }
 
 .table {
@@ -370,12 +369,13 @@ v-card-text {
   border: 1px solid #ccc;
   border-radius: 4px;
   overflow: hidden;
+  color: var(--colortext) !important;
+  background-color: var(--colorbg) !important;
 }
 
 .table-header {
   display: flex;
   flex-direction: row;
-  background-color: #f5f5f5;
   font-weight: bold;
   padding: 8px;
 }
@@ -383,12 +383,18 @@ v-card-text {
 .table-cell {
   flex: 1;
   padding: 8px;
+  background-color: var(--colorbg);
+}
+.input-group input {
+  color: var(--colortext) !important;
+  background-color: var(--colorbg) !important;
 }
 
 .table-row {
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid #ccc;
+  background-color: var(--colorbg);
 }
 
 .table-row:last-child {
@@ -397,7 +403,7 @@ v-card-text {
 
 .button-group {
   display: flex;
-  flex-direction: row;
+
 }
 
 .button-group button {
@@ -411,7 +417,22 @@ v-card-text {
 }
 
 .button-group button:disabled {
-  background-color: #ccc;
   cursor: not-allowed;
+}
+
+
+
+@media (max-width: 767.98px) {
+
+.table-row {
+  display: flex;
+  flex-direction: column;
+}
+}
+@media (max-width: 991.98px) {
+.table-row {
+  display: flex;
+  flex-direction: column;
+}
 }
 </style>

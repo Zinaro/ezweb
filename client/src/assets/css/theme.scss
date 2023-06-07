@@ -1,0 +1,33 @@
+:root {
+    --colorbg: white;
+    --colortext: black;
+    --shadow: 0 .5rem 1rem rgba(0,0,0,.25);
+    --colorshadow:  rgba(0,0,0,.15);
+    --bghover: #0000003a;
+    --a-color: red;
+    --border: 0.2px solid black;
+  }
+  
+  @media screen {
+    :root[data-theme="dark"] {
+      --colorbg: #15202b;
+      --colortext: white;
+      --shadow: 0 .5rem 1rem rgba(255,255,255,.25);
+      --colorshadow:  rgba(255,255,255,.15);
+      --bghover: #1d9cf03a;
+      --a-color: cyan;
+      --border: 0.2px solid cyan;
+    }
+  }
+  a {
+    color: var(--colortext);
+    background-color: var(--colorbg);
+    transition: color 0.1s, background-color 0.1s;
+    padding: 5px;
+  }
+  
+  a:hover {
+    color: var(--a-color);
+    background-color: var(--colorshadow);
+    border-radius: 5px;
+  }

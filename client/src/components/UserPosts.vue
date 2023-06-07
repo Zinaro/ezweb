@@ -125,4 +125,16 @@ export default {
   width: calc(33.33% - 20px);
   margin: 10px;
 }
+@media (max-width: 767.98px) {
+ .list-item {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+@media (max-width: 991.98px) {
+ .list-item {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
 </style>

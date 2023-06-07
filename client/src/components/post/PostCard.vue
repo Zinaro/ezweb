@@ -42,7 +42,7 @@
                 {{ item.postAutorName.length > 15 ? item.postAutorName.substring(0, 15) + '..' : item.postAutorName }}
               </div>
             </div>
-            {{ Object.keys(item.likes).length }} liked.
+            <div>{{ Object.keys(item.likes).length }} <i class="fas fa-heart" style="color: red;"></i></div>
           </div>
         </div>
 
@@ -104,8 +104,8 @@ export default {
 }
 .item-card {
   box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.7);
-  background-color: white;
-  border: 0.2px solid cyan;
+  background-color: var(--colorbg);
+  border: var(--border);
   border-radius: 15px;
   position: relative;
   height: 420px;

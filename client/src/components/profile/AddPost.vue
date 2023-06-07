@@ -185,7 +185,6 @@ export default {
   text-align: center;
 }
 .add-post {
-  width: 100%;
   padding-bottom: 100px;
   display: flex;
 }

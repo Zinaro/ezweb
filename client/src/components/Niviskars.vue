@@ -1,7 +1,7 @@
 <template>
   <div class="container pt-3">
     <div>
-      <h1 class="title">Niviskarên me!</h1>
+      <h1 class="title">Nivîskarên me!</h1>
         <ul class="list">
           <li v-for="item in items" :key="item._id" class="card ml-2 mr-2 mt-4 list-item shadow">
             <div class="card-body">
@@ -187,7 +187,6 @@ export default {
 .profile-image {
   width: 75px;
   height: 75px;
-  border-radius: 50%;
   overflow: hidden;
 }
 

@@ -116,8 +116,6 @@ export default {
 <style>
 .category {
     padding-top: 8px;
-    height: 100%;
-    min-height: 100vh;
 }
 .category-view {
   display: flex;

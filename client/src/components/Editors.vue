@@ -197,4 +197,17 @@ export default {
   height: 100%;
   object-fit: cover;
 }
+.title {
+  color: var(--colortext);
+}
+.card-body {
+  background-color: var(--colorbg);
+  color: var(--colortext);
+}
+.shadow {
+  box-shadow: var(--shadow)!important;
+}
+.card {
+  border: none;
+}
 </style>

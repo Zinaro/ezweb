@@ -74,8 +74,8 @@
       <div
         class="post-category"
         @click="goToCategory(post.postCategory)"
-        style="cursor: pointer; text-decoration: underline"
-      >
+        style="cursor: pointer;"
+      ><i class="fas fa-tags"></i>
         {{ category }}
       </div>
     </div>
@@ -374,6 +374,7 @@ export default {
 .post-image {
   width: 100%;
   position: relative;
+  padding-bottom: 10px;
 }
 
 .post-image img {
@@ -463,7 +464,6 @@ export default {
 }
 
 .comment-item {
-  background-color: rgba(173, 235, 245, 0.466);
   align-items: center;
   justify-content: space-between;
   margin: 5px;

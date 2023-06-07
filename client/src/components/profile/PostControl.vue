@@ -7,26 +7,35 @@
     "
     class="post-control"
   >
-    <div>
-      <h1>Unapproved Submissions</h1>
-      <div class="row">
-        <div class="col">
-          <button :class="{ active: activeTab === 'unapproved' }"
-          @click="activeTab = 'unapproved'">Unapproved</button>
-        </div>
-        <div class="col">
-          <button :class="{ active: activeTab === 'approved' }"
-          @click="activeTab = 'approved'">Approved</button>
-        </div>
-        <div class="col">
-          <button :class="{ active: activeTab === 'allpost' }"
-          @click="activeTab = 'allpost'">All Posts</button>
-        </div>
-      </div>
-      <div class="bottom-active">
+    <div class="tabs is-toggle is-medium mt-2">
+      <ul>
+        <li :class="{ 'is-active': activeTab === 'unapproved' }">
+          <a 
+            :class="{ active: activeTab === 'unapproved' }"
+            @click="activeTab = 'unapproved'"
+            ><i class="far fa-clock"></i>  Unapproved</a
+          >
+        </li>
+        <li :class="{ 'is-active': activeTab === 'approved' }">
+          <a
+            :class="{ active: activeTab === 'approved' }"
+            @click="activeTab = 'approved'"
+            ><i class="fas fa-check-circle"></i>  Approved</a
+          >
+        </li>
+        <li :class="{ 'is-active': activeTab === 'allpost' }">
+          <a
+            :class="{ active: activeTab === 'allpost' }"
+            @click="activeTab = 'allpost'"
+            ><i class="fas fa-list"></i>  All Posts</a
+          >
+        </li>
+      </ul>
+      
+    </div>
+    <div class="bottom-active">
         <component :is="activeTabComponent"></component>
       </div>
-    </div>
   </div>
 </template>
 
@@ -38,7 +47,6 @@ import AllPost from "@/components/profile/post/AllPost.vue";
 
 export default {
   components: {
-
     Unapproved,
     Approved,
     AllPost,
@@ -78,33 +86,6 @@ export default {
 };
 </script>
 <style>
-.row {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  background-color: #b6d4b4;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: absolute;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-
-.col {
-  width: calc(33.33% - 20px);
-  margin-right: 10px;
-  margin-left: 10px;
-}
-
-.col:not(:last-child) {
-  margin-right: 20px;
-}
-
-.col > button {
-  width: 100%;
-}
-
-
 .dialog {
   position: fixed;
   top: 0;
@@ -117,14 +98,6 @@ export default {
   justify-content: center;
   align-items: center;
   backdrop-filter: blur(5px);
-}
-.post-control {
-  flex-direction: row;
-  justify-content: space-between;
-}
-.bottom-active {
-  margin-top: 100px;
-  height: 100vh;
 }
 .form-section {
   position: fixed;
@@ -142,9 +115,42 @@ export default {
   margin-bottom: 10px;
 }
 
+
+
+
+
+.post-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.post-control .tabs ul {
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  padding: 0;
+}
+
+.post-control .tabs ul li a {
+  text-decoration: none;
+  color: var(--colortext);
+}
+.post-control .tabs ul li a i{
+  margin-right: 10px;
+  padding-bottom: 5px;
+}
+
+
+
+
+
+
+
 .form-postcontent {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .form-postcontent .label {

@@ -162,9 +162,6 @@ export default {
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 30px;
-
-
-  color: #333;
   border: 1.5px solid #002fff91;
   background-color: #00ffff20;
   border-radius: 5px;
@@ -179,8 +176,6 @@ export default {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-
-  color: #333;
   font-size: 16px;
   font-weight: bold;
   border: 1.5px solid #002fff91;
@@ -209,7 +204,6 @@ export default {
   flex-wrap: wrap;
 
 
-  color: #333;
   font-size: 16px;
   font-weight: bold;
   border: 1.5px solid #002fff91;
@@ -235,7 +229,6 @@ export default {
   justify-content: space-around;
   align-items: center;
 
-  color: #333;
   font-size: 16px;
   font-weight: bold;
   border: 1.5px solid #002fff91;
@@ -257,7 +250,6 @@ export default {
 .setting-password {
   flex-direction: column;
 
-  color: #333;
   font-size: 16px;
   font-weight: bold;
   border: 1.5px solid #002fff91;

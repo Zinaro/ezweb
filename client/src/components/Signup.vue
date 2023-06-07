@@ -1,9 +1,9 @@
 <template>
-    <div>
-        <h1>Tomar bibe</h1>
+    <div class="signup-page">
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
         <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
         <div v-if="!user" class="form-container">
+            <h1>Tomar bibe</h1>
             <form @submit.prevent="signup">
                 <div>
                     <label for="name">Nav</label>
@@ -108,9 +108,8 @@ form {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow);
     padding: 20px;
     width: 400px;
 }

@@ -84,7 +84,6 @@ export default {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  height: 100vh;
 }
 
 .following h1 {
@@ -135,7 +134,6 @@ export default {
 .following-item__name {
     font-weight: bold;
   font-size: 18px;
-  color: blue;
   margin: 0 0 5px 0;
   margin-left: 10px;
 }

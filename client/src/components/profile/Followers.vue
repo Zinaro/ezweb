@@ -76,7 +76,6 @@ export default {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  height: 100vh;
 }
 
 .followers h1 {
@@ -127,7 +126,6 @@ export default {
 .followers-item__name {
   font-weight: bold;
   font-size: 18px;
-  color: blue;
   margin: 0 0 5px 0;
   margin-left: 10px;
 }

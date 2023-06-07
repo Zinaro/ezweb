@@ -48,15 +48,37 @@
           <button v-if="user.permission === 'root' || user.permission === 'admin'"
         type="delete"
         class="button is-danger"
-        @click.prevent="deletePost(this.postCopy._id)"
+        @click.prevent="dialogVeke()"
       >
         Delete
       </button>
         </div>
       </div>
+      <div v-if="dialog" class="dialog">
+      <v-dialog v-model="dialog" max-width="500">
+        <v-card>
+          <v-card-title class="headline">OPS!</v-card-title>
+          <v-card-text>Bi rastî jî dixwazî jê bibî?</v-card-text>
+          <v-card-actions class="custom-actions">
+            <v-btn
+              class="custom-button na"
+              text
+              @click="dialogVeke()"
+              >NA</v-btn
+            >
+            <v-btn
+              class="custom-button ere"
+              text
+              @click="deletePost(this.postCopy._id)"
+              >ERÊ</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
       
       <div class="form-group">
-        <label for="posttitle" class="label">Sernav:</label>
+        <label for="posttitle">Sernav:</label>
         <input
           type="text"
           id="posttitle"
@@ -69,7 +91,7 @@
       
 
       <div class="form-group">
-        <label for="postcategory" class="label">Kategori:</label>
+        <label for="postcategory">Kategori:</label>
         <select
           id="postcategory"
           v-model="postCopy.postCategory"
@@ -87,7 +109,7 @@
         </select>
       </div>
       <div class="form-group form-postcontent">
-        <label class="label">Naverok:</label>
+        <label>Naverok:</label>
         <Tiny
           ref="editor"
           v-model="postCopy.postCategory"
@@ -114,6 +136,7 @@ export default {
       postCopy: {},
       categories: [],
       showMessage: false,
+      dialog: false,
       editorContent: "",
       postimage: "",
       previewUrl: null,
@@ -155,6 +178,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    dialogVeke(){
+      this.dialog = !this.dialog;
     },
     onFileChange(e) {
       this.previewUrl = e.target.files[0];
@@ -248,10 +274,33 @@ export default {
   margin-top: 10px;
   text-align: center;
 }
-
+.dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bghover) !important;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+.na {
+  background-color: #f44336;
+}
+.ere {
+  background-color: #4caf50;
+}
+.edit-post {
+  background-color: var(--colorbg);
+  color: var(--colortext);
+}
 .form-section-add {
   margin: 0 auto;
-  background-color: #fff;
+  background-color: var(--colorbg);
+  color: var(--colortext);
 }
 
 .thumbnail-picker-edit {
@@ -283,6 +332,10 @@ export default {
   flex: 1;
   
 }
+.switch-container >*:first-child {
+  flex: none;
+  
+}
 .switch-container > *:last-child {
   margin-right: 0.01;
   flex: 1;
@@ -291,9 +344,9 @@ export default {
 .switch {
   position: relative;
   display: inline-block;
-  max-width: 5rem;
-  height: 2.5rem;
-  border-radius: 1.25rem;
+  width: 80px;
+  height: 40px;
+  border-radius: 20px;
   background-color: #d9d9d9;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -302,25 +355,22 @@ export default {
 .switch-knob {
   position: absolute;
   top: 50%;
+  left: 2px;
   transform: translateY(-50%);
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background-color: #fff;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease;
 }
 
 .switch--approved .switch-knob {
-  transform: translate(2.75rem, -50%);
+  left: calc(100% - 38px);
 }
 
 .switch--not-approved .switch-knob {
-  transform: translate(0, -50%);
-}
-
-.switch-label {
-  margin-left: 1rem;
+  left: 2px;
 }
 
 .switch--approved {
@@ -329,5 +379,48 @@ export default {
 
 .switch--not-approved {
   background-color: #f44336;
+}
+
+@media (max-width: 767.98px) {
+
+.switch-container {
+  display: flex;
+  flex-direction: column;
+}
+  .switch {
+    width: 60px;
+    height: 30px;
+  }
+
+  .switch-knob {
+    width: 26px;
+    height: 26px;
+    left: 2px;
+    transform: translateY(-50%);
+  }
+  .switch--approved .switch-knob {
+  left: calc(117% - 38px);
+}
+  
+}
+@media (max-width: 991.98px) {
+.switch-container {
+  display: flex;
+  flex-direction: column;
+}
+  .switch {
+    width: 60px;
+    height: 30px;
+  }
+
+  .switch-knob {
+    width: 26px;
+    height: 26px;
+    left: 2px;
+    transform: translateY(-50%);
+  }
+  .switch--approved .switch-knob {
+  left: calc(117% - 38px);
+}
 }
 </style>

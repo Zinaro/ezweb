@@ -66,14 +66,14 @@
             >
               <a @click="activeTab = 'my-posts'">
                 <span :class="{ active: activeTab === 'my-posts' }"
-                  >Şandiyên min</span
+                  ><i class="fas fa-pencil-alt"></i> Şandiyên min</span
                 >
               </a>
             </li>
             <li :class="{ 'is-active': activeTab === 'following' }">
               <a @click="activeTab = 'following'">
                 <span :class="{ active: activeTab === 'following' }"
-                  >Dişopîne</span
+                  ><i class="fas fa-user-friends"></i> Dişopîne</span
                 >
               </a>
             </li>
@@ -87,12 +87,12 @@
               :class="{ 'is-active': activeTab === 'followers' }"
             >
               <a @click="activeTab = 'followers'">
-                <span>Şopîner</span>
+                <span><i class="fas fa-users"></i> Şopîner</span>
               </a>
             </li>
             <li :class="{ 'is-active': activeTab === 'favorites' }">
               <a @click="activeTab = 'favorites'">
-                <span>Hezkirinên min</span>
+                <span><i class="fas fa-heart"></i> Hezkirinên min</span>
               </a>
             </li>
           </ul>
@@ -177,19 +177,19 @@ export default {
 };
 </script>
 <style>
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
 .settings {
   position: fixed;
   height: 100%;
   width: 25%;
   max-width: 25%;
-  background-color: #15202b;
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: flex-start;
   padding: 20px;
+  border-right: 1px solid grey;
 }
 
 .settings > div {
@@ -197,20 +197,22 @@ export default {
   align-items: center;
   justify-content: flex-start;
   padding: 10px;
+  width: 100%;
   margin-left: 10px;
   border-radius: 20px;
-  color: white;
+  cursor: pointer;
 }
 
 .settings > div i {
   margin-right: 15px; 
   font-size: 18px;
   width: 20px; 
-  text-align: center; 
+  text-align: center;
+  margin-bottom: 5px;
 }
 
 .settings > div:hover {
-  background-color: #37444d;
+  background-color: var(--bghover);
 }
 
 button,
@@ -257,22 +259,23 @@ button:hover,
 
 .content-section {
   margin-left: 25%;
-  background-color: darkgray;
   display: flex;
   flex-direction: column;
 }
 
 .top-section {
   position: sticky;
-  height: 100%;
   max-height: 400px;
   width: 100%;
   max-width: 100%;
-  background-color: #cff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  border-bottom: 1px solid gray;
+}
+.tabs li:hover {
+  color: var(--a-color);
 }
 
 .profile-row {
@@ -337,7 +340,6 @@ button:hover,
   max-width: 100%;
   top: 400px;
   overflow-y: scroll;
-  background-color: #eff;
 }
 
 @media screen and (max-width: 768px) {
@@ -356,7 +358,6 @@ button:hover,
     height: 10%;
     width: 100%;
     max-width: 100%;
-    background-color: #000;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -365,13 +366,14 @@ button:hover,
     overflow-y: hidden;
     white-space: nowrap;
     z-index: 9999;
+    background-color: var(--colorbg);
+    border-top: 1px solid gray;
 }
 
 
 .content-section {
   margin-left: 0%;
   margin-bottom: 10%;
-  background-color: darkgray;
   display: flex;
   flex-direction: column;
 }

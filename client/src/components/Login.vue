@@ -74,7 +74,7 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 72px;
 }
 
 form {
@@ -82,11 +82,12 @@ form {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   padding: 20px;
   width: 400px;
+  background-color: var(--colorbg);
+  color: var(--colortext);
+  box-shadow: var(--shadow);
 }
 
 form div {
@@ -100,6 +101,14 @@ form label {
   font-weight: bold;
   margin-bottom: 5px;
 }
+.form-control {
+  color: var(--colortext) !important;
+  background-color: var(--colorbg);
+}
+.form-control input{
+  color: var(--colortext) !important;
+  background-color: var(--colorbg) !important;
+}
 
 form input {
   border-radius: 5px;
@@ -107,6 +116,8 @@ form input {
   font-size: 1.2rem;
   padding: 5px;
   width: 100%;
+  color: var(--colortext) !important;
+  background-color: var(--colorbg) !important;
 }
 
 form button {

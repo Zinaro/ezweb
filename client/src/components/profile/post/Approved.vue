@@ -28,29 +28,17 @@
       <h1>APPROVED</h1>
       <ul>
         <li v-for="post in sortedItems" :key="post._id">
-          
-          <h1 v-show="!post.showModal" style="font-weight: bold; font-size: 18px;">{{ post.postTitle }}</h1>
-          <div v-if="!post.showMore && post.postContent.length > 500">
-            <div v-html="post.postContent.slice(0, 500)"></div>
-            <span>...</span>
-            <a href="#" class="more-link" @click.prevent="post.showMore = true"
-              >more</a
-            >
-          </div>
-          <div v-else v-show="!post.showModal" v-html="post.postContent"></div>
+          <div class="post-name-div">
+            <h1 v-show="!post.showModal" style="font-weight: bold; font-size: 18px;">{{ post.postTitle }}</h1>
           <p v-show="!post.showModal">{{ post.postDate }}</p>
-          <p v-show="!post.showModal">{{ post.postAutorName }}</p>
-          <div class="modalll" v-show="post.showModal">
-            <EditPost
-              :post="post"
-              @save="savePost"
-              @close="showModal = false"
-            />
           </div>
-          <button v-if="!post.showModal" @click="editPost(post)">Edit</button>
-          <button v-if="post.showModal" @click="post.showModal = false">
-            Cancel
-          </button>
+          <div class="modalll" v-show="post.showModal">
+            <EditPost :post="post" @save="savePost" @close="showModal = false"/>
+          </div>
+          <div class="edit-cancel"><a v-if="!post.showModal" @click="editPost(post)" class="btn btn-success">Edit</a>
+          <a v-if="post.showModal" @click="post.showModal = false" class="btn btn-danger">Cancel
+          </a>
+        </div>
         </li>
       </ul>
       <button class="show-more-posts" @click="showMorePosts">Show More Posts</button>
@@ -115,7 +103,7 @@ export default {
   },
     dialogChange() {
       this.dialog = !this.dialog;
-      this.cancelEdit();
+
     },
     editPost(post) {
       this.posts.forEach((p) => (p.showModal = false));
@@ -151,23 +139,40 @@ export default {
   width: 100%;
 }
 
-.dialog {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(5px);
-}
 .approved {
-  flex-direction: row;
-  justify-content: space-between;
+  width: 140vh;
+  max-width: 150vh;
 }
+
+.approved ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.approved li {
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+
+}
+.post-name-div {
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+}
+
+
+.modalll {
+  padding-right: 10px;
+}
+
+
+
 .form-section {
   position: fixed;
   margin-top: 25px;
@@ -214,4 +219,18 @@ export default {
 .button {
   margin-right: 10px;
 }
+
+@media (max-width: 767.98px) {
+    .approved {
+      width: 100%;
+  max-width: 100vh;
+}
+}
+@media (max-width: 991.98px) {
+  .approved {
+    width: 100%;
+  max-width: 100vh;
+}
+}
+
 </style>
