@@ -1,7 +1,8 @@
 :root {
     --colorbg: white;
-    --colortext: black;
+    --colortext: #243447;
     --shadow: 0 .5rem 1rem rgba(0,0,0,.25);
+    --shadowpp: 0 .5rem .6rem rgba(0,0,0,.25);
     --colorshadow:  rgba(0,0,0,.15);
     --bghover: #0000003a;
     --a-color: red;
@@ -10,9 +11,10 @@
   
   @media screen {
     :root[data-theme="dark"] {
-      --colorbg: #15202b;
+      --colorbg: #243447;
       --colortext: white;
       --shadow: 0 .5rem 1rem rgba(255,255,255,.25);
+      --shadowpp: 0 .5rem .6rem rgba(0, 255, 255, 0.25);
       --colorshadow:  rgba(255,255,255,.15);
       --bghover: #1d9cf03a;
       --a-color: cyan;

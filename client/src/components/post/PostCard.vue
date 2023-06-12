@@ -30,7 +30,7 @@
                 v-if="item.profileImage"
                 :src="require(`@/assets/images/${item.profileImage}`)"
                 alt="Wêneya Profîlê"
-                class="post-image"
+                class="post-image-card"
               />
               <img
                 v-else
@@ -103,7 +103,7 @@ export default {
   height: 210px;
 }
 .item-card {
-  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.7);
+  box-shadow: var(--shadow);
   background-color: var(--colorbg);
   border: var(--border);
   border-radius: 15px;

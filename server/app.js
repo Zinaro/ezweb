@@ -7,9 +7,12 @@ const db = require("./db");
 const User = require("./userModel.js");
 const Post = require("./post.js");
 const Category = require("./category.js")
+const Market = require("./market.js")
 const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
 const categoriesRouter = require('./routes/categories');
+const platformsRouter = require('./routes/platforms');
+const productsRouter = require('./routes/products');
 const upload = multer({ dest: 'uploads/' });
 
 db.connect();
@@ -21,6 +24,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/', usersRouter);
 app.use('/', postsRouter);
 app.use('/', categoriesRouter);
+app.use('/', platformsRouter);
+app.use('/', productsRouter);
 
 
 
@@ -94,6 +99,71 @@ app.post('/image/upload', (req, res) => {
 });
 
 
+app.post("/platform/image/upload", async (req, res) => {
+  const uploadDir = path.join(__dirname, "../client/src/assets/images/pimages");
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+  }
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname).replace(".", "");
+      const timestamp = Date.now();
+      const filename = `${timestamp}-${Math.floor(Math.random() * 10000)}.${ext}`;
+      cb(null, filename);
+    }
+  });
+  const upload = multer({ storage: storage }).single("image");
+
+  try {
+    await new Promise((resolve, reject) => {
+      upload(req, res, (err) => {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    const imageUrl = req.file.filename;
+    res.json({ imageUrl: imageUrl });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "An error occurred while uploading the image." });
+  }
+});
+
+
+app.post('/product/image/upload', (req, res) => {
+  const uploadDir = path.join(__dirname, `../client/src/assets/images/productimages`);
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+  }
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname).replace(".", "");
+      const timestamp = Date.now();
+      const filename = `${timestamp}-${Math.floor(Math.random() * 10000)}.${ext}`;
+      cb(null, filename);
+    }
+  });
+  const upload = multer({ storage: storage }).single('image');
+  upload(req, res, (err) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ message: 'An error occurred while uploading the image.' });
+    }
+    const imageUrl = req.file.filename;
+    res.json({ imageUrl: imageUrl });
+  });
+});
 
 
 

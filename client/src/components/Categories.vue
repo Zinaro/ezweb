@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="title pt-3">Categories</h1>
+    <h1 class="pt-3">Categories</h1>
     <div class="tabs is-toggle is-medium center">
       <ul>
         <li v-for="category in categories" :key="category._id" :class="{ 'is-active': category === activeCategory }">
@@ -48,6 +48,14 @@ export default {
 </script>
 
 <style>
+.tabs {
+  padding: 15px;
+}
+.tabs ul li {
+}
+.tabs ul li:hover{
+  color: #243447;
+}
 
 @media screen and (max-width: 768px) {
   .tabs ul {

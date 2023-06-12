@@ -10,12 +10,12 @@
     </div>
     <div class="setting-name">
       <label for="name">Nav:</label>
-      <input type="text" id="name" v-model="name" required />
+      <input type="text" id="name" v-model="name" required class="input"/>
       <button @click="updateUser">Rojane bike</button>
     </div>
     <div class="setting-mail">
       <label for="email">E-name:</label>
-      <input type="email" id="email" v-model="mail" required />
+      <input type="email" id="email" v-model="mail" required class="input"/>
       <button @click="updateUser">Rojane bike</button>
     </div>
     <div class="setting-password">
@@ -26,6 +26,7 @@
           id="current-password"
           v-model="currentPassword"
           required
+          class="input"
         />
       </div>
       <div class="setting-input">
@@ -35,6 +36,7 @@
           id="new-password"
           v-model="newPassword"
           required
+          class="input"
         />
       </div>
       <div class="setting-input">
@@ -44,6 +46,7 @@
           id="new-password-confirm"
           v-model="newPasswordConfirm"
           required
+          class="input"
         />
       </div>
       <button @click.prevent="updateUser">Rojane bike</button>
@@ -72,6 +75,7 @@ export default {
     this.user = VueCookies.get("user");
     this.name = this.user.name;
     this.mail = this.user.mail;
+    document.title = 'Sazkarî';
   },
   methods: {
     onFileChange(e) {
@@ -144,6 +148,10 @@ export default {
 .settings-page {
   flex-direction: column;
 }
+.settings-page input {
+  background-color: var(--colorbg);
+  color: var(--colortext);
+}
 .settings-form {
   display: flex;
   justify-content: center;
@@ -162,10 +170,9 @@ export default {
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 30px;
-  border: 1.5px solid #002fff91;
-  background-color: #00ffff20;
+  border: var(--border);
   border-radius: 5px;
-  box-shadow: 0 0 15px 0 #00000077;
+  box-shadow: var(--shadow);
   margin: 20px;
   margin-top: 50px;
   margin-bottom: 50px;
@@ -178,10 +185,9 @@ export default {
   align-items: center;
   font-size: 16px;
   font-weight: bold;
-  border: 1.5px solid #002fff91;
-  background-color: #00ffff20;
+  border: var(--border);
   border-radius: 5px;
-  box-shadow: 0 0 15px 0 #00000077;
+  box-shadow: var(--shadow);
   margin: 20px;
   margin-top: 50px;
   margin-bottom: 50px;
@@ -206,10 +212,9 @@ export default {
 
   font-size: 16px;
   font-weight: bold;
-  border: 1.5px solid #002fff91;
-  background-color: #00ffff20;
+  border: var(--border);
   border-radius: 5px;
-  box-shadow: 0 0 15px 0 #00000077;
+  box-shadow: var(--shadow);
   margin: 20px;
   margin-top: 50px;
   margin-bottom: 50px;
@@ -231,10 +236,9 @@ export default {
 
   font-size: 16px;
   font-weight: bold;
-  border: 1.5px solid #002fff91;
-  background-color: #00ffff20;
+  border: var(--border);
   border-radius: 5px;
-  box-shadow: 0 0 15px 0 #00000077;
+  box-shadow: var(--shadow);
   margin: 20px;
   margin-top: 50px;
   margin-bottom: 50px;
@@ -252,10 +256,9 @@ export default {
 
   font-size: 16px;
   font-weight: bold;
-  border: 1.5px solid #002fff91;
-  background-color: #00ffff20;
+  border: var(--border);
   border-radius: 5px;
-  box-shadow: 0 0 15px 0 #00000077;
+  box-shadow: var(--shadow);
   margin: 20px;
   margin-top: 50px;
   margin-bottom: 50px;

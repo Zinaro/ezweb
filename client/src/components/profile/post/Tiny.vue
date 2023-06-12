@@ -2,6 +2,7 @@
   <div class="tiny-wrapper">
     <editor
       ref="editor"
+      class="tiny-editor"
       :value="value"
       :init="tinymceConfig"
       @input="handleInput"
@@ -42,7 +43,8 @@ export default {
         toolbar:
           "undo redo | cut copy paste pastetext | searchreplace | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent |  forecolor backcolor | removeformat | table | hr |  link unlink | image media | code",
         toolbar_mode: "floating",
-        min_height: 300,
+        min_height: 500,
+        content_css: "../../../assets/css/theme.scss"
       },
     };
   },
@@ -51,5 +53,10 @@ export default {
 <style>
 .tiny-wrapper {
   width: 100%;
+  background-color: var(--colorbg);
+}
+.tiny-wrapper .tiny-editor {
+  background-color: var(--colorbg);
+  color: var(--text-color);
 }
 </style>

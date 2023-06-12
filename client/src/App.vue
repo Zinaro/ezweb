@@ -20,6 +20,9 @@
           <router-link class="text-decoration-none" to="/about"> <i class="fas fa-info-circle"></i> About</router-link>
         </div>
         <div class="navbar-item" @click="toggleNavbar">
+          <router-link class="text-decoration-none" to="/market"> <i class="fas fa-shopping-cart"></i> Market</router-link>
+        </div>
+        <div class="navbar-item" @click="toggleNavbar">
           <router-link class="text-decoration-none" to="/users"><i class="fas fa-users"></i> Users</router-link>
         </div>
         <div class="dropdown is-hoverable" @click="toggleDropdown">
@@ -123,8 +126,6 @@ export default {
 
 };
 </script>
-
-
 
 
 <style>

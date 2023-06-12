@@ -3,27 +3,31 @@
     <div v-if="user" class="form form-section-add">
       <div class="thumbnail-picker-edit">
         <img
-                v-if="postCopy.postImage"
-                @click="viewPost(item)"
-                style="cursor: pointer"
-                :src="require(`@/assets/images/postimages/${postCopy.postImage}`)"
-                alt="Wêneya Postê"
-                class="post-image-edit"
-              />
-          <div class="select-image-edit">
-            <input
-              type="file"
-              ref="image"
-              accept="image/*"
-              @change="onFileChange"
-              @click="$refs.image.click()"
-            />
-          </div>
-          
-            <img v-show="thumbImage" class="post-image-edit" :src="thumbImage" alt="Thumbnail" />
-          
+          v-if="postCopy.postImage"
+          @click="viewPost(item)"
+          style="cursor: pointer"
+          :src="require(`@/assets/images/postimages/${postCopy.postImage}`)"
+          alt="Wêneya Postê"
+          class="post-image-edit"
+        />
+        <div class="select-image-edit">
+          <input
+            type="file"
+            ref="image"
+            accept="image/*"
+            @change="onFileChange"
+            @click="$refs.image.click()"
+          />
         </div>
-      <div class="form-group">
+
+        <img
+          v-show="thumbImage"
+          class="post-image-edit"
+          :src="thumbImage"
+          alt="Thumbnail"
+        />
+      </div>
+      <div class="form-group tomar-bike">
         <div class="switch-container">
           <div
             class="switch"
@@ -39,44 +43,42 @@
             {{ postCopy.postApproved ? "Approved" : "Unapproved" }}
           </div>
           <button
-        type="submit"
-        class="button is-primary"
-        @click.prevent="updatePost()"
-      >
-        Tevlî bike
-      </button>
-          <button v-if="user.permission === 'root' || user.permission === 'admin'"
-        type="delete"
-        class="button is-danger"
-        @click.prevent="dialogVeke()"
-      >
-        Delete
-      </button>
+            type="submit"
+            class="button is-primary"
+            @click.prevent="updatePost()"
+          >
+            Tomar Bike
+          </button>
+          <button
+            v-if="user.permission === 'root' || user.permission === 'admin'"
+            type="delete"
+            class="button is-danger"
+            @click.prevent="dialogVeke()"
+          >
+            Delete
+          </button>
         </div>
       </div>
       <div v-if="dialog" class="dialog">
-      <v-dialog v-model="dialog" max-width="500">
-        <v-card>
-          <v-card-title class="headline">OPS!</v-card-title>
-          <v-card-text>Bi rastî jî dixwazî jê bibî?</v-card-text>
-          <v-card-actions class="custom-actions">
-            <v-btn
-              class="custom-button na"
-              text
-              @click="dialogVeke()"
-              >NA</v-btn
-            >
-            <v-btn
-              class="custom-button ere"
-              text
-              @click="deletePost(this.postCopy._id)"
-              >ERÊ</v-btn
-            >
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
-      
+        <v-dialog v-model="dialog" max-width="500">
+          <v-card>
+            <v-card-title class="headline">OPS!</v-card-title>
+            <v-card-text>Bi rastî jî dixwazî jê bibî?</v-card-text>
+            <v-card-actions class="custom-actions">
+              <v-btn class="custom-button na" text @click="dialogVeke()"
+                >NA</v-btn
+              >
+              <v-btn
+                class="custom-button ere"
+                text
+                @click="deletePost(this.postCopy._id)"
+                >ERÊ</v-btn
+              >
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
+
       <div class="form-group">
         <label for="posttitle">Sernav:</label>
         <input
@@ -87,8 +89,6 @@
           required
         />
       </div>
-
-      
 
       <div class="form-group">
         <label for="postcategory">Kategori:</label>
@@ -117,7 +117,6 @@
           :config="config"
         ></Tiny>
       </div>
-      
     </div>
     <div v-if="showMessage" class="success-message">Şandî Tevlî bû</div>
   </div>
@@ -179,7 +178,7 @@ export default {
         console.log(error);
       }
     },
-    dialogVeke(){
+    dialogVeke() {
       this.dialog = !this.dialog;
     },
     onFileChange(e) {
@@ -190,7 +189,6 @@ export default {
         this.thumbImage = reader.result;
       };
       reader.readAsDataURL(file);
-      
     },
     async uploadImage() {
       const formData = new FormData();
@@ -223,10 +221,10 @@ export default {
     },
     async updatePost() {
       if (this.previewUrl) {
-          await this.uploadImage();
-        } else {
-          this.postimage = this.postCopy.postImage;
-        }
+        await this.uploadImage();
+      } else {
+        this.postimage = this.postCopy.postImage;
+      }
       const item = {
         postTitle: this.postCopy.postTitle,
         postCategory: this.postCopy.postCategory,
@@ -297,6 +295,31 @@ export default {
   background-color: var(--colorbg);
   color: var(--colortext);
 }
+.form-group {
+  margin-top: 40px;
+  box-shadow: var(--shadow);
+  border-radius: 5px;
+  border: none;
+}
+.tomar-bike {
+  padding-bottom: 10px;
+}
+.form-group input {
+  background-color: var(--colorbg);
+  color: var(--colortext);
+}
+.form-group label {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.form-group select {
+  background-color: var(--colorbg);
+  color: var(--colortext);
+}
+.form-group select option {
+  background-color: var(--colorbg);
+  color: var(--colortext);
+}
 .form-section-add {
   margin: 0 auto;
   background-color: var(--colorbg);
@@ -330,11 +353,9 @@ export default {
   margin-right: 0.5rem;
   margin: 10px;
   flex: 1;
-  
 }
-.switch-container >*:first-child {
+.switch-container > *:first-child {
   flex: none;
-  
 }
 .switch-container > *:last-child {
   margin-right: 0.01;
@@ -382,11 +403,10 @@ export default {
 }
 
 @media (max-width: 767.98px) {
-
-.switch-container {
-  display: flex;
-  flex-direction: column;
-}
+  .switch-container {
+    display: flex;
+    flex-direction: column;
+  }
   .switch {
     width: 60px;
     height: 30px;
@@ -399,15 +419,14 @@ export default {
     transform: translateY(-50%);
   }
   .switch--approved .switch-knob {
-  left: calc(117% - 38px);
-}
-  
+    left: calc(117% - 38px);
+  }
 }
 @media (max-width: 991.98px) {
-.switch-container {
-  display: flex;
-  flex-direction: column;
-}
+  .switch-container {
+    display: flex;
+    flex-direction: column;
+  }
   .switch {
     width: 60px;
     height: 30px;
@@ -420,7 +439,7 @@ export default {
     transform: translateY(-50%);
   }
   .switch--approved .switch-knob {
-  left: calc(117% - 38px);
-}
+    left: calc(117% - 38px);
+  }
 }
 </style>

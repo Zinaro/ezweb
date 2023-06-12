@@ -11,7 +11,11 @@
   </div>
   <div v-if="user && user.permission === 'root'" :class="{ active: activeTab === 'add-category' }" @click="activeTab = 'add-category'">
     <i class="fas fa-plus"></i>
-    Kategorî Tevlî bike
+    Kategorî Tevlî Bike
+  </div>
+  <div v-if="user && user.permission === 'root'" :class="{ active: activeTab === 'market-control' }" @click="activeTab = 'market-control'">
+    <i class="fas fa-shopping-cart"></i>
+    Market Control
   </div>
   <div v-if="(user && user.permission === 'root') || user.permission === 'admin'" :class="{ active: activeTab === 'user-control' }" @click="activeTab = 'user-control'">
     <i class="fas fa-users"></i>
@@ -27,7 +31,7 @@
   </div>
   <div v-if="(user && user.permission === 'root') || user.permission === 'admin' || user.permission === 'editor' || user.permission === 'niviskar'" :class="{ active: activeTab === 'add-post' }" @click="activeTab = 'add-post'">
     <i class="fas fa-plus"></i>
-    Şandî Tevlî bike
+    Şandî Tevlî Bike
   </div>
 </div>
 
@@ -116,6 +120,7 @@ import Settings from "../profile/Settings.vue";
 import AddCategory from "../profile/AddCategory.vue";
 import UserControl from "../profile/UserControl.vue";
 import PostControl from "../profile/PostControl.vue";
+import MarketControl  from "@/components/profile/market/MarketControl.vue"
 import axios from "axios";
 
 export default {
@@ -141,6 +146,8 @@ export default {
           return "AddPost";
         case "add-category":
           return "AddCategory";
+        case "market-control":
+          return "MarketControl";
         case "user-control":
           return "UserControl";
         case "post-control":
@@ -170,6 +177,7 @@ export default {
     Favorite,
     AddPost,
     AddCategory,
+    MarketControl,
     UserControl,
     PostControl,
     Settings,
@@ -274,8 +282,15 @@ button:hover,
   justify-content: center;
   border-bottom: 1px solid gray;
 }
+.tabs {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.tabs li {
+  box-shadow: var(--shadow);
+}
 .tabs li:hover {
-  color: var(--a-color);
+  color: #243447;
 }
 
 .profile-row {
@@ -283,7 +298,7 @@ button:hover,
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   margin-top: 10px;
 }
 
@@ -292,6 +307,8 @@ button:hover,
   height: 100px;
   border-radius: 50%;
   overflow: hidden;
+  border: var(--border);
+  box-shadow: var(--shadowpp);
 }
 
 .profile-image img {

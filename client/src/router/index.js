@@ -14,14 +14,29 @@ const routes = [
     path: '/about',
     name: 'about',
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-    
+  },
+  {
+    path: '/market',
+    name: 'market',
+    component: () => import(/* webpackChunkName: "market" */ '../views/MarketView.vue'),
+    meta: {
+      title: "Market - Product List"
+  }
+  },
+  {
+    path: '/:catchAll(.*)',
+    name: 'notfound',
+    component: () => import(/* webpackChunkName: "notfound" */ '../views/NotFound.vue'),
+    meta: {
+      title: '404 - Rûpel Nehat Dîtin..'
+    }
   },
   {
     path: '/users',
     name: 'users',
     component: () => import(/* webpackChunkName: "users" */ '../views/UsersView.vue'),
     meta: {
-      title: 'Users'
+      title: 'Edîtor û Nivîskarên me'
     }
   },
   {

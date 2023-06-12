@@ -21,7 +21,7 @@
 
                   <div class="item-dil">@{{ item.username }}</div>
                 </div>
-                <div class="float-end">
+                <div class="float-end folunfol">
                   <button v-if="user && item && item._id !== this.user._id &&
                       !item.followers.some((f) => f.followerId == this.user._id)"
                     class="button is-primary" @click.prevent="following(item)">Follow
@@ -190,12 +190,17 @@ export default {
   height: 75px;
   border-radius: 50%;
   overflow: hidden;
+  border: var(--border);
+  box-shadow: var(--shadowpp);
 }
 
 .profile-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.folunfol button {
+  box-shadow: var(--shadow);
 }
 .title {
   color: var(--colortext);

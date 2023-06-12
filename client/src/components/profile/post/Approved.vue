@@ -152,12 +152,12 @@ export default {
 
 .approved li {
   border-radius: 8px;
-  border: 1px solid #ccc;
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
   display: flex;
   align-items: start;
   flex-direction: column;
+  box-shadow: var(--shadow);
 
 }
 .post-name-div {
@@ -170,7 +170,13 @@ export default {
 .modalll {
   padding-right: 10px;
 }
-
+.edit-cancel {
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+.edit-cancel a{
+  box-shadow: var(--shadow);
+}
 
 
 .form-section {

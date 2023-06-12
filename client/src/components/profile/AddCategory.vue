@@ -1,28 +1,55 @@
 <template>
-  <div v-if="user && user.permission === 'root'" class="add-category">
-    <h1>Categories</h1>
-      <ul>
-        <li v-for="category in categories" :key="category.id">
-          {{ category.name }}
-          <button @click="deleteCategory(category._id)">Delete</button>
-        <button @click="editCategory(category)">Update</button>
-        </li>
-      </ul>
-      <div v-if="showEditForm" class="form form-section">
-      <form @submit.prevent="updateCategory">
-        <input type="text" v-model="editCategoryName" placeholder="Nave Kategori ye" />
-        <button type="submit">Save</button>
+  <div class="add-category-container">
+    <h1 class="add-category-title">Categories</h1>
+    <ul class="add-category-list">
+      <li v-for="category in categories" :key="category.id" class="add-category-item">
+        <div class="add-category-name">{{ category.name }}</div>
+        <button @click="deleteCategory(category)" class="add-category-delete">Delete</button>
+        <button @click="editCategory(category)" class="add-category-update">Update</button>
+        <div v-if="category.showDeleteConfirmation" class="dialog">
+          <v-dialog max-width="500">
+            <v-card>
+              <p>Are you sure you want to delete this category?<br>{{ category.name }}</p>
+              <v-card-actions class="custom-actions">
+                <v-btn
+                  class="custom-button na"
+                  text
+                  @click="cancelDelete(category)"
+                  >NA</v-btn
+                >
+                <v-btn
+                  class="custom-button ere"
+                  text
+                  @click="confirmDelete(category)"
+                  >ERÊ</v-btn
+                >
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
+      </li>
+    </ul>
+    <div v-if="showEditForm" class="dialog">
+      <v-dialog max-width="500">
+        <v-card>
+          <form @submit.prevent="updateCategory" class="add-category-form">
+        <input type="text" v-model="editCategoryName" placeholder="New Category Name" class="add-category-input" />
+        <button type="submit" class="add-category-submit">Save</button>
+        <button class="add-category-cancel" @click="cancelCategory">Cancel</button>
       </form>
+        </v-card>
+      </v-dialog>
     </div>
-    <div v-if="user" class="form form-section">
-      <form @submit.prevent="addCategory">
-        <input type="text" v-model="categoryName" placeholder="Nave Kategori ye" />
-        <button type="submit">Kategori Tevlî bû</button>
+    
+    <div v-if="user && showEditForm == false" class="add-form-section">
+      <form @submit.prevent="addCategory" class="add-category-form">
+        <h1>Kategorî Tevlî Bike</h1>
+        <input type="text" v-model="categoryName" placeholder="New Category Name" class="add-category-input" />
+        <button type="submit" class="add-category-submit">Add Category</button>
       </form>
     </div>
   </div>
 </template>
-
 <script>
 import VueCookies from "vue-cookies";
 import axios from "axios";
@@ -41,6 +68,7 @@ export default {
   },
   created() {
     this.user = VueCookies.get("user");
+    document.title = 'Kategorî Tevlî Bike';
   },
   mounted() {
     this.fetchCategories();
@@ -49,12 +77,19 @@ export default {
     async fetchCategories() {
       try {
         const response = await axios.get('http://localhost:3000/category');
-        this.categories = response.data;
+        this.categories = response.data.map(category => ({
+      ...category,
+      showDeleteConfirmation: false
+    }));
       } catch (error) {
         console.log(error);
       }
     },
     async addCategory() {
+      if (this.categories.some(category => category.name === this.categoryName)) {
+    alert('This category already exists!');
+    return;
+  }
       try {
         const response = await axios.post('http://localhost:3000/category', {
           name: this.categoryName,
@@ -65,14 +100,23 @@ export default {
         console.log(error);
       }
     },
-    async deleteCategory(categoryId) {
+    async deleteCategory(category) {
+      category.showDeleteConfirmation = true;
+    },
+    async confirmDelete(category) {
+      const categoryId = category._id;
       try {
         await axios.delete(`http://localhost:3000/category/${categoryId}`);
         this.categories = this.categories.filter((category) => category.id !== categoryId);
         this.fetchCategories();
+        category.showDeleteConfirmation = false;
       } catch (error) {
         console.log(error);
       }
+      
+    },
+    cancelDelete(category) {
+      category.showDeleteConfirmation = false;
     },
     editCategory(category) {
       this.showEditForm = true;
@@ -92,20 +136,137 @@ export default {
         console.log(error);
       }
     },
+    cancelCategory() {
+      this.showEditForm = !this.showEditForm;
+    }
   },
 };
 </script>
 <style>
-.success-message {
-  background-color: green;
-  color: white;
-  padding: 10px;
-  margin-top: 10px;
+.add-category-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 5px;
+  align-items: center;
+}
+
+.add-category-title {
   text-align: center;
 }
 
-.form-section {
-  max-width: 600px;
-  margin: 0 auto;
+.add-category-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.add-category-item {
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  box-shadow: var(--shadow);
+  padding-left: 7px;
+  padding-top: 7px;
+  border-radius: 5px;
+}
+
+.add-category-name {
+  margin-right: 10px;
+  min-width: 100px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.add-category-item button {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.add-category-form {
+  display: flex;
+  align-items: center;
+}
+
+
+.add-form-section form{
+  width: 100%;
+  margin-bottom: 50px;
+}
+.add-category-input {
+  padding: 5px;
+  border-radius: 3px;
+}
+.add-category-submit {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.add-category-cancel {
+  padding: 5px 10px;
+  background-color: #d80d0d;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.add-category-cancel:hover {
+  background-color: #8b0808;
+}
+.add-category-delete {
+  background-color: #d80d0d;
+}
+.add-category-delete:hover {
+  background-color: #8b0808;
+}
+@media (max-width: 767.98px) {
+  .add-category-container {
+    max-width: 100%;
+    padding: 10px;
+  }
+  
+  .add-category-item {
+
+  }
+  
+  .add-category-item button {
+    margin-top: 10px;
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+  
+  .add-category-input,
+  .add-category-submit {
+    width: 100%;
+  }
+  .add-category-input,
+  .add-category-cancel {
+    width: 100%;
+  }
+}
+@media (max-width: 991.98px) {
+  .add-category-container {
+    max-width: 100%;
+    padding: 10px;
+  }
+  
+  .add-category-item {
+
+  }
+  
+  .add-category-item button {
+    margin-top: 10px;
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+  
+  .add-category-input,
+  .add-category-submit {
+    width: 100%;
+  }
+  .add-category-input,
+  .add-category-cancel {
+    width: 100%;
+  }
 }
 </style>

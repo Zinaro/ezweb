@@ -20,7 +20,7 @@
         </v-card>
       </v-dialog>
     </div>
-
+    <h1>User Control</h1>
     <div class="table">
       <div class="table-header">
         <div class="table-cell">Name</div>
@@ -43,7 +43,7 @@
           <div v-if="u._id !== editUserId" class="table-cell">
             {{
               u._id !== user._id && u.permission !== "admin"
-                ? u.password
+                ? "***"
                 : "***"
             }}
           </div>
@@ -94,24 +94,33 @@
             </div>
           </div>
           <div
-  v-if="
-    u._id === editUserId &&
-    (u.permission !== 'admin' ||
-      user.permission === 'root' ||
-      user._id === u._id)
-  "
-  class="table-cell"
->
-  <div class="mb-3">
-    <label for="permission" class="form-label">Permission:</label>
-    <select id="permission" class="form-select" v-model="editUser.permission">
-      <option value="user">User</option>
-      <option value="niviskar">Niviskar</option>
-      <option value="editor">Editor</option>
-      <option v-if="user.permission === 'root' || u._id === user._id" value="admin">Admin</option>
-    </select>
-  </div>
-</div>
+            v-if="
+              u._id === editUserId &&
+              (u.permission !== 'admin' ||
+                user.permission === 'root' ||
+                user._id === u._id)
+            "
+            class="table-cell"
+          >
+            <div class="mb-3">
+              <label for="permission" class="form-label">Permission:</label>
+              <select
+                id="permission"
+                class="form-select"
+                v-model="editUser.permission"
+              >
+                <option value="user">User</option>
+                <option value="niviskar">Niviskar</option>
+                <option value="editor">Editor</option>
+                <option
+                  v-if="user.permission === 'root' || u._id === user._id"
+                  value="admin"
+                >
+                  Admin
+                </option>
+              </select>
+            </div>
+          </div>
 
           <div
             v-if="
@@ -122,10 +131,14 @@
             "
             class="table-cell"
           >
-          <div class="input-group">
-    <span class="input-group-text">Password:</span>
-    <input type="password" class="form-control" v-model="editUser.password" />
-  </div>
+            <div class="input-group">
+              <span class="input-group-text">Password:</span>
+              <input
+                type="password"
+                class="form-control"
+                v-model="editUser.password"
+              />
+            </div>
           </div>
           <div class="table-cell">
             <div class="button-group">
@@ -136,7 +149,8 @@
                     user.permission === 'root' ||
                     user._id === u._id)
                 "
-                @click="deleteUser(u._id)"
+                @click="deleteUser(u)"
+                class="user-delete"
               >
                 Delete
               </button>
@@ -151,14 +165,35 @@
               >
                 Update
               </button>
-              <button v-if="u._id === editUserId" @click="saveUser(u._id)">
-                Save
-              </button>
               <button v-if="u._id === editUserId" @click="cancelEdit()">
                 Cancel
               </button>
+              <button v-if="u._id === editUserId" @click="saveUser(u._id)">
+                Save
+              </button>
             </div>
           </div>
+          <div v-if="u.showDeleteConfirmation" class="dialog">
+          <v-dialog max-width="500">
+            <v-card>
+              <p>Are you sure you want to delete this users?<br>{{ u.name }}</p>
+              <v-card-actions class="custom-actions">
+                <v-btn
+                  class="custom-button na"
+                  text
+                  @click="cancelDelete(u)"
+                  >NA</v-btn
+                >
+                <v-btn
+                  class="custom-button ere"
+                  text
+                  @click="confirmDelete(u)"
+                  >ERÊ</v-btn
+                >
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
         </div>
       </div>
       <div v-if="showLoadMoreButton">
@@ -183,12 +218,12 @@ export default {
       errorMessage: "",
       displayedUsers: [],
       showLoadMoreButton: false,
-      loadMoreCount: 100,
+      loadMoreCount: 25,
     };
   },
   created() {
     this.user = VueCookies.get("user");
-    document.title = 'User Control';
+    document.title = "User Control";
     this.getUsers();
   },
   watch: {
@@ -222,8 +257,11 @@ export default {
                 return a.permission.localeCompare(b.permission);
               }
             });
-          this.displayedUsers = this.users.slice(0, 100);
-          if (this.users.length > 100) {
+          this.displayedUsers = this.users.slice(0, 25).map(u => ({
+            ...u,
+            showDeleteConfirmation: false
+          }));
+          if (this.users.length > 25) {
             this.showLoadMoreButton = true;
           }
         })
@@ -262,13 +300,21 @@ export default {
         this.errorMessage = "Mail or username already in use";
       }
     },
-    async deleteUser(id) {
+    async confirmDelete(u) {
+      const id = u._id;
       try {
         await axios.delete(`http://localhost:3000/users/${id}/root`);
         this.getUsers();
+        u.showDeleteConfirmation = false;
       } catch (error) {
         console.log(error);
       }
+    },
+    async deleteUser(u) {
+      u.showDeleteConfirmation = true;
+    },
+    cancelDelete(u) {
+      u.showDeleteConfirmation = false;
     },
     dialogChange() {
       this.dialog = !this.dialog;
@@ -278,6 +324,13 @@ export default {
 };
 </script>
 <style>
+.user-control {
+  flex-direction: row;
+  justify-content: space-between;
+  color: var(--colortext) !important;
+  background-color: var(--colorbg) !important;
+  padding: 15px;
+}
 .select {
   position: relative;
   display: inline-block;
@@ -286,7 +339,7 @@ export default {
 
 .select select {
   width: 100%;
-  padding: 8px 38px 8px 8px;
+
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
@@ -309,7 +362,7 @@ export default {
 }
 
 v-card {
-  border-radius: 10px;
+  border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.24), 0 0 2px rgba(0, 0, 0, 0.12);
   width: 400px;
   height: 130px;
@@ -317,18 +370,16 @@ v-card {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 14px;
+
 }
 
 v-card-title {
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 8px;
 }
 
 v-card-text {
   font-size: 16px;
-  margin-bottom: 8px;
 }
 
 .custom-actions {
@@ -356,21 +407,16 @@ v-card-text {
   cursor: pointer;
 }
 
-.user-control {
-  flex-direction: row;
-  justify-content: space-between;
-  color: var(--colortext) !important;
-  background-color: var(--colorbg) !important;
-}
 
 .table {
   display: flex;
   flex-direction: column;
-  border: 1px solid #ccc;
   border-radius: 4px;
   overflow: hidden;
   color: var(--colortext) !important;
   background-color: var(--colorbg) !important;
+  box-shadow: var(--shadow);
+  margin-bottom: 30px;
 }
 
 .table-header {
@@ -393,8 +439,11 @@ v-card-text {
 .table-row {
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid #ccc;
-  background-color: var(--colorbg);
+  background-color: var(--colorbg) ;
+  margin-bottom: -10px;
+  padding-bottom: 0;
+  box-shadow: var(--shadow);
+  overflow: hidden;
 }
 
 .table-row:last-child {
@@ -403,12 +452,13 @@ v-card-text {
 
 .button-group {
   display: flex;
-
 }
 
 .button-group button {
   margin-right: 8px;
   padding: 4px 8px;
+  margin-bottom: 15px;
+  margin-top: -2px;
   border: none;
   border-radius: 4px;
   background-color: #007bff;
@@ -420,19 +470,16 @@ v-card-text {
   cursor: not-allowed;
 }
 
-
-
 @media (max-width: 767.98px) {
-
-.table-row {
-  display: flex;
-  flex-direction: column;
-}
+  .table-row {
+    display: flex;
+    flex-direction: column;
+  }
 }
 @media (max-width: 991.98px) {
-.table-row {
-  display: flex;
-  flex-direction: column;
-}
+  .table-row {
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>

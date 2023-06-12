@@ -7,7 +7,7 @@
     "
     class="post-control"
   >
-    <div class="tabs is-toggle is-medium mt-2">
+    <div class="tabs is-toggle is-medium mt-3">
       <ul>
         <li :class="{ 'is-active': activeTab === 'unapproved' }">
           <a 
@@ -82,6 +82,7 @@ export default {
 
   created() {
     this.user = VueCookies.get("user");
+    document.title = 'Post Control';
   },
 };
 </script>
@@ -135,6 +136,9 @@ export default {
 .post-control .tabs ul li a {
   text-decoration: none;
   color: var(--colortext);
+}
+.post-control .tabs ul li a:hover {
+  color: #243447;
 }
 .post-control .tabs ul li a i{
   margin-right: 10px;

@@ -1,11 +1,11 @@
 <template>
   <div class="add-post">
     <div v-if="user" class="form-section-add-post">
-      <h1>Şandî Tevlî bike</h1>
-      <div v-if="showMessage" class="success-message">Şandî Tevlî bû</div>
+      <h1>Şandî Tevlî Bike</h1>
+      <div v-if="showMessage" class="success-message">Şandî Tevlî Bû</div>
       <div class="firsland">
-        <div class="form-group">
-          <label for="posttitle" class="label">Sernav:</label>
+        <div class="form-group-sernav">
+          <label for="posttitle">Sernav:</label>
           <input
             type="text"
             id="posttitle"
@@ -16,8 +16,8 @@
           />
         </div>
         <div class="form-group form-postcontent">
-          <label for="postcontent" class="label">Naverok:</label>
-          <Tiny ref="editor" v-model="postcontent"></Tiny>
+          <label for="postcontent">Naverok:</label>
+          <Tiny class="tiny-editor" ref="editor" v-model="postcontent"></Tiny>
         </div>
       </div>
       <div class="lastland">
@@ -35,8 +35,8 @@
             <img :src="thumbImage" alt="Thumbnail" />
           </div>
         </div>
-        <div class="form-group">
-          <label for="postcategory" class="label">Kategori:</label>
+        <div class="form-group-category">
+          <label for="postcategory">Kategori:</label>
           <select
             id="postcategory"
             v-model="postcategory"
@@ -56,7 +56,7 @@
 
         <button
           type="submit"
-          class="button is-primary"
+          class="button is-primary tevli-bike"
           @click.prevent="addItem"
         >
           Tevlî bike
@@ -92,6 +92,7 @@ export default {
   created() {
     this.user = VueCookies.get("user");
     this.fetchCategories();
+    document.title = 'Şandî Tevlî Bike';
   },
   methods: {
     async fetchCategories() {
@@ -185,24 +186,46 @@ export default {
   text-align: center;
 }
 .add-post {
-  padding-bottom: 100px;
   display: flex;
 }
 .form-section-add-post {
-  background-color: white;
+  padding: 20px;
+  background-color: var(--colorbg);
 }
 .firsland {
   width: 75%;
-  height: 100%;
   float: left;
   padding-right: 5px;
 }
+.form-group-sernav {
+  background-color: var(--colorbg);
+  color: var(--colortext);
+  box-shadow: var(--shadow);
+  padding-top: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+.firsland input{
+  margin-top: 10px;
+  background-color: var(--colorbg);
+  color: var(--colortext);
+}
+.form-postcontent {
+  margin-top: 30px;
+  padding-top: 10px;
+  background-color: var(--colorbg);
+  color: var(--colortext);
+  box-shadow: var(--shadow);
+  
+}
+.tiny-editor {
+  margin-top: 10px;
+  
+}
 .lastland {
   width: 25%;
-  height: 100%;
   float: right;
-  padding-left: 5px;
-  padding-right: 10px;
+  padding: 10px;
 }
 
 .thumbnail-picker {
@@ -210,21 +233,82 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 10px;
 }
 
 .select-image {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #f5f5f5;
+  background-color: var(--colorbg);
   border: 1px solid #ccc;
+  box-shadow: var(--shadow);
   border-radius: 5px;
-  padding: 10px;
+  margin-bottom: 10px;
   cursor: pointer;
   transition: all 0.3s;
-  margin: 15px;
+  overflow: hidden;
+}
+.select-image input {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.image-preview {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.form-group-category {
+  padding-top: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+  border-radius: 5px;
+}
+.form-group-category .input {
+  margin-top: 10px;
+  background-color: var(--colorbg);
+  color: var(--colortext);
+
+}
+.tevli-bike {
+  margin-top: 20px;
+  box-shadow: var(--shadow);
+}
+@media (max-width: 767.98px) {
+  .firsland {
+  width: 100%;
+  float: left;
+  padding-right: 5px;
+  margin-bottom: 40px;
+}
+
+.lastland {
+  width: 100%;
+  float: right;
+  padding: 10px;
+  margin-bottom: 40px;
+}
+}
+@media (max-width: 991.98px) {
+  .firsland {
+  width: 100%;
+  float: left;
+  padding-right: 5px;
+  margin-bottom: 40px;
+}
+
+.lastland {
+  width: 100%;
+  float: right;
+  padding: 10px;
+  margin-bottom: 40px;
+}
 }
 
 </style>

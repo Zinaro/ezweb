@@ -1,23 +1,25 @@
 <template>
-  <div class="post-view">
+  <div class="post-view" v-if="post !== null">
+    <div v-if="post && !post.postApproved" class="balkesi">
+      <i class="far fa-clock"></i> Balkêşî!!! Ev parvekirin nehatiye pejirandin!
+    </div>
     <h1>{{ post.postTitle }}</h1>
     <div class="post-image">
       <img
         v-if="post.postImage"
         :src="require(`@/assets/images/postimages/${post.postImage}`)"
         alt="Wêneya Postê"
-        class="post-image"
       />
     </div>
     <div v-html="post.postContent"></div>
 
     <div class="post-autor-bottom">
-      <div class="post-autor">
+      <div class="post-autor" v-if="autor != null">
         <img
           v-if="autor.profileImage"
           :src="require(`@/assets/images/${autor.profileImage}`)"
           alt="Wêneya Postê"
-          class="post-image"
+          class="post-image-profile"
         />
         <img
           v-else
@@ -30,8 +32,21 @@
             href="#"
             @click.prevent="goToProfile(autor.username)"
             class="item-nav"
-            >{{ autor.name }}</a
-          >
+            >{{ autor.name }}</a>
+        </div>
+      </div>
+      <div class="post-autor" v-else>
+        <img
+          src="../assets/images/default.jpg"
+          alt="Wêneya Profîlê"
+          class="profile-image"
+        />
+        <div class="post-autor-name">
+          <a
+            href="#"
+            @click.prevent="goToProfile('NullUser')"
+            class="item-nav"
+            >Null User</a>
         </div>
       </div>
       <div class="post-autor-likes">
@@ -74,8 +89,9 @@
       <div
         class="post-category"
         @click="goToCategory(post.postCategory)"
-        style="cursor: pointer;"
-      ><i class="fas fa-tags"></i>
+        style="cursor: pointer"
+      >
+        <i class="fas fa-tags"></i>
         {{ category }}
       </div>
     </div>
@@ -92,10 +108,12 @@
               <img
                 v-if="commentAuthorProfileImages[comment.commentAuthorId]"
                 :src="
-                  require(`@/assets/images/${commentAuthorProfileImages[comment.commentAuthorId]}`)
+                  require(`@/assets/images/${
+                    commentAuthorProfileImages[comment.commentAuthorId]
+                  }`)
                 "
                 alt="Wêneya Postê"
-                class="post-image"
+                class="post-image-profile"
               />
               <img
                 v-else
@@ -106,7 +124,9 @@
               <div class="post-autor-name">
                 <a
                   href="#"
-                  @click.prevent="getUserNameAndGoToProfile(comment.commentAuthorId)"
+                  @click.prevent="
+                    getUserNameAndGoToProfile(comment.commentAuthorId)
+                  "
                   class="item-nav"
                   >{{ commentAuthorNames[comment.commentAuthorId] }}</a
                 >
@@ -117,7 +137,8 @@
             </div>
             <button
               v-if="canDeleteComment(comment)"
-              type="button" class="btn btn-outline-danger"
+              type="button"
+              class="btn btn-outline-danger"
               @click="deleteComment(comment._id)"
             >
               Delete
@@ -131,33 +152,53 @@
         </div>
       </div>
       <div v-if="showNextButton" class="next-button">
-        <button type="button" class="btn btn-outline-info" @click="showMoreComments">Next</button>
+        <button
+          type="button"
+          class="btn btn-outline-info"
+          @click="showMoreComments"
+        >
+          Next
+        </button>
       </div>
       <div class="add-comment">
         <p>Your Commit:</p>
         <div class="comment-input">
           <textarea
             name="commentContent"
-            :disabled="!user"
+            :disabled="!user || !post.postApproved"
             v-model="comment"
             :placeholder="placeholderText"
             rows="3"
             required
           ></textarea>
         </div>
-        <button v-if="user" class="btn btn-outline-success" type="button" @click="submitComment">Send</button>
+        <button
+          v-if="user && post.postApproved"
+          class="btn btn-outline-success"
+          type="button"
+          @click="submitComment"
+        >
+          Send
+        </button>
       </div>
     </div>
+  </div>
+  <div v-else class="post-view">
+    <NotFound />
   </div>
 </template>
 <script>
 import VueCookies from "vue-cookies";
 import axios from "axios";
 import { parse } from "date-fns";
-import { reactive } from 'vue';
+import { reactive } from "vue";
+import NotFound from "@/views/NotFound.vue";
 
 export default {
   name: "PostPage",
+  components: {
+    NotFound,
+  },
   data() {
     return {
       user: null,
@@ -172,7 +213,7 @@ export default {
       allComments: [],
       currentIndex: 0,
       commentAuthorNames: reactive({}),
-      commentAuthorProfileImages: reactive({})
+      commentAuthorProfileImages: reactive({}),
     };
   },
 
@@ -202,23 +243,36 @@ export default {
           `http://localhost:3000/post/${postId}`
         );
         this.post = response.data;
-
         if (this.user) {
           this.userLiked = this.post.likes.some(
             (like) => like.likeId === this.user._id
           );
         }
-        const resuser = await axios.get(
-          `http://localhost:3000/users/${response.data.postAutorId}`
-        );
-        const rescategory = await axios.get(
-          `http://localhost:3000/category/${response.data.postCategory}`
-        );
-        this.category = rescategory.data.category.name;
-        this.autor = resuser.data;
+        let resuser;
+        try {
+          resuser = await axios.get(
+            `http://localhost:3000/users/${response.data.postAutorId}`
+          );
+          this.autor = resuser.data;
+        } catch (error) {
+          this.autor = null;
+        }
+
+        let rescategory;
+        try {
+          rescategory = await axios.get(
+            `http://localhost:3000/category/${response.data.postCategory}`
+          );
+          this.category = rescategory.data.category.name;
+        } catch (error) {
+          this.category = "Null Category";
+        }
+
         document.title = this.post.postTitle;
       } catch (error) {
-        console.log(error);
+        if (error) {
+          this.post = null;
+        }
       }
     },
     async submitComment() {
@@ -246,8 +300,7 @@ export default {
     },
     canDeleteComment(comment) {
       return (
-        (this.user &&
-          comment.commentAuthorId === this.user._id) ||
+        (this.user && comment.commentAuthorId === this.user._id) ||
         ["root", "admin"].includes(this.user.permission)
       );
     },
@@ -274,7 +327,8 @@ export default {
     async getCommentAuthorProfileImage(comment) {
       if (!this.commentAuthorProfileImages[comment.commentAuthorId]) {
         const user = await this.getUserCome(comment.commentAuthorId);
-        this.commentAuthorProfileImages[comment.commentAuthorId] = user.profileImage || "";
+        this.commentAuthorProfileImages[comment.commentAuthorId] =
+          user.profileImage || "";
       }
     },
     async getUserName(comID) {
@@ -352,9 +406,19 @@ export default {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: var(--border);
   border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
+}
+.balkesi {
+  background-color: var(--colortext);
+  color: var(--colorbg);
+  border-radius: 20px;
+  padding: 10px;
+  margin-bottom: 40px;
+  font-style: italic;
+  font-size: 32px;
+  box-shadow: var(--shadow);
 }
 
 .post-view h1 {
@@ -374,7 +438,10 @@ export default {
 .post-image {
   width: 100%;
   position: relative;
-  padding-bottom: 10px;
+  margin-bottom: 30px;
+  box-shadow: var(--shadow);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .post-image img {

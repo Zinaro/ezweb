@@ -1,6 +1,6 @@
 <template>
   <div class="profile">
-    <div v-if="userNotFound" class="user-not-found">User not found</div>
+    <div v-if="userNotFound" class="user-not-found"><NotFound /></div>
     <div v-else class="profile-header">
       <div class="profile-image float-start">
         <img
@@ -14,7 +14,7 @@
       </div>
       <div class="profile-info float-end">
         <div class="profile-name">{{ user.name }}</div>
-        <div class="profile-username">{{ user.username }}</div>
+        <div class="profile-username">@{{ user.username }}</div>
         <div class="profile-followers">
           <span class="profile-followers-count">{{ followersCount }}</span>
           Followers
@@ -35,11 +35,13 @@
 
 <script>
 import axios from 'axios';
+import NotFound from '@/views/NotFound.vue'
 import UserPosts from "@/components/UserPosts.vue"
 export default {
   name: "UserProfile",
   components: {
-    UserPosts
+    UserPosts,
+    NotFound
   },
   data() {
     return {
@@ -141,6 +143,5 @@ export default {
 .profile-followers-count,
 .profile-following-count {
   font-weight: bold;
-  color: #333;
 }
 </style>

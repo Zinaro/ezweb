@@ -73,14 +73,22 @@ export default {
       }
     },
     async getAutor(userid) {
-      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+      try {
+        const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
       const prof = resuser.data.profileImage;
       return prof;
+      } catch (error) {
+        return "default.jpg";
+      }
     },
     async getAutorName(userid) {
-      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
-      const prof = resuser.data.name;
-      return prof;
+      try {
+    const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+    const prof = resuser.data.name;
+    return prof;
+  } catch (error) {
+    return "Null User";
+  }
     },
     async refreshData() {
       try {
