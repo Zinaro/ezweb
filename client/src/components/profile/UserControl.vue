@@ -236,7 +236,7 @@ export default {
   methods: {
     async getUsers() {
       await axios
-        .get("http://localhost:3000/users")
+        .get(`${process.env.VUE_APP_BASE_URL}/users`)
         .then((response) => {
           this.users = response.data
             .filter((u) => u.permission !== "root")
@@ -289,7 +289,7 @@ export default {
     async saveUser(id) {
       try {
         await axios.put(
-          `http://localhost:3000/users/${id}/root`,
+          `${process.env.VUE_APP_BASE_URL}/users/${id}/root`,
           this.editUser
         );
         this.editUserId = null;
@@ -303,7 +303,7 @@ export default {
     async confirmDelete(u) {
       const id = u._id;
       try {
-        await axios.delete(`http://localhost:3000/users/${id}/root`);
+        await axios.delete(`${process.env.VUE_APP_BASE_URL}/users/${id}/root`);
         this.getUsers();
         u.showDeleteConfirmation = false;
       } catch (error) {

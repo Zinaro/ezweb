@@ -1,12 +1,16 @@
 <template>
   <div class="container">
-    <h1 class=" pt-3">Silav Zinar, {{ msg }}</h1>
+    <Slider />
     <Posts></Posts>
+    <Footer />
   </div>
+  
 </template>
 
 <script>
-import Posts from "./Posts.vue";
+import Posts from "@/components/Posts.vue";
+import Footer from '@/components/Footer.vue';
+import Slider from '@/components/post/Slider.vue'
 
 export default {
   name: "HomePage",
@@ -17,7 +21,9 @@ export default {
     },
   },
   components: {
-    Posts
+    Posts,
+    Footer,
+    Slider
   },
 
 };

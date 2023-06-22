@@ -5,18 +5,21 @@
     <Niviskars></Niviskars>
     <div class="border-top mt-5 pb-2"></div>
   </div>
+  <Footer />
 </template>
 
 <script>
 import VueCookies from "vue-cookies";
 import Editors from "@/components/Editors.vue"
 import Niviskars from "@/components/Niviskars.vue"
+import Footer from '@/components/Footer.vue';
 
 export default {
   name: "UsersPage",
   components: {
     Editors,
-    Niviskars
+    Niviskars,
+    Footer,
   },
   data() {
     return {

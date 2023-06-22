@@ -10,6 +10,9 @@ const marketSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  productPrice: {
+    type: String,
+  },
   platforms: [
     {
       id: {
@@ -27,7 +30,6 @@ const marketSchema = new mongoose.Schema({
       },
       img: {
         type: String,
-        required: true,
       },
     },
   ],

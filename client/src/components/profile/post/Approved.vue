@@ -91,7 +91,7 @@ export default {
     async getPosts() {
       try {
         const response = await axios.get(
-          "http://localhost:3000/posts/approved"
+          `${process.env.VUE_APP_BASE_URL}/posts/approved`
         );
         this.posts = response.data;
       } catch (error) {
@@ -140,7 +140,7 @@ export default {
 }
 
 .approved {
-  width: 140vh;
+  width: 100vh;
   max-width: 150vh;
 }
 

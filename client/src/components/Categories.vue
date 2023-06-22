@@ -19,7 +19,7 @@ import Category from '@/components/Category.vue'
 export default {
   name: "CategoriesPage",
   components: {
-    Category
+    Category,
   },
   data() {
     return {
@@ -33,7 +33,7 @@ export default {
   methods: {
     async fetchCategories() {
       try {
-        const response = await axios.get("http://localhost:3000/category");
+        const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/category`);
         this.categories = response.data;
         this.activeCategory = this.categories[0];
       } catch (error) {

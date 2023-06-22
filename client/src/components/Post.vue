@@ -13,11 +13,11 @@
     </div>
     <div v-html="post.postContent"></div>
 
-    <div class="post-autor-bottom">
-      <div class="post-autor" v-if="autor != null">
+    <div class="post-author-bottom">
+      <div class="post-author" v-if="author != null">
         <img
-          v-if="autor.profileImage"
-          :src="require(`@/assets/images/${autor.profileImage}`)"
+          v-if="author.profileImage"
+          :src="require(`@/assets/images/${author.profileImage}`)"
           alt="Wêneya Postê"
           class="post-image-profile"
         />
@@ -27,21 +27,21 @@
           alt="Wêneya Profîlê"
           class="profile-image"
         />
-        <div class="post-autor-name">
+        <div class="post-author-name">
           <a
             href="#"
-            @click.prevent="goToProfile(autor.username)"
+            @click.prevent="goToProfile(author.username)"
             class="item-nav"
-            >{{ autor.name }}</a>
+            >{{ author.name }}</a>
         </div>
       </div>
-      <div class="post-autor" v-else>
+      <div class="post-author" v-else>
         <img
           src="../assets/images/default.jpg"
           alt="Wêneya Profîlê"
           class="profile-image"
         />
-        <div class="post-autor-name">
+        <div class="post-author-name">
           <a
             href="#"
             @click.prevent="goToProfile('NullUser')"
@@ -49,7 +49,7 @@
             >Null User</a>
         </div>
       </div>
-      <div class="post-autor-likes">
+      <div class="post-author-likes">
         <svg
           v-if="!userLiked"
           @click="likePost(post._id, post)"
@@ -81,11 +81,11 @@
           ></path>
         </svg>
 
-        <div class="post-autor-likes-count">
+        <div class="post-author-likes-count">
           {{ post.likes ? Object.keys(post.likes).length : 0 }} liked.
         </div>
       </div>
-      <div class="post-autor-date">{{ getDifference(post.postDate) }}</div>
+      <div class="post-author-date">{{ getDifference(post.postDate) }}</div>
       <div
         class="post-category"
         @click="goToCategory(post.postCategory)"
@@ -104,7 +104,7 @@
           class="comment-item"
         >
           <div class="comment-item-top">
-            <div class="post-autor">
+            <div class="post-author">
               <img
                 v-if="commentAuthorProfileImages[comment.commentAuthorId]"
                 :src="
@@ -121,7 +121,7 @@
                 alt="Wêneya Profîlê"
                 class="profile-image"
               />
-              <div class="post-autor-name">
+              <div class="post-author-name">
                 <a
                   href="#"
                   @click.prevent="
@@ -132,7 +132,7 @@
                 >
               </div>
             </div>
-            <div class="post-autor-date">
+            <div class="post-author-date">
               {{ getDifference(comment.commentDate) }}
             </div>
             <button
@@ -186,6 +186,7 @@
   <div v-else class="post-view">
     <NotFound />
   </div>
+  <Footer />
 </template>
 <script>
 import VueCookies from "vue-cookies";
@@ -193,17 +194,19 @@ import axios from "axios";
 import { parse } from "date-fns";
 import { reactive } from "vue";
 import NotFound from "@/views/NotFound.vue";
+import Footer from '@/components/Footer.vue';
 
 export default {
   name: "PostPage",
   components: {
     NotFound,
+    Footer,
   },
   data() {
     return {
       user: null,
       post: {},
-      autor: {},
+      author: {},
       userLiked: false,
       category: null,
       placeholderText: "",
@@ -240,7 +243,7 @@ export default {
     async getPost(postId) {
       try {
         const response = await axios.get(
-          `http://localhost:3000/post/${postId}`
+          `${process.env.VUE_APP_BASE_URL}/post/${postId}`
         );
         this.post = response.data;
         if (this.user) {
@@ -251,17 +254,17 @@ export default {
         let resuser;
         try {
           resuser = await axios.get(
-            `http://localhost:3000/users/${response.data.postAutorId}`
+            `${process.env.VUE_APP_BASE_URL}/users/${response.data.postAuthorId}`
           );
-          this.autor = resuser.data;
+          this.author = resuser.data;
         } catch (error) {
-          this.autor = null;
+          this.author = null;
         }
 
         let rescategory;
         try {
           rescategory = await axios.get(
-            `http://localhost:3000/category/${response.data.postCategory}`
+            `${process.env.VUE_APP_BASE_URL}/category/${response.data.postCategory}`
           );
           this.category = rescategory.data.category.name;
         } catch (error) {
@@ -277,7 +280,7 @@ export default {
     },
     async submitComment() {
       try {
-        await axios.post(`http://localhost:3000/comment/${this.post._id}`, {
+        await axios.post(`${process.env.VUE_APP_BASE_URL}/comment/${this.post._id}`, {
           commentContent: this.comment,
           commentAuthorId: this.user._id,
         });
@@ -291,7 +294,7 @@ export default {
       const postId = this.post._id;
       try {
         await axios.delete(
-          `http://localhost:3000/comment/${postId}/${commentId}`
+          `${process.env.VUE_APP_BASE_URL}/comment/${postId}/${commentId}`
         );
         location.reload();
       } catch (error) {
@@ -315,7 +318,7 @@ export default {
       this.$router.push(`/category/${this.category}-${category}`);
     },
     async getUserCome(comID) {
-      const resuser = await axios.get(`http://localhost:3000/users/${comID}`);
+      const resuser = await axios.get(`${process.env.VUE_APP_BASE_URL}/users/${comID}`);
       return resuser.data;
     },
     async getCommentAuthorName(comment) {
@@ -343,7 +346,7 @@ export default {
           const data = { userId, postttId };
           const sec = this.post;
           if (sec.likes.some((l) => l.likeId == userId)) {
-            await axios.delete(`http://localhost:3000/posts/${postttId}/like`, {
+            await axios.delete(`${process.env.VUE_APP_BASE_URL}/posts/${postttId}/like`, {
               data,
             });
             sec.likes = sec.likes.filter((like) => like.likeId !== userId);
@@ -351,7 +354,7 @@ export default {
             await this.getPost(postttId);
           } else {
             await axios.put(
-              `http://localhost:3000/posts/${postttId}/like`,
+              `${process.env.VUE_APP_BASE_URL}/posts/${postttId}/like`,
               data
             );
             this.userLiked = !this.userLiked;
@@ -449,18 +452,18 @@ export default {
   height: 100%;
   object-fit: cover;
 }
-.post-autor-bottom {
+.post-author-bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.post-autor {
+.post-author {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.post-autor img {
+.post-author img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -468,24 +471,24 @@ export default {
   margin: 5px;
 }
 
-.post-autor-name {
+.post-author-name {
   margin-left: 10px;
   font-size: 18px;
   font-weight: bold;
 }
 
-.post-autor-likes {
+.post-author-likes {
   display: flex;
   align-items: center;
   margin-left: 10px;
   font-size: 16px;
 }
 
-.post-autor-likes * {
+.post-author-likes * {
   margin-left: 10px;
 }
 
-.post-autor-date {
+.post-author-date {
   margin-left: 10px;
   font-size: 14px;
 }

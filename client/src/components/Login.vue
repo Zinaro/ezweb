@@ -24,7 +24,8 @@
       </div>
       <button type="submit">Têkeve</button>
     </form>
-    <div v-if="user">Silav, {{ user.username }}!</div>
+    <div class="silav-user" v-if="user">Silav, {{ user.name }}! Tu çi dikî li vir? Here rûpela xwe zû! <router-link :to="`/profile/${user.username}`"><i class="fas fa-arrow-alt-circle-right"></i>
+</router-link></div>
   </div>
 </template>
 
@@ -44,7 +45,7 @@ export default {
   methods: {
     async submitForm() {
       try {
-        const response = await axios.get("http://localhost:3000/users");
+        const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/users`);
         const user = response.data.find(
           (k) => k.username === this.username && k.password === this.password
         );
@@ -130,5 +131,8 @@ form button {
   margin-top: 10px;
   padding: 10px;
   width: 100%;
+}
+.silav-user {
+  font-size: 32px;
 }
 </style>

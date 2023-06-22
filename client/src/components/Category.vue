@@ -7,11 +7,13 @@
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 <script>
 import VueCookies from "vue-cookies";
 import axios from "axios";
 import PostCard from "@/components/post/PostCard.vue";
+import Footer from '@/components/Footer.vue';
 
 export default {
   name: "CategoryPage",
@@ -22,6 +24,7 @@ export default {
   },
   components: {
     PostCard,
+    Footer, 
   },
   data() {
     return {
@@ -40,10 +43,10 @@ export default {
     sortedUserItems() {
       if (this.user) {
         return this.sortedItems
-          .filter((item) => item.postAutorId === this.user._id)
+          .filter((item) => item.postAuthorId === this.user._id)
           .concat(
             this.sortedItems.filter(
-              (item) => item.postAutorId !== this.user._id
+              (item) => item.postAuthorId !== this.user._id
             )
           );
       } else {
@@ -76,14 +79,14 @@ export default {
           categoryId = this.catID;
         }
         const response = await axios.get(
-          `http://localhost:3000/category/${categoryId}`
+          `${process.env.VUE_APP_BASE_URL}/category/${categoryId}`
         );
         const datame = response.data.posts;
         for (const post of datame) {
-          const prof = await this.getAutor(post.postAutorId);
+          const prof = await this.getAuthor(post.postAuthorId);
           post.profileImage = prof;
-          const name = await this.getAutorName(post.postAutorId);
-          post.postAutorName = name;
+          const name = await this.getAuthorName(post.postAuthorId);
+          post.postAuthorName = name;
         }
         this.posts = datame;
         this.categoryName = response.data.category.name;
@@ -92,13 +95,13 @@ export default {
         console.error(err);
       }
     },
-    async getAutor(userid) {
-      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+    async getAuthor(userid) {
+      const resuser = await axios.get(`${process.env.VUE_APP_BASE_URL}/users/${userid}`);
       const prof = resuser.data.profileImage;
       return prof;
     },
-    async getAutorName(userid) {
-      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+    async getAuthorName(userid) {
+      const resuser = await axios.get(`${process.env.VUE_APP_BASE_URL}/users/${userid}`);
       const prof = resuser.data.name;
       return prof;
     },

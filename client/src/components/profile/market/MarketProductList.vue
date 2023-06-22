@@ -1,39 +1,58 @@
 <template>
   <div v-if="user && user.permission === 'root'" class="market-product-list">
     <h1>Product List</h1>
-    <div >
+    <div>
       <ul>
-      <li v-for="product in products" :key="product._id" class="product-list-row">
-        <div class="product-image-list" v-show="product.productImage">
-           <img :src="require(`@/assets/images/productimages/${product.productImage}`)" :alt="product.productName " />
-           <a @click="deleteProduct(product)"><i class="fas fa-trash"></i></a>
-        </div>
-        <div class=""> <h2>{{ product.productName }}</h2></div>
-        <ul>
-          <li v-for="platform in product.platforms" :key="platform._id" class="platform-list">
-            <div class="product-image-preview" v-show="product.productImage">
-           <img :src="require(`@/assets/images/pimages/${platform.img}`)" :alt="platform.name" style="max-height: 30px;" />
-        </div>
-            <p>URL: </p> <a :href="platform.url" target="_blank">{{ platform.url }}</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
+        <li
+          v-for="product in products"
+          :key="product._id"
+          class="product-list-row"
+        >
+          <div class="product-image-list" v-show="product.productImage">
+            <img
+              :src="
+                require(`@/assets/images/productimages/${product.productImage}`)
+              "
+              :alt="product.productName"
+            />
+            <a @click="deleteProduct(product)"><i class="fas fa-trash del-icon"></i></a>
+          </div>
+          <div class="">
+            <h2>
+              <span v-if="product.productPrice" style="color: darkgreen; !important">{{ product.productPrice.slice(0, 20) }} </span>
+            {{ product.productName }}</h2>
+          </div>
+          <ul>
+            <li
+              v-for="platform in product.platforms"
+              :key="platform._id"
+              class="platform-list"
+            >
+              <div class="product-image-preview" v-show="product.productImage">
+                <img v-if="platform.img" :src="require(`@/assets/images/pimages/${platform.img}`)"
+                  :alt="platform.name"
+                  style="max-height: 30px" /> <img v-else :alt="platform.name" />
+              </div>
+              <p>URL:</p>
+              <a :href="platform.url" target="_blank">{{ platform.url }}</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
-    
   </div>
 </template>
 
 <script>
 import VueCookies from "vue-cookies";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "MarketAddProductPage",
   data() {
     return {
       user: null,
-      products: {}
+      products: {},
     };
   },
   created() {
@@ -46,16 +65,16 @@ export default {
   methods: {
     async getProducts() {
       try {
-    const response = await axios.get("http://localhost:3000/products");
-    this.products = response.data;
-  } catch (error) {
-    console.error(error);
-  }
+        const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/products`);
+        this.products = response.data;
+      } catch (error) {
+        console.error(error);
+      }
     },
-   async deleteProduct(product) {
-     await axios.delete(`http://localhost:3000/product/delete/${product._id}`);
-     this.getProducts();
-   },
+    async deleteProduct(product) {
+      await axios.delete(`${process.env.VUE_APP_BASE_URL}/product/delete/${product._id}`);
+      this.getProducts();
+    },
   },
 };
 </script>
@@ -84,10 +103,10 @@ export default {
   flex-direction: row;
   justify-content: flex-start;
 }
-.platform-list p{
+.platform-list p {
   margin-top: 8px;
 }
-.platform-list a{
+.platform-list a {
   text-align: start;
 }
 .platform-list > :first-child {
@@ -99,17 +118,22 @@ export default {
   justify-content: space-between;
   margin-bottom: 20px;
 }
-.product-image-list img{
+.product-image-list img {
   border-radius: 10px;
   max-height: 200px;
 }
-.product-image-list a{
+.product-image-list a {
   margin-bottom: 120px;
 }
-.product-image-list i{
+.product-image-list i {
   font-size: 48px;
   padding: 10px;
-  
+}
+.del-icon {
+  color: darkred;
+}
+.del-icon:hover {
+  color: red;
 }
 @media (max-width: 768px) {
   .market-product-list {

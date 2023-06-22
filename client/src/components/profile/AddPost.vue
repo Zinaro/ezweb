@@ -97,7 +97,7 @@ export default {
   methods: {
     async fetchCategories() {
       try {
-        const response = await axios.get("http://localhost:3000/category");
+        const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/category`);
         this.categories = response.data;
       } catch (error) {
         console.log(error);
@@ -118,7 +118,7 @@ export default {
       formData.append("image", this.previewUrl);
       try {
         const response = await axios.post(
-          `http://localhost:3000/image/upload`,
+          `${process.env.VUE_APP_BASE_URL}/image/upload`,
           formData,
           {
             headers: {
@@ -143,22 +143,22 @@ export default {
         postCategory: this.postcategory,
         postContent: this.$refs.editor.editorData,
         postDate: new Date().toLocaleString("tr-TR"),
-        postAutorId: this.user._id,
-        postAutorImage: this.user.profileImage ? this.user.profileImage : null,
+        postAuthorId: this.user._id,
+        postAuthorImage: this.user.profileImage ? this.user.profileImage : null,
         postImage: this.postimage,
         postUrl: this.posttitle.toLowerCase()
               .replace(/[^a-z0-9]+/g, '-')
               .replace(/(^-|-$)+/g, '')
       };
       try {
-        const response = await axios.post("http://localhost:3000/posts", item);
+        const response = await axios.post(`${process.env.VUE_APP_BASE_URL}/posts`, item);
         const postId = response.data._id;
         const categoryResponse = await axios.put(
-          `http://localhost:3000/category/${this.postcategory}/addpost`,
+          `${process.env.VUE_APP_BASE_URL}/category/${this.postcategory}/addpost`,
           { postId }
         );
         console.log(categoryResponse.data);
-        const itemsResponse = await axios.get("http://localhost:3000/posts");
+        const itemsResponse = await axios.get(`${process.env.VUE_APP_BASE_URL}/posts`);
         this.items = itemsResponse.data;
         this.clearInputs();
         this.showMessage = true;

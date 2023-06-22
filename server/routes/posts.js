@@ -62,7 +62,7 @@ router.get("/posts", async (req, res) => {
 router.get("/posts/:id/user", async (req, res) => {
   try {
     const userId = req.params.id;
-    const posts = await Post.find({ postAutorId: userId });
+    const posts = await Post.find({ postAuthorId: userId });
     res.json(posts);
   } catch (err) {
     console.error(err);
@@ -195,7 +195,7 @@ router.get("/users/:userId/posts/favorites", async (req, res) => {
   const userId = req.params.userId;
   try {
     const posts = await Post.find({ "likes.likeId": userId }).populate(
-      "postAutorId"
+      "postAuthorId"
     );
     res.status(200).json(posts);
   } catch (err) {

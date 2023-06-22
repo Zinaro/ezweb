@@ -4,11 +4,11 @@
     <form @submit.prevent="addProduct" class="market-form mb-4">
       <div class="platform-row">
         <div class="productName">
-          <label for="productName">Product Name:</label>
+          <label for="productName">* Product Name:</label>
           <input type="text" id="productName" v-model="productName" required />
         </div>
         <div class="productImage">
-          <label for="productImage">Product Image:</label>
+          <label for="productImage">* Product Image:</label>
           <input
             type="file"
             id="productImage"
@@ -20,8 +20,12 @@
             <img :src="thumbImage" alt="Thumbnail" />
           </div>
         </div>
+        <div class="productPrice">
+          <label for="productPrice">Product Price:</label>
+          <input type="text" id="productPrice" v-model="productPrice" maxlength="20"/>
+        </div>
         <div class="platforms-selected">
-          <label for="platforms">Platform:</label>
+          <label for="platforms">* Platform:</label>
           <select
             id="platforms"
             v-model="selectedPlatformId"
@@ -43,11 +47,11 @@
           <div class="selected-platform-name">
             <p>{{ getPlatformName(selectedPlatformId) }}</p>
             <p>URL:</p>
-            <a @click="addPlatform"><i class="fas fa-plus-circle"></i></a>
+            <a v-if="platformUrl.length > 0" @click="addPlatform"><i class="fas fa-plus-circle"></i></a>
           </div>
           <div class="selected-platform-row">
             <img
-              v-if="getPlatformImage(selectedPlatformId)"
+              v-if="getPlatformImageTrue(selectedPlatformId)"
               :src="getPlatformImage(selectedPlatformId)"
               class="platform-image"
               alt="Platform Image"
@@ -73,7 +77,7 @@
             >
               <p>{{ platform.name }}</p>
               <img
-                v-if="getPlatformImage(platform.id)"
+                v-if="getPlatformImageTrue(platform.id)"
                 :src="getPlatformImage(platform.id)"
                 class="platform-image"
                 alt="Platform Image"
@@ -111,9 +115,10 @@ export default {
       platforms: [],
       platformList: [],
       selectedPlatformId: "",
-      platformUrl: "",
+      platformUrl: '',
       productName: "",
       productImage: "",
+      productPrice: "",
       thumbImage: null,
       previewUrl: null,
       fileInput: null,
@@ -160,10 +165,11 @@ export default {
       const requestData = {
         productName: this.productName,
         productImage: this.productImage,
+        productPrice: this.productPrice,
         platforms: platforms,
       };
       try {
-        await axios.post("http://localhost:3000/product", requestData);
+        await axios.post(`${process.env.VUE_APP_BASE_URL}/product`, requestData);
         this.clearInputs();
       } catch (error) {
         console.error(error);
@@ -175,6 +181,7 @@ export default {
       this.platformUrl = "";
       this.productName = "";
       this.productImage = "";
+      this.productPrice = "";
       this.thumbImage = null;
       this.previewUrl = null;
       this.$refs.fileInput.value = "";
@@ -184,7 +191,7 @@ export default {
       formData.append("image", this.previewUrl);
       try {
         const response = await axios.post(
-          `http://localhost:3000/product/image/upload`,
+          `${process.env.VUE_APP_BASE_URL}/product/image/upload`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
@@ -195,7 +202,7 @@ export default {
     },
     async getPlatforms() {
       try {
-        const response = await axios.get("http://localhost:3000/platform");
+        const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/platform`);
         this.platforms = response.data.map((platform) => ({
           ...platform,
           showDeleteConfirmation: false,
@@ -214,18 +221,27 @@ export default {
         ? require(`@/assets/images/pimages/${platform.platformImage}`)
         : "";
     },
+    getPlatformImageTrue(platformId) {
+      const platform = this.platforms.find((p) => p._id === platformId);
+      if (platform.platformImage) {
+    return true;
+  } else {
+    return false;
+  }
+    },
     getPlatformImg(platformId) {
       const platform = this.platforms.find((p) => p._id === platformId);
       return platform
         ? platform.platformImage
         : "";
     },
+    
     addPlatform() {
       const platform = {
         url: this.platformUrl,
         id: this.selectedPlatformId,
         name: this.getPlatformName(this.selectedPlatformId),
-        img: this.getPlatformImg(this.selectedPlatformId),
+        img: this.getPlatformImageTrue(this.selectedPlatformId) ? this.getPlatformImage(this.selectedPlatformId) : '',
       };
       this.platformList.push(platform);
       this.selectedPlatformId = "";
@@ -297,6 +313,12 @@ export default {
   border-radius: 5px;
 }
 .productName {
+  margin-top: 30px !important;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: var(--shadow);
+}
+.productPrice {
   margin-top: 30px !important;
   padding: 10px;
   border-radius: 5px;

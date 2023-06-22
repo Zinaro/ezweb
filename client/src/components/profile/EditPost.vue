@@ -172,7 +172,7 @@ export default {
   methods: {
     async fetchCategories() {
       try {
-        const response = await axios.get("http://localhost:3000/category");
+        const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/category`);
         this.categories = response.data;
       } catch (error) {
         console.log(error);
@@ -195,7 +195,7 @@ export default {
       formData.append("image", this.previewUrl);
       try {
         const response = await axios.post(
-          `http://localhost:3000/image/upload`,
+          `${process.env.VUE_APP_BASE_URL}/image/upload`,
           formData,
           {
             headers: {
@@ -211,7 +211,7 @@ export default {
     },
     async deletePost(postID) {
       try {
-        await axios.delete(`http://localhost:3000/posts/${postID}`);
+        await axios.delete(`${process.env.VUE_APP_BASE_URL}/posts/${postID}`);
         this.fetchCategories();
         location.reload();
       } catch (error) {
@@ -230,7 +230,7 @@ export default {
         postCategory: this.postCopy.postCategory,
         postContent: this.$refs.editor.editorData,
         postDate: this.postCopy.postDate,
-        postAutorId: this.postCopy.postAutorId,
+        postAuthorId: this.postCopy.postAuthorId,
         postImage: this.postimage,
       };
       if (this.postCopy.postApproved) {
@@ -240,7 +240,7 @@ export default {
       }
       try {
         const response = await axios.put(
-          `http://localhost:3000/posts/${this.postCopy._id}`,
+          `${process.env.VUE_APP_BASE_URL}/posts/${this.postCopy._id}`,
           item
         );
         console.log(response.data);

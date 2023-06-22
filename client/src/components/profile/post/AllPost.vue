@@ -91,7 +91,7 @@ export default {
     async getPosts() {
       try {
         const response = await axios.get(
-          "http://localhost:3000/posts"
+          `${process.env.VUE_APP_BASE_URL}/posts`
         );
         this.posts = response.data;
       } catch (error) {
@@ -142,7 +142,7 @@ export default {
 
 
 .allpost {
-  width: 140vh;
+  width: 100vh;
   max-width: 150vh;
 }
 

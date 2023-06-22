@@ -44,7 +44,6 @@ export default {
           "undo redo | cut copy paste pastetext | searchreplace | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent |  forecolor backcolor | removeformat | table | hr |  link unlink | image media | code",
         toolbar_mode: "floating",
         min_height: 500,
-        content_css: "../../../assets/css/theme.scss"
       },
     };
   },

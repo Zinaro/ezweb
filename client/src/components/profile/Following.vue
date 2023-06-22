@@ -61,13 +61,13 @@ export default {
     async getFollowingList() {
       try {
         const response = await axios.get(
-          `http://localhost:3000/users/${this.user._id}/following`
+          `${process.env.VUE_APP_BASE_URL}/users/${this.user._id}/following`
         );
         const followingIds = response.data;
         const users = [];
         for (let i = 0; i < followingIds.length; i++) {
           const userResponse = await axios.get(
-            `http://localhost:3000/users/${followingIds[i]}`
+            `${process.env.VUE_APP_BASE_URL}/users/${followingIds[i]}`
           );
           users.push(userResponse.data);
         }

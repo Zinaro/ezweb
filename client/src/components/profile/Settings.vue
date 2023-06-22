@@ -3,14 +3,14 @@
     <div class="setting-sazkari">
       <h1>Sazkarî</h1>
     </div>
-    <div class="setting-photo">
+    <div v-if="user.permission !== 'user'" class="setting-photo">
       <label for="profile-image">Wêneyê Profîlê:</label>
       <input type="file" id="profile-image" @change="onFileChange" />
       <button @click.prevent="uploadImage">Wêneyê Profîlê Bişîne</button>
     </div>
     <div class="setting-name">
       <label for="name">Nav:</label>
-      <input type="text" id="name" v-model="name" required class="input"/>
+      <input type="text" id="name" v-model="name" required class="input" maxlength="30"/>
       <button @click="updateUser">Rojane bike</button>
     </div>
     <div class="setting-mail">
@@ -86,7 +86,7 @@ export default {
       formData.append("image", this.profileImage);
       try {
         const response = await axios.post(
-          `http://localhost:3000/upload/${this.user._id}`,
+          `${process.env.VUE_APP_BASE_URL}/upload/${this.user._id}`,
           formData,
           {
             headers: {
@@ -96,7 +96,7 @@ export default {
         );
         this.profileImage = null;
         alert("Profile image uploaded successfully");
-        await axios.put(`http://localhost:3000/users/${this.user._id}`, {
+        await axios.put(`${process.env.VUE_APP_BASE_URL}/users/${this.user._id}`, {
           profileImage: `${this.user._id}/${response.data.imageUrl}`,
         });
         location.reload();
@@ -124,7 +124,7 @@ export default {
     return;
   }
   try {
-    await axios.put(`http://localhost:3000/users/${this.user._id}`, data);
+    await axios.put(`${process.env.VUE_APP_BASE_URL}/users/${this.user._id}`, data);
     if (data.name) {
       this.user.name = data.name;
     }

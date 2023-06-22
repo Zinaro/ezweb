@@ -40,10 +40,10 @@ export default {
     sortedUserItems() {
       if (this.user) {
         return this.sortedItems
-          .filter((item) => item.postAutorId === this.user._id)
+          .filter((item) => item.postAuthorId === this.user._id)
           .concat(
             this.sortedItems.filter(
-              (item) => item.postAutorId !== this.user._id
+              (item) => item.postAuthorId !== this.user._id
             )
           );
       } else {
@@ -57,13 +57,13 @@ export default {
   methods: {
     async getItems() {
       try {
-        const response = await axios.get(`http://localhost:3000/posts/${this.user._id}/user`);
+        const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/posts/${this.user._id}/user`);
         const datame = response.data;
         for (const post of datame) {
-          const prof = await this.getAutor(post.postAutorId);
+          const prof = await this.getAuthor(post.postAuthorId);
           post.profileImage = prof;
-          const name = await this.getAutorName(post.postAutorId);
-          post.postAutorName = name;
+          const name = await this.getAuthorName(post.postAuthorId);
+          post.postAuthorName = name;
         }
         this.posts = datame;
       } catch (error) {
@@ -71,13 +71,13 @@ export default {
         alert("hi zinar, you have an error");
       }
     },
-    async getAutor(userid) {
-      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+    async getAuthor(userid) {
+      const resuser = await axios.get(`${process.env.VUE_APP_BASE_URL}/users/${userid}`);
       const prof = resuser.data.profileImage;
       return prof;
     },
-    async getAutorName(userid) {
-      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+    async getAuthorName(userid) {
+      const resuser = await axios.get(`${process.env.VUE_APP_BASE_URL}/users/${userid}`);
       const prof = resuser.data.name;
       return prof;
     },

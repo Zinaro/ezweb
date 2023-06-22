@@ -6,25 +6,36 @@
             <h1>Tomar bibe</h1>
             <form @submit.prevent="signup">
                 <div>
-                    <label for="name">Nav</label>
-                    <input id="name" type="text" v-model="name" required>
+                    <label for="name">* Nav</label>
+                    <input id="name" type="text" v-model="name" required maxlength="30">
                 </div>
                 <div>
-                    <label for="username">Navê Bikarhêner</label>
+                    <label for="username">* Navê Bikarhêner</label>
                     <input id="username" type="text" v-model="username" required>
                 </div>
                 <div>
-                    <label for="email">E-name</label>
-                    <input id="email" type="text" v-model="mail" required>
+                    <label for="email">* E-name</label>
+                    <input id="email" type="email" v-model="mail" required>
                 </div>
                 <div>
-                    <label for="password">Borînpeyv</label>
+                    <label for="password">* Borînpeyv</label>
                     <input id="password" type="password" v-model="password" required>
                 </div>
-                <button type="submit">Tomar bibe</button>
+                <div>
+                    <label for="confirm-password">* Borînpeyva Piştrast bike</label>
+                    <input id="confirm-password" type="password" v-model="confirmPassword" required>
+                </div>
+                <div v-if="password !== confirmPassword" class="confirmPass">
+                     Borînpeyv ne wekhev in!
+                </div>
+                <button type="submit" :disabled="password !== confirmPassword">Tomar bibe</button>
             </form>
         </div>
-        <div v-if="user"><h1>Lexeee</h1></div>
+        <div v-if="user" class="custom-link">
+            Silav, {{ user.name }}! Tu bûyî endam. Îja here rûpela xwe  <router-link :to="`/profile/${user.username}`"><i class="fas fa-arrow-alt-circle-right"></i>
+</router-link>
+        </div>
+
     </div>
 </template>
 <script>
@@ -39,6 +50,7 @@ export default {
             username: '',
             mail: '',
             password: '',
+            confirmPassword: '',
             errorMessage: '',
             successMessage: '',
             user: null
@@ -54,7 +66,7 @@ export default {
                 permission: 'user',
             };
             try {
-                const response = await axios.get('http://localhost:3000/users');
+                const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/users`);
                 const existingUser = response.data.find(user => user.username === newUser.username || user.mail === newUser.mail);
                 if (existingUser) {
                     this.errorMessage = 'A user with the same username or email already exists';
@@ -63,8 +75,7 @@ export default {
                     }, 5000);
                     return;
                 }
-                // If no user found, proceed with sign up
-                const signUpResponse = await axios.post('http://localhost:3000/users', newUser);
+                const signUpResponse = await axios.post(`${process.env.VUE_APP_BASE_URL}/users`, newUser);
                 this.successMessage = 'Registration Successful!';
 
                 setTimeout(() => {
@@ -150,6 +161,14 @@ form button {
     color: red;
     margin: 10px 0px;
     text-align: center;
+}
+.confirmPass {
+    color: red;
+}
+.custom-link {
+    margin-top: 20px;
+    font-size: 32px;
+    text-decoration: none !important;
 }
 
 @keyframes fadeOut {

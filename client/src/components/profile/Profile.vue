@@ -33,6 +33,12 @@
     <i class="fas fa-plus"></i>
     Şandî Tevlî Bike
   </div>
+  <div v-if="(user && user.permission === 'root')" :class="{ active: activeTab === 'about' }" @click="activeTab = 'about'">
+    <i class="fas fa-info-circle"></i>
+    About
+  </div>
+
+
 </div>
 
     <div class="content-section">
@@ -121,6 +127,7 @@ import AddCategory from "../profile/AddCategory.vue";
 import UserControl from "../profile/UserControl.vue";
 import PostControl from "../profile/PostControl.vue";
 import MarketControl  from "@/components/profile/market/MarketControl.vue"
+import AboutProfile from '@/components/about/AboutProfile.vue'
 import axios from "axios";
 
 export default {
@@ -154,6 +161,8 @@ export default {
           return "PostControl";
         case "settings":
           return "Settings";
+        case 'about':
+          return 'AboutProfile';     
         default:
           return this.user.permission == "user" ? "Favorite" : "MyPosts";
       }
@@ -165,7 +174,7 @@ export default {
   },
   mounted() {
     axios
-      .get(`http://localhost:3000/users/${this.user._id}`)
+      .get(`${process.env.VUE_APP_BASE_URL}/users/${this.user._id}`)
       .then((response) => {
         this.user.profileImage = response.data.profileImage;
       });
@@ -181,6 +190,7 @@ export default {
     UserControl,
     PostControl,
     Settings,
+    AboutProfile,
   },
 };
 </script>

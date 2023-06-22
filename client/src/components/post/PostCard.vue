@@ -24,8 +24,8 @@
           v-html="truncateText(item.postContent, 410)"
         ></div>
         <div class="item-post-content">
-          <div class="post-content-autor-bottom">
-            <div class="post-autor">
+          <div class="post-content-author-bottom">
+            <div class="post-author">
               <img
                 v-if="item.profileImage"
                 :src="require(`@/assets/images/${item.profileImage}`)"
@@ -38,8 +38,8 @@
                 alt="Wêneya Profîlê"
                 class="profile-image"
               />
-              <div class="post-autor-name">
-                {{ item.postAutorName.length > 15 ? item.postAutorName.substring(0, 15) + '..' : item.postAutorName }}
+              <div class="post-author-name">
+                {{ item.postAuthorName.length > 15 ? item.postAuthorName.substring(0, 15) + '..' : item.postAuthorName }}
               </div>
             </div>
             <div>{{ Object.keys(item.likes).length }} <i class="fas fa-heart" style="color: red;"></i></div>
@@ -138,7 +138,7 @@ export default {
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
 }
-.post-content-autor-bottom {
+.post-content-author-bottom {
   position: absolute;
   padding-left: 15px;
   padding-right: 15px;

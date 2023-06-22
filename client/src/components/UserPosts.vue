@@ -45,10 +45,10 @@ export default {
     sortedUserItems() {
       if (this.user) {
         return this.sortedItems
-          .filter((item) => item.postAutorId === this.user._id)
+          .filter((item) => item.postAuthorId === this.user._id)
           .concat(
             this.sortedItems.filter(
-              (item) => item.postAutorId !== this.user._id
+              (item) => item.postAuthorId !== this.user._id
             )
           );
       } else {
@@ -78,29 +78,29 @@ export default {
         this.numOfLoadedItems += 3; // num of items to load
       }
     },
-    async getAutor(userid) {
-      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+    async getAuthor(userid) {
+      const resuser = await axios.get(`${process.env.VUE_APP_BASE_URL}/users/${userid}`);
       const prof = resuser.data.profileImage;
       return prof;
     },
-    async getAutorName(userid) {
-      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+    async getAuthorName(userid) {
+      const resuser = await axios.get(`${process.env.VUE_APP_BASE_URL}/users/${userid}`);
       const prof = resuser.data.name;
       return prof;
     },
     async refreshData() {
       try {
         const response = await axios.get(
-          "http://localhost:3000/posts/approved"
+          `${process.env.VUE_APP_BASE_URL}/posts/approved`
         );
         const posts = response.data;
         for (const post of posts) {
-          const prof = await this.getAutor(post.postAutorId);
+          const prof = await this.getAuthor(post.postAuthorId);
           post.profileImage = prof;
-          const name = await this.getAutorName(post.postAutorId);
-          post.postAutorName = name;
+          const name = await this.getAuthorName(post.postAuthorId);
+          post.postAuthorName = name;
         }
-        this.items = posts.filter(post => post.postAutorId === this.userID);
+        this.items = posts.filter(post => post.postAuthorId === this.userID);
       } catch (error) {
         console.error(error);
       }

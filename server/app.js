@@ -13,6 +13,7 @@ const postsRouter = require('./routes/posts');
 const categoriesRouter = require('./routes/categories');
 const platformsRouter = require('./routes/platforms');
 const productsRouter = require('./routes/products');
+const aboutsRouter = require('./routes/about');
 const upload = multer({ dest: 'uploads/' });
 
 db.connect();
@@ -26,7 +27,7 @@ app.use('/', postsRouter);
 app.use('/', categoriesRouter);
 app.use('/', platformsRouter);
 app.use('/', productsRouter);
-
+app.use('/', aboutsRouter);
 
 
 app.post('/upload/:id', (req, res) => {

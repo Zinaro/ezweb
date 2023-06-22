@@ -39,10 +39,10 @@ export default {
     sortedUserItems() {
       if (this.user) {
         return this.sortedItems
-          .filter((item) => item.postAutorId === this.user._id)
+          .filter((item) => item.postAuthorId === this.user._id)
           .concat(
             this.sortedItems.filter(
-              (item) => item.postAutorId !== this.user._id
+              (item) => item.postAuthorId !== this.user._id
             )
           );
       } else {
@@ -69,28 +69,28 @@ export default {
       const userId = this.user._id;
       try {
         const response = await axios.get(
-          `http://localhost:3000/users/${userId}/posts/favorites`
+          `${process.env.VUE_APP_BASE_URL}/users/${userId}/posts/favorites`
         );
         const datame = response.data;
         for (const post of datame) {
-          const prof = await this.getAutor(post.postAutorId._id);
+          const prof = await this.getAuthor(post.postAuthorId._id);
           post.profileImage = prof;
-          const name = await this.getAutorName(post.postAutorId._id);
-          post.postAutorName = name;
-          post.postAutorId = post.postAutorId._id;
+          const name = await this.getAuthorName(post.postAuthorId._id);
+          post.postAuthorName = name;
+          post.postAuthorId = post.postAuthorId._id;
         }
         this.posts = datame;
       } catch (err) {
         console.error(err);
       }
     },
-    async getAutor(userid) {
-      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+    async getAuthor(userid) {
+      const resuser = await axios.get(`${process.env.VUE_APP_BASE_URL}/users/${userid}`);
       const prof = resuser.data.profileImage;
       return prof;
     },
-    async getAutorName(userid) {
-      const resuser = await axios.get(`http://localhost:3000/users/${userid}`);
+    async getAuthorName(userid) {
+      const resuser = await axios.get(`${process.env.VUE_APP_BASE_URL}/users/${userid}`);
       const prof = resuser.data.name;
       return prof;
     },

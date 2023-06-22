@@ -76,7 +76,7 @@ export default {
   methods: {
     async fetchCategories() {
       try {
-        const response = await axios.get('http://localhost:3000/category');
+        const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/category`);
         this.categories = response.data.map(category => ({
       ...category,
       showDeleteConfirmation: false
@@ -91,7 +91,7 @@ export default {
     return;
   }
       try {
-        const response = await axios.post('http://localhost:3000/category', {
+        const response = await axios.post(`${process.env.VUE_APP_BASE_URL}/category`, {
           name: this.categoryName,
         });
         this.categories.push(response.data);
@@ -106,7 +106,7 @@ export default {
     async confirmDelete(category) {
       const categoryId = category._id;
       try {
-        await axios.delete(`http://localhost:3000/category/${categoryId}`);
+        await axios.delete(`${process.env.VUE_APP_BASE_URL}/category/${categoryId}`);
         this.categories = this.categories.filter((category) => category.id !== categoryId);
         this.fetchCategories();
         category.showDeleteConfirmation = false;
@@ -125,7 +125,7 @@ export default {
     },
     async updateCategory() {
       try {
-        await axios.put(`http://localhost:3000/category/${this.editCategoryId}`, {
+        await axios.put(`${process.env.VUE_APP_BASE_URL}/category/${this.editCategoryId}`, {
           name: this.editCategoryName,
         });
         this.showEditForm = false;

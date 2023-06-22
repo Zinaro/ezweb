@@ -29,7 +29,7 @@ const postSchema = new mongoose.Schema({
     type: String,
     default: new Date().toLocaleString("tr-TR"),
   },
-  postAutorId: {
+  postAuthorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,

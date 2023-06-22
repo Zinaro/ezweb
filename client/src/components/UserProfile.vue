@@ -31,17 +31,21 @@
       <UserPosts :userID=user._id></UserPosts>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script>
 import axios from 'axios';
 import NotFound from '@/views/NotFound.vue'
 import UserPosts from "@/components/UserPosts.vue"
+import Footer from '@/components/Footer.vue';
+
 export default {
   name: "UserProfile",
   components: {
     UserPosts,
-    NotFound
+    NotFound,
+    Footer, 
   },
   data() {
     return {
@@ -57,7 +61,7 @@ export default {
   methods: {
     getUserInfo() {
   const username = this.$route.params.username;
-  axios.get(`http://localhost:3000/users/username/${username}`)
+  axios.get(`${process.env.VUE_APP_BASE_URL}/users/username/${username}`)
     .then(response => {
       const user = response.data;
       if (user) {

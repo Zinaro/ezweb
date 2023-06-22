@@ -76,7 +76,7 @@ export default {
   },
     async refreshData() {
       try {
-        const response = await axios.get("http://localhost:3000/users", {
+        const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/users`, {
           params: {
             projection: { name: 1, username: 1, _id: 0 },
           },
@@ -119,7 +119,7 @@ export default {
             userId: item._id,
           };
           const response = await axios.put(
-            `http://localhost:3000/users/${item._id}/followers`,
+            `${process.env.VUE_APP_BASE_URL}/users/${item._id}/followers`,
             data
           );
           if (response.status === 200) {
@@ -130,7 +130,7 @@ export default {
               userId: this.user._id,
             };
             const responsessss = await axios.put(
-              `http://localhost:3000/users/${this.user._id}/following`,
+              `${process.env.VUE_APP_BASE_URL}/users/${this.user._id}/following`,
               followingData
             );
             if (responsessss.status === 200) {
@@ -153,7 +153,7 @@ export default {
             userId: item._id,
           };
           const response = await axios.delete(
-            `http://localhost:3000/users/${item._id}/followers`,
+            `${process.env.VUE_APP_BASE_URL}/users/${item._id}/followers`,
             { data }
           );
           if (response.status === 200) {
@@ -164,7 +164,7 @@ export default {
               userId: this.user._id,
             };
             const responsessss = await axios.delete(
-              `http://localhost:3000/users/${this.user._id}/following`,
+              `${process.env.VUE_APP_BASE_URL}/users/${this.user._id}/following`,
               { data: followingData }
             );
             if (responsessss.status === 200) {

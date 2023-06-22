@@ -151,7 +151,7 @@ export default {
   methods: {
     async fetchPlatforms() {
       try {
-        const response = await axios.get("http://localhost:3000/platform");
+        const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/platform`);
         this.platforms = response.data.map((platform) => ({
           ...platform,
           showDeleteConfirmation: false,
@@ -180,7 +180,7 @@ export default {
       };
       try {
         const response = await axios.post(
-          "http://localhost:3000/platform",
+          `${process.env.VUE_APP_BASE_URL}/platform`,
           requestData
         );
         this.platforms = response.data;
@@ -200,7 +200,7 @@ export default {
       formData.append("image", this.previewUrl);
       try {
         const response = await axios.post(
-          `http://localhost:3000/platform/image/upload`,
+          `${process.env.VUE_APP_BASE_URL}/platform/image/upload`,
           formData, {headers: {"Content-Type": "multipart/form-data",},}
         );
         this.platformImage = response.data.imageUrl;
@@ -221,7 +221,7 @@ export default {
     async confirmDelete(platform) {
       const platformId = platform._id;
       try {
-        await axios.delete(`http://localhost:3000/platform/${platformId}`);
+        await axios.delete(`${process.env.VUE_APP_BASE_URL}/platform/${platformId}`);
         this.platforms = this.platforms.filter((platform) => platform.id !== platformId);
         this.fetchPlatforms();
         platform.showDeleteConfirmation = false;
@@ -237,7 +237,7 @@ export default {
           this.platformImage = '';
         }
       try {
-        await axios.put(`http://localhost:3000/platform/${this.editPlatformId}`, {
+        await axios.put(`${process.env.VUE_APP_BASE_URL}/platform/${this.editPlatformId}`, {
           platformName: this.editPlatformName,
           platformImage: this.platformImage,
         });

@@ -4,30 +4,39 @@
       <a class="navbar-item" href="http://localhost:8080">
         <img src="@/assets/logo.png" width="112" height="28" />
       </a>
-      <div class="navbar-burger burger" :class="{ 'is-active': navbarOpen }" @click="toggleNavbar">
-  <span :class="{ 'is-active': !navbarOpen }"></span>
-  <span :class="{ 'is-active': !navbarOpen }"></span>
-  <span :class="{ 'is-active': !navbarOpen }"></span>
-</div>
-
+      <div
+        class="navbar-burger burger"
+        :class="{ 'is-active': navbarOpen }"
+        @click="toggleNavbar"
+      >
+        <span :class="{ 'is-active': !navbarOpen }"></span>
+        <span :class="{ 'is-active': !navbarOpen }"></span>
+        <span :class="{ 'is-active': !navbarOpen }"></span>
+      </div>
     </div>
     <div class="navbar-menu" :class="{ 'is-active': !navbarOpen }">
       <div class="navbar-end">
         <div class="navbar-item" @click="toggleNavbar">
-          <router-link class="text-decoration-none" to="/"><i class="fas fa-home"></i> Home</router-link>
+          <router-link class="text-decoration-none" to="/"
+            ><i class="fas fa-home"></i> Home</router-link
+          >
         </div>
         <div class="navbar-item" @click="toggleNavbar">
-          <router-link class="text-decoration-none" to="/about"> <i class="fas fa-info-circle"></i> About</router-link>
+          <router-link class="text-decoration-none" to="/market">
+            <i class="fas fa-shopping-cart"></i> Market</router-link>
         </div>
         <div class="navbar-item" @click="toggleNavbar">
-          <router-link class="text-decoration-none" to="/market"> <i class="fas fa-shopping-cart"></i> Market</router-link>
-        </div>
-        <div class="navbar-item" @click="toggleNavbar">
-          <router-link class="text-decoration-none" to="/users"><i class="fas fa-users"></i> Users</router-link>
+          <router-link class="text-decoration-none" to="/users"
+            ><i class="fas fa-users"></i> Users</router-link
+          >
         </div>
         <div class="dropdown is-hoverable" @click="toggleDropdown">
           <div class="dropdown-trigger">
-            <a class="text-decoration-none" aria-haspopup="true" @click.prevent="$router.push('/categories')">
+            <a
+              class="text-decoration-none"
+              aria-haspopup="true"
+              @click.prevent="$router.push('/categories')"
+            >
               <i class="fas fa-tags"></i> Categories
             </a>
           </div>
@@ -46,25 +55,40 @@
         </div>
         <div v-if="user" class="navbar-item">
           Bi xêr hatî,
-          <a v-if="user" class="position-relative ml-2 text-decoration-none" @click="$router.push('/profile/' + user.username)">
-            <i class="fas fa-user"></i> {{ user.name }}
+          <a
+            v-if="user"
+            class="position-relative ml-2 text-decoration-none"
+            @click="$router.push('/profile/' + user.username)"
+          >
+            <i class="fas fa-user"></i>
+            {{
+              user.name.length > 15 ? user.name.slice(0, 15) + "." : user.name
+            }}
           </a>
         </div>
         <div class="navbar-item" @click="toggleTheme">
-          <a class="" style="text-decoration: none;">
-  <div v-if="theme === 'dark'">
-    <i class="far fa-sun"></i> Roj
-  </div>
-  <div v-else>
-    <i class="far fa-moon"></i> Şev
-  </div></a>
-</div>
-
+          <a class="" style="text-decoration: none">
+            <div v-if="theme === 'dark'"><i class="far fa-sun"></i> Roj</div>
+            <div v-else><i class="far fa-moon"></i> Şev</div></a
+          >
+        </div>
 
         <div class="navbar-item">
-          <a v-if="!user" class="ml-2 text-decoration-none" @click="$router.push('/signup')"><i class="fas fa-user-plus"></i> SignUp</a>
-          <a v-if="!user" class="ml-2 text-decoration-none" @click="$router.push('/login')"><i class="fas fa-sign-in-alt"></i> Login</a>
-          <a v-if="user" class="text-decoration-none" @click.prevent="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          <a
+            v-if="!user"
+            class="ml-2 text-decoration-none"
+            @click="$router.push('/signup')"
+            ><i class="fas fa-user-plus"></i> SignUp</a
+          >
+          <a
+            v-if="!user"
+            class="ml-2 text-decoration-none"
+            @click="$router.push('/login')"
+            ><i class="fas fa-sign-in-alt"></i> Login</a
+          >
+          <a v-if="user" class="text-decoration-none" @click.prevent="logout"
+            ><i class="fas fa-sign-out-alt"></i> Logout</a
+          >
         </div>
       </div>
     </div>
@@ -72,10 +96,10 @@
   <router-view />
 </template>
 
-
 <script>
 import VueCookies from "vue-cookies";
 import axios from "axios";
+
 
 export default {
   name: "App",
@@ -85,13 +109,13 @@ export default {
       user: VueCookies.get("user"),
       categories: [],
       showDropdown: false,
-      theme: localStorage.getItem('theme') || 'light',
+      theme: localStorage.getItem("theme") || "light",
     };
   },
+
   mounted() {
     this.fetchCategories();
     document.documentElement.dataset.theme = this.theme;
-
   },
   methods: {
     toggleNavbar() {
@@ -102,7 +126,7 @@ export default {
     },
     async fetchCategories() {
       try {
-        const response = await axios.get("http://localhost:3000/category");
+        const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/category`);
         this.categories = response.data;
       } catch (error) {
         console.log(error);
@@ -118,20 +142,18 @@ export default {
       window.location.href = `/category/${category.name}-${category._id}`;
     },
     toggleTheme() {
-      this.theme = this.theme === 'light' ? 'dark' : 'light';
+      this.theme = this.theme === "light" ? "dark" : "light";
       document.documentElement.dataset.theme = this.theme;
-      localStorage.setItem('theme', this.theme);
+      localStorage.setItem("theme", this.theme);
     },
   },
-
 };
 </script>
-
 
 <style>
 @import url("https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css");
 @import url("https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css");
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css");
 @import url("@/assets/css/theme.scss");
 
 #app {
@@ -201,15 +223,14 @@ export default {
     position: static;
     display: none;
   }
-  
+
   .navbar-burger {
     display: block;
   }
-  
+
   .navbar-menu.is-active {
     display: none;
   }
-  
 }
 @media screen and (max-width: 1028px) {
   .navbar-menu {
@@ -233,16 +254,13 @@ export default {
     position: static;
     display: none;
   }
-  
+
   .navbar-burger {
     display: block;
   }
-  
+
   .navbar-menu.is-active {
     display: none;
   }
-  
 }
 </style>
-
-

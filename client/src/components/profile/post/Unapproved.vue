@@ -91,7 +91,7 @@
       async getPosts() {
         try {
           const response = await axios.get(
-            "http://localhost:3000/posts/unapproved"
+            `${process.env.VUE_APP_BASE_URL}/posts/unapproved`
           );
           this.posts = response.data;
         } catch (error) {
@@ -140,8 +140,8 @@
   }
   
 
-  .unapproved {
-    width: 140vh;
+.unapproved {
+  width: 100vh;
   max-width: 150vh;
 }
 
