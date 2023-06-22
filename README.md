@@ -22,3 +22,11 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+![1](https://raw.githubusercontent.com/Zinaro/ezweb/main/img/light.png)
+
+
+![2](https://raw.githubusercontent.com/Zinaro/ezweb/main/img/night.png)
+
+
+![3](https://raw.githubusercontent.com/Zinaro/ezweb/main/img/profile.png)
